@@ -5,7 +5,7 @@ Dir["#{RAILS_ROOT}/vendor/plugins/community_engine/config/initializers/**/*.rb"]
   load(initializer) unless File.exists?("#{RAILS_ROOT}/config/initializers/#{File.basename(initializer)}")
 end
 
-CommunityEngine.check_for_pending_migrations
+#CommunityEngine.check_for_pending_migrations # Requires Desert
 
 if AppConfig.theme
   theme_view_path = "#{RAILS_ROOT}/themes/#{AppConfig.theme}/views"
