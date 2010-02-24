@@ -103,6 +103,11 @@ module AuthenticatedSystem
             page.redirect_to login_path and return false
           end
         end        
+        accepts.any do
+          headers["Status"]           = "Unauthorized"
+          headers["WWW-Authenticate"] = %(Basic realm="Web Password")
+          render :text => "Could't authenticate you", :status => '401 Unauthorized'
+        end
       end
       false
     end  

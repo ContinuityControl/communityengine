@@ -108,6 +108,7 @@ class UsersController < BaseController
     @user.role  = Role[:member]
 
     if (!AppConfig.require_captcha_on_signup || verify_recaptcha(@user)) && @user.save
+      track! :signup
       create_friendship_with_inviter(@user, params)
       flash[:notice] = :email_signup_thanks.l_with_args(:email => @user.email) 
       redirect_to signup_completed_user_path(@user)

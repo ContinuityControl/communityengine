@@ -26,10 +26,10 @@ class User < ActiveRecord::Base
   
   #callbacks  
   before_save   :whitelist_attributes
-  before_create :make_activation_code
+  before_create :make_activation_code, :if => Proc.new { |user| user.activated_at.nil? && user.activation_code.nil? }
   after_create  :update_last_login
   after_create  :deliver_signup_notification
-  after_save    :deliver_activation
+  after_save    :deliver_activation, :if => Proc.new { |user| user.recently_activated? }
   before_save   :generate_login_slug
   after_save    :recount_metro_area_users
   after_destroy :recount_metro_area_users
