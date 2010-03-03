@@ -8,16 +8,16 @@ class User < ActiveRecord::Base
   attr_protected :admin, :featured, :role_id
   
   acts_as_authentic do |c|
-    c.crypto_provider = CommunityEngineSha1CryptoMethod
-
-    c.validates_length_of_password_field_options = { :within => 6..20, :if => :password_required? }
-    c.validates_length_of_password_confirmation_field_options = { :within => 6..20, :if => :password_required? }
-
-    c.validates_length_of_login_field_options = { :within => 5..20 }
-    c.validates_format_of_login_field_options = { :with => /^[\sA-Za-z0-9_-]+$/ }
-
-    c.validates_length_of_email_field_options = { :within => 3..100 }
-    c.validates_format_of_email_field_options = { :with => /^([^@\s]+)@((?:[-a-z0-9A-Z]+\.)+[a-zA-Z]{2,})$/ }
+#    c.crypto_provider = CommunityEngineSha1CryptoMethod
+#
+#    c.validates_length_of_password_field_options = { :within => 6..20, :if => :password_required? }
+#    c.validates_length_of_password_confirmation_field_options = { :within => 6..20, :if => :password_required? }
+#
+#    c.validates_length_of_login_field_options = { :within => 5..20 }
+#    c.validates_format_of_login_field_options = { :with => /^[\sA-Za-z0-9_-]+$/ }
+#
+#    c.validates_length_of_email_field_options = { :within => 3..100 }
+#    c.validates_format_of_email_field_options = { :with => /^([^@\s]+)@((?:[-a-z0-9A-Z]+\.)+[a-zA-Z]{2,})$/ }
   end
   acts_as_taggable  
   acts_as_commentable
