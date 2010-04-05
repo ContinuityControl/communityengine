@@ -13,7 +13,7 @@ if AppConfig.theme
 end
 
 
-EnginesHelper::Assets.propagate if EnginesHelper.autoload_assets
+#EnginesHelper::Assets.propagate if EnginesHelper.autoload_assets
  
 # # If the app is using Haml/Sass, propagate sass directories too
 # EnginesHelper::Assets.update_sass_directories
