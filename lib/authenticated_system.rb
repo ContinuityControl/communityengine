@@ -93,9 +93,7 @@ module AuthenticatedSystem
           redirect_to login_path and return false
         end
         accepts.xml do
-          headers["Status"]           = "Unauthorized"
-          headers["WWW-Authenticate"] = %(Basic realm="Web Password")
-          render :text => "Could't authenticate you", :status => '401 Unauthorized'
+          request_http_basic_authentication
         end
         accepts.js do
           store_location 
@@ -103,10 +101,11 @@ module AuthenticatedSystem
             page.redirect_to login_path and return false
           end
         end        
-        accepts.any do
-          headers["Status"]           = "Unauthorized"
-          headers["WWW-Authenticate"] = %(Basic realm="Web Password")
-          render :text => "Could't authenticate you", :status => '401 Unauthorized'
+        accepts.atom do
+          request_http_basic_authentication
+        end
+        accepts.rss do
+          request_http_basic_authentication
         end
       end
       false
