@@ -1,2 +1,8 @@
-.DS_Store
+*.DS_Store
+*.swp
+*.swo
 *~
+db/*.sqlite3
+log/*.log
+log/*.pid
+tmp/**/*
