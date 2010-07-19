@@ -5,7 +5,14 @@ class User < ActiveRecord::Base
   
   MALE    = 'M'
   FEMALE  = 'F'
-  attr_protected :admin, :featured, :role_id
+  #attr_protected :admin, :featured, :role_id
+  
+  attr_accessible :avatar_id, :company_name, :country_id, :description, :email,
+    :firstname, :fullname, :gender, :lastname, :login, :metro_area_id,
+    :middlename, :notify_comments, :notify_community_news,
+    :notify_friend_requests, :password, :password_confirmation,
+    :profile_public, :state_id, :stylesheet, :time_zone, :vendor, :zip
+
   
   acts_as_authentic do |c|
 #    c.crypto_provider = CommunityEngineSha1CryptoMethod
@@ -255,12 +262,18 @@ class User < ActiveRecord::Base
   def deactivate
     return if admin? #don't allow admin deactivation
     @activated = false
-    update_attributes(:activated_at => nil, :activation_code => make_activation_code)
+    User.transaction do
+      update_attribute(:activated_at, nil)
+      update_attribute(:activation_code, make_activation_code)
+    end
   end
 
   def activate
     @activated = true
-    update_attributes(:activated_at => Time.now.utc, :activation_code => nil)
+    User.transaction do
+      update_attribute(:activated_at, Time.now.utc)
+      update_attribute(:activation_code, nil)
+    end
   end
   
   def active?
