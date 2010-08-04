@@ -4,7 +4,7 @@ require 'paging_enumerator'
 class PagingEnumeratorTest < Test::Unit::TestCase
   
   def test_should_count_pages_correctly
-    assert_equal 4, enum(page_size, total_size).page_count
+    assert_equal 4, enum(page_size, total_size).total_pages
   end
   
   def test_should_page

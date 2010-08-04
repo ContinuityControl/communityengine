@@ -6,7 +6,7 @@
     -box do 
       %h3= :metro_areas.l
 
-      .pagination= paginating_links @metro_areas if @metro_areas.page_count > 1
+      .pagination= paginating_links @metro_areas if @metro_areas.total_pages > 1
 
       %table{:width=>"100%"}
         %tr

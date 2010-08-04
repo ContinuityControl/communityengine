@@ -12,7 +12,7 @@ class GroupTest < Test::Unit::TestCase
     assert !results.to_a.include?(two)
     assert !results.to_a.include?(three)
     assert results.to_a.include?(four)
-    assert_equal 1, results.page_count
+    assert_equal 1, results.total_pages
     assert_equal 2, results.page_size
   end
   
@@ -23,7 +23,7 @@ class GroupTest < Test::Unit::TestCase
     four = Article.create(:name => "four", :author_id => 2)
     results = Article.find(:all, :group => "author_id", :order => "name DESC", :page => {:size => 2})
     assert_equal 2, results.size
-    assert_equal 1, results.page_count
+    assert_equal 1, results.total_pages
     assert_equal 2, results.page_size
   end
   
@@ -34,7 +34,7 @@ class GroupTest < Test::Unit::TestCase
     four = Article.create(:name => "four", :author_id => 2)
     results = Article.find(:all, :group => "author_id HAVING author_id=1", :order => "name DESC", :page => {:size => 2})
     assert_equal 1, results.size
-    assert_equal 1, results.page_count
+    assert_equal 1, results.total_pages
     assert_equal 2, results.page_size
   end
 end

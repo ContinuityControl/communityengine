@@ -19,8 +19,8 @@ class PaginatingFindTest < Test::Unit::TestCase
     h = ArticleHelper.new(112)
     h.find_articles(:all, :page => {:size => 10, :auto => true}) do |results|
       results.each {} # enumerate all 112 results
-      assert_equal results.page_count, results.stop_page
-      assert_equal results.page_count, results.page
+      assert_equal results.total_pages, results.stop_page
+      assert_equal results.total_pages, results.page
     end
   end
   
@@ -36,7 +36,7 @@ class PaginatingFindTest < Test::Unit::TestCase
   
   def test_should_not_paginate
     results = Article.find(:all)
-    assert !results.respond_to?(:page_count)
+    assert !results.respond_to?(:total_pages)
     assert !results.respond_to?(:page_size)
   end
   
@@ -176,13 +176,13 @@ class ArticleHelper
     (1..@how_many).each { |n| Article.create(:name => n, :author_id => 1) }
     results = Article.find(*args)
     if results.size > results.page_size
-      page_count, num_on_last_page = how_many.divmod(results.page_size)
-      page_count = page_count + 1 if num_on_last_page > 0
+      total_pages, num_on_last_page = how_many.divmod(results.page_size)
+      total_pages = total_pages + 1 if num_on_last_page > 0
     else 
-      page_count = 1
+      total_pages = 1
     end
-    if (page_count != results.page_count)
-      raise "Expected #{page_count} pages but there were #{results.page_count}"
+    if (total_pages != results.total_pages)
+      raise "Expected #{total_pages} pages but there were #{results.total_pages}"
     end  
     yield results if block_given? 
     results

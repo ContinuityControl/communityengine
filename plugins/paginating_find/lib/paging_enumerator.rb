@@ -24,7 +24,7 @@
 class PagingEnumerator
   include Enumerable
 
-  attr_accessor :results, :page, :first_page, :last_page, :stop_page, :page_size, :page_count, :size, :auto
+  attr_accessor :results, :page, :first_page, :last_page, :stop_page, :page_size, :total_pages, :size, :auto
 
   def initialize(page_size, size, auto = false, page = 1, first_page=page, &callback)
     self.page = page.to_i
@@ -32,7 +32,7 @@ class PagingEnumerator
     self.size = size.to_i
     self.auto = auto
     self.first_page = first_page.to_i
-    self.last_page = page_count.to_i
+    self.last_page = total_pages.to_i
     self.stop_page = auto ? last_page : self.page
     @callback = callback
   end
@@ -90,7 +90,7 @@ class PagingEnumerator
   end
   
   def next_page
-    page >= page_count ? nil : page + 1
+    page >= total_pages ? nil : page + 1
   end
   
   # Move to the previous page if auto paging is disabled.
@@ -115,8 +115,8 @@ class PagingEnumerator
   end
 
   # How many pages are available?
-  def page_count
-    @page_count ||= (empty? or page_size == 0) ? 1 : (q, r = size.divmod(page_size); r == 0 ? q : q + 1)
+  def total_pages
+    @total_pages ||= (empty? or page_size == 0) ? 1 : (q, r = size.divmod(page_size); r == 0 ? q : q + 1)
   end
   
   def empty?

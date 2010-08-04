@@ -17,9 +17,9 @@
     -box :class => "user_list" do 
       %h3= "#{AppConfig.community_name} &raquo; "+:pros.l
 
-      .pagination= paginating_links @users if @users.page_count > 1
+      .pagination= paginating_links @users if @users.total_pages > 1
 
       = render :partial => "users/user", :collection => @users, :locals => {:format => 'full' }
     
       %br.clear
-      .pagination= paginating_links @users if @users.page_count > 1
+      .pagination= paginating_links @users if @users.total_pages > 1

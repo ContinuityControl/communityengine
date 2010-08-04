@@ -56,7 +56,7 @@
       %li= link_to h(user.display_name), user_path(user)
 
   %h6.all.right= link_to_function :reply_to_topic.l, "ReplyForm.init()", :class => "utility"
-  - if @posts.page_count > 1
+  - if @posts.total_pages > 1
     .pagination.clear= paginating_links @posts
 
   %a{"name"=>"#{@posts.to_a.first.dom_id}", "id"=>"#{@posts.to_a.first.dom_id}"} &nbsp;
@@ -94,7 +94,7 @@
           = post.body_html
 
 
-  - if @posts.page_count > 1
+  - if @posts.total_pages > 1
     .pagination= paginating_links @posts
 
   - if logged_in?

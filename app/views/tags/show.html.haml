@@ -60,4 +60,4 @@
         %h6.all= link_to :all_clippings_tagged.l(:tag_name => @tags_raw), show_tag_type_path(:id => @tags_raw, :type => 'Clipping') unless params[:type]
 
     - if @pages
-      .pagination= paginating_links @pages, :params => params if @pages.page_count > 1
+      .pagination= paginating_links @pages, :params => params if @pages.total_pages > 1
