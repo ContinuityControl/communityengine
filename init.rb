@@ -1,7 +1,7 @@
 #reload CE in development
 config.after_initialize do
   if RAILS_ENV == 'development'
-    ActiveSupport::Dependencies.load_once_paths = ActiveSupport::Dependencies.load_once_paths.select {|path| (path =~ /(community_engine)/).nil? }  
+    ActiveSupport::Dependencies.autoload_once_paths = ActiveSupport::Dependencies.autoload_once_paths.select {|path| (path =~ /(community_engine)/).nil? }  
   end
 end 
 
