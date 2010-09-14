@@ -321,7 +321,7 @@ class UsersController < BaseController
       UserNotifier.deliver_reset_password(@user)
       @user.save_without_session_maintenance
       redirect_to login_url
-      flash[:info] = :your_password_has_been_reset_and_emailed_to_you.l      
+      flash[:success] = :your_password_has_been_reset_and_emailed_to_you.l      
     else
       flash[:error] = :sorry_we_dont_recognize_that_email_address.l
     end 
@@ -333,7 +333,7 @@ class UsersController < BaseController
     if @user = User.active.find_by_email(params[:email])
       UserNotifier.deliver_forgot_username(@user)
       redirect_to login_url
-      flash[:info] = :your_username_was_emailed_to_you.l      
+      flash[:success] = :your_username_was_emailed_to_you.l      
     else
       flash[:error] = :sorry_we_dont_recognize_that_email_address.l
     end 
