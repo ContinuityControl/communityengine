@@ -59,8 +59,8 @@ ActionController::Routing::Routes.draw do |map|
   map.forum_home '/forums', :controller => 'forums', :action => 'index'
   map.resources :topics
 
-  map.connect 'sitemap.xml', :controller => "sitemap", :action => "index", :format => 'xml'
-  map.connect 'sitemap', :controller => "sitemap", :action => "index"
+  #map.connect 'sitemap.xml', :controller => "sitemap", :action => "index", :format => 'xml'
+  #map.connect 'sitemap', :controller => "sitemap", :action => "index"
 
   if AppConfig.closed_beta_mode
     map.connect '', :controller => "base", :action => "teaser"
