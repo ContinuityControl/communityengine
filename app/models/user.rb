@@ -439,6 +439,11 @@ class User < ActiveRecord::Base
     User.update_all ['sb_last_seen_at = ?', Time.now.utc], ['id = ?', self.id]
     self.sb_last_seen_at = Time.now.utc
   end
+
+  def deliver_password_reset_instructions!  
+    reset_perishable_token!
+    UserNotifier.deliver_reset_password(self)
+  end 
   
   ## End Instance Methods
   

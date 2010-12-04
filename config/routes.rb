@@ -90,6 +90,7 @@ ActionController::Routing::Routes.draw do |map|
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.signup_by_id '/signup/:inviter_id/:inviter_code', :controller => 'users', :action => 'new'
 
+  map.resources :password_resets
   map.forgot_password '/forgot_password', :controller => 'users', :action => 'forgot_password'
   map.forgot_username '/forgot_username', :controller => 'users', :action => 'forgot_username'  
   map.resend_activation '/resend_activation', :controller => 'users', :action => 'resend_activation'  
