@@ -31,7 +31,7 @@ class SessionsController < BaseController
   end
 
   def destroy
-    current_user_session.destroy
+    current_user_session and current_user_session.destroy
     flash[:notice] = :youve_been_logged_out_hope_you_come_back_soon.l
     redirect_to new_session_path
   end
