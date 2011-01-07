@@ -2,10 +2,7 @@ class SbPostsController < BaseController
   before_filter :find_post,      :except => [:index, :monitored, :search, :create, :new]
   before_filter :login_required, :except => [:index, :search, :show, :monitored]
 
-  uses_tiny_mce(:only => [:edit, :update]) do
-    AppConfig.default_mce_options
-  end
-
+  uses_tiny_mce :only => [:edit, :update], :options => AppConfig.default_mce_options
 
   def index
     conditions = []

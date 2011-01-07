@@ -17,13 +17,9 @@ class EventsController < BaseController
     extend ActionView::Helpers::SanitizeHelper::ClassMethods
   end
 
-  uses_tiny_mce(:only => [:new, :edit, :create, :update, :clone ]) do
-    AppConfig.default_mce_options
-  end
+  uses_tiny_mce :only => [:new, :edit, :create, :update, :clone ], :options => AppConfig.default_mce_options
   
-  uses_tiny_mce(:only => [:show]) do
-    AppConfig.simple_mce_options
-  end
+  uses_tiny_mce :only => [:show], :options => AppConfig.simple_mce_options
 
   before_filter :admin_required, :except => [:index, :show, :ical]
 

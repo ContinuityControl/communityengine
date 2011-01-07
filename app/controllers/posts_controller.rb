@@ -1,13 +1,9 @@
 class PostsController < BaseController
   include Viewable
 
-  uses_tiny_mce(:only => [:new, :edit, :update, :create ]) do
-    AppConfig.default_mce_options
-  end
+  uses_tiny_mce :only => [:new, :edit, :update, :create ], :options => AppConfig.default_mce_options
 
-  uses_tiny_mce(:only => [:show]) do
-    AppConfig.simple_mce_options
-  end
+  uses_tiny_mce :only => [:show], :options => AppConfig.simple_mce_options
          
   cache_sweeper :post_sweeper, :only => [:create, :update, :destroy]
   cache_sweeper :taggable_sweeper, :only => [:create, :update, :destroy]    

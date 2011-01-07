@@ -3,9 +3,7 @@ class ClippingsController < BaseController
   before_filter :find_user, :only => [:new, :edit, :index, :show]
   before_filter :require_current_user, :only => [:new, :edit, :update, :destroy]
 
-  uses_tiny_mce(:only => [:show,:new_clipping]) do
-    AppConfig.default_mce_options
-  end
+  uses_tiny_mce :only => [:show,:new_clipping], :options => AppConfig.default_mce_options
 
   cache_sweeper :taggable_sweeper, :only => [:create, :update, :destroy]    
 

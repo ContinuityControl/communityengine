@@ -2,9 +2,7 @@ class TopicsController < BaseController
   before_filter :find_forum_and_topic, :except => :index
   before_filter :login_required, :except => [:index, :show]
 
-  uses_tiny_mce(:only => [:show, :new]) do
-    AppConfig.default_mce_options
-  end
+  uses_tiny_mce :only => [:show, :new], :options => AppConfig.default_mce_options
 
   def index
     @forum = Forum.find(params[:forum_id])    

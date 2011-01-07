@@ -1,7 +1,5 @@
 class PagesController < BaseController
-  uses_tiny_mce(:only => [:new, :edit, :update, :create ]) do
-    AppConfig.default_mce_options
-  end
+  uses_tiny_mce :only => [:new, :edit, :update, :create ], :options => AppConfig.default_mce_options
 
   cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
   caches_action :show, :if => Proc.new{|c| c.cache_action? }

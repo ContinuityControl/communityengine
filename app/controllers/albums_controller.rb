@@ -4,9 +4,7 @@ class AlbumsController < BaseController
   before_filter :find_user, :only => [:new, :edit, :index]
   before_filter :require_current_user, :only => [:new, :edit, :update, :destroy]
 
-  uses_tiny_mce(:only => [:show]) do
-    AppConfig.simple_mce_options
-  end
+  uses_tiny_mce :only => [:show], :options => AppConfig.simple_mce_options
 
 
   # GET /albums/1

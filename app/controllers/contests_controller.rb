@@ -2,9 +2,7 @@ class ContestsController < BaseController
   before_filter :login_required, :except => [:show, :current]
   before_filter :admin_required, :except => [:show, :current, :index]
 
-  uses_tiny_mce(:only => [:new, :edit ]) do
-    AppConfig.default_mce_options
-  end
+  uses_tiny_mce :only => [:new, :edit ], :options => AppConfig.default_mce_options
   
   def current
     @contest = Contest.current
