@@ -1,4 +1,4 @@
-require_dependency File.dirname(__FILE__) + '/../../plugins/acts_as_taggable_on_steroids/lib/tag.rb'
+require_dependency File.join(Rails.root, 'vendor', 'plugins', 'acts_as_taggable_on_steroids', 'lib', 'tag.rb')
 
 class Tag < ActiveRecord::Base
   
