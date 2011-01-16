@@ -186,13 +186,13 @@ class User < ActiveRecord::Base
   end  
 
   
-  def self.recent_activity(page = {}, options = {})
-    page.reverse_merge! :size => 10, :current => 1
-    Activity.recent.find(:all, 
+  def self.recent_activity(options = {})
+    options.reverse_merge! :per_page => 10, :page => 1
+    Activity.recent.paginate(
       :select => 'activities.*', 
       :conditions => "users.activated_at IS NOT NULL", 
-      :joins => "LEFT JOIN users ON users.id = activities.user_id", 
-      :page => page, *options)    
+      :joins => "LEFT JOIN users ON users.id = activities.user_id",
+      *options)    
   end
 
   def self.currently_online
@@ -373,22 +373,22 @@ class User < ActiveRecord::Base
   end
 
   def network_activity(page = {}, since = 1.week.ago)
-    page.reverse_merge :size => 10, :current => 1
+    page.reverse_merge! :per_page => 10, :page => 1
     friend_ids = self.friends_ids
     metro_area_people_ids = self.metro_area ? self.metro_area.users.map(&:id) : []
     
     ids = ((friends_ids | metro_area_people_ids) - [self.id])[0..100] #don't pull TOO much activity for now
     
-    Activity.recent.since(since).by_users(ids).find(:all, :page => page)          
+    Activity.recent.since(since).by_users(ids).paginate(page)          
   end
 
   def comments_activity(page = {}, since = 1.week.ago)
-    page.reverse_merge :size => 10, :current => 1
+    page.reverse_merge :per_page => 10, :page => 1
 
-    Activity.recent.since(since).find(:all, 
+    Activity.recent.since(since).paginate( 
       :conditions => ['comments.recipient_id = ? AND activities.user_id != ?', self.id, self.id], 
       :joins => "LEFT JOIN comments ON comments.id = activities.item_id AND activities.item_type = 'Comment'",
-      :page => page)      
+      *page)
   end
 
   def friends_ids

@@ -31,7 +31,7 @@ class TopicsController < BaseController
         # authors of topics don't get counted towards total hits
         @topic.hit! unless logged_in? and @topic.user == current_user
 
-        @posts = @topic.sb_posts.recent.find(:all, :page => {:current => params[:page], :size => 25}, :include => :user)
+        @posts = @topic.sb_posts.recent.paginate(:page => params[:page], :per_page => 25, :include => :user)
 
         @voices = @posts.map(&:user)
         @voices.uniq!

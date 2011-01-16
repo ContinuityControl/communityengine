@@ -19,8 +19,8 @@ class ForumsController < BaseController
         # keep track of when we last viewed this forum for activity indicators
         (session[:forums] ||= {})[@forum.id] = Time.now.utc if logged_in?
 
-        @topics = @forum.topics.find(:all, 
-          :page => {:size => 20, :current => params[:page]}, 
+        @topics = @forum.topics.paginate(
+          :per_page => 20, :page => params[:page], 
           :include => :replied_by_user, 
           :order => 'sticky DESC, replied_at DESC')
       end

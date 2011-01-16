@@ -26,7 +26,7 @@ class CommentsController < BaseController
 
     if @commentable
 
-      @comments = @commentable.comments.recent.find(:all, :page => {:size => 10, :current => params[:page]})
+      @comments = @commentable.comments.recent.paginate(:per_page => 10, :page => params[:page])
 
       if @comments.to_a.empty?
 

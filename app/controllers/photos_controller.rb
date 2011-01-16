@@ -59,7 +59,7 @@ class PhotosController < BaseController
       end
 
       @selected = params[:photo_id]
-      @photos = Photo.recent.find :all, :conditions => cond.to_sql, :include => :tags, :page => {:size => 10, :current => params[:page]}
+      @photos = Photo.recent.paginate :conditions => cond.to_sql, :include => :tags, :per_page => 10, :page => params[:page]
 
     end
     respond_to do |format|

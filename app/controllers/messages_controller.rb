@@ -12,9 +12,9 @@ class MessagesController < BaseController
     
   def index
     if params[:mailbox] == "sent"
-      @messages = @user.sent_messages.find(:all, :page => {:current => params[:page], :size => 20})
+      @messages = @user.sent_messages.paginate(:page => params[:page], :per_page => 20)
     else
-      @messages = @user.received_messages.find(:all, :page => {:current => params[:page], :size => 20})
+      @messages = @user.received_messages.paginate(:page => params[:page], :per_page => 20)
     end
   end
   

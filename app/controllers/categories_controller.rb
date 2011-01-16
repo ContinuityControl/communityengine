@@ -23,7 +23,7 @@ class CategoriesController < BaseController
     cond.category_id  == @category.id
     order = (params[:popular] ? "view_count #{params[:popular].eql?('DESC') ? 'DESC' : 'ASC'}": "published_at DESC")
 
-    @posts = Post.find :all, :page => {:current => params[:page]}, :order => order, :conditions => cond.to_sql, :include => :tags
+    @posts = Post.paginate :page => params[:page], :order => order, :conditions => cond.to_sql, :include => :tags
     
     
     @popular_posts = @category.posts.find(:all, :limit => 10, :order => "view_count DESC")

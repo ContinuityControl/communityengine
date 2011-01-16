@@ -17,8 +17,8 @@ class ClippingsController < BaseController
     order = (params[:recent] ? "created_at DESC" : "clippings.favorited_count DESC")
 
 
-    @clippings = Clipping.find(:all,
-      :page => {:size => 30, :current => params[:page]},
+    @clippings = Clipping.paginate(
+      :per_page => 30, :page => params[:page],
       :order => order,
       :conditions => cond.to_sql,
       :include => :tags
@@ -31,12 +31,11 @@ class ClippingsController < BaseController
       format.rss {
         render_rss_feed_for(@clippings,
            { :feed => {:title => @rss_title, :link => url_for(:controller => 'clippings', :action => 'site_index') },
-             :item => {:title => :title_for_rss,
+             :item => {:title => :title_for_rss},
                        :description => Proc.new {|clip| description_for_rss(clip)},
                        :link => Proc.new {|clip| user_clipping_url(clip.user, clip)},
-                       :pub_date => :created_at} })
+                       :pub_date => :created_at})}
 
-      }
     end
 
   end
@@ -52,8 +51,8 @@ class ClippingsController < BaseController
       cond.append ['tags.name = ?', params[:tag_name]]
     end
 
-    @clippings = Clipping.find(:all,
-      :page => {:size => 30, :current => params[:page]},
+    @clippings = Clipping.paginate(
+      :per_page => 30, :page => params[:page],
       :order => "created_at DESC",
       :conditions => cond.to_sql,
       :include => :tags )

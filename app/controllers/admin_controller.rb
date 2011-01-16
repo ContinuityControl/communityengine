@@ -11,12 +11,12 @@ class AdminController < BaseController
   end
 
   def events
-    @events = Event.find(:all, :order => 'start_time DESC', :page => {:current => params[:page]})
+    @events = Event.paginate(:order => 'start_time DESC', :page => params[:page])
   end
   
   def messages
     @user = current_user
-    @messages = Message.find(:all, :page => {:current => params[:page], :size => 50}, :order => 'created_at DESC')
+    @messages = Message.paginate(:page => params[:page], :per_page => 50, :order => 'created_at DESC')
   end
   
   def users
@@ -28,13 +28,13 @@ class AdminController < BaseController
       cond.email =~ "%#{params['email']}%"
     end        
     
-    @users = User.recent.find(:all, :page => {:current => params[:page], :size => 100}, :conditions => cond.to_sql)      
+    @users = User.recent.paginate(:page => params[:page], :per_page => 100, :conditions => cond.to_sql)      
   end
   
   def comments
     @search = Comment.search(params[:search])
     @search.order ||= :descend_by_created_at        
-    @comments = @search.find(:all, :page => {:current => params[:page], :size => 100})
+    @comments = @search.paginate(:page => params[:page], :per_page => 100)
   end
   
   def activate_user

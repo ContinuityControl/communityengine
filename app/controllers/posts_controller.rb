@@ -21,7 +21,7 @@ class PostsController < BaseController
   def manage
     @search = Post.search(params[:search])
     @search.order ||= :descend_by_created_at    
-    @posts = @search.find_without_published_as(:all, :conditions => {:user_id => @user.id}, :page => {:current => params[:page], :size => (params[:size] ? params[:size].to_i : 10) })    
+    @posts = @search.find_without_published_as(:all).paginate :conditions => {:user_id => @user.id}, :page => params[:page], :per_page => (params[:size] ? params[:size].to_i : 10)
   end
 
   def index
@@ -32,7 +32,7 @@ class PostsController < BaseController
       cond.append ['category_id = ?', @category.id]
     end
 
-    @posts = @user.posts.recent.find :all, :conditions => cond.to_sql, :page => {:size => 10, :current => params[:page]}
+    @posts = @user.posts.recent.paginate :conditions => cond.to_sql, :per_page => 10, :page => params[:page]
     
     @is_current_user = @user.eql?(current_user)
 
@@ -200,7 +200,7 @@ class PostsController < BaseController
   end
   
   def recent
-    @posts = Post.recent.find :all, :page => {:current => params[:page], :size => 20}
+    @posts = Post.recent.paginate :page => params[:page], :per_page => 20
 
     @recent_clippings = Clipping.find_recent(:limit => 15)
     @recent_photos = Photo.find_recent(:limit => 10)
@@ -218,7 +218,7 @@ class PostsController < BaseController
   end
   
   def featured
-    @posts = Post.by_featured_writers.recent.find(:all, :page => {:current => params[:page]})
+    @posts = Post.by_featured_writers.recent.paginate :page => params[:page]
     @featured_writers = User.featured
         
     @rss_title = "#{AppConfig.community_name} "+:featured_posts.l

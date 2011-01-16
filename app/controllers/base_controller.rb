@@ -117,7 +117,7 @@ class BaseController < ApplicationController
       @recent_photos = Photo.find_recent(:limit => 10)
       @recent_comments = Comment.find_recent(:limit => 13)
       @popular_tags = popular_tags(30, ' count DESC')
-      @recent_activity = User.recent_activity(:size => 15, :current => 1)
+      @recent_activity = User.recent_activity(:per_page => 15, :page => 1)
     
     end
 

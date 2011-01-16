@@ -26,13 +26,13 @@ class TagsController < BaseController
   end
 
   def manage
-    @tags = Tag.find(:all, :order => :name, :page => {:current => params[:page], :size => 20})
+    @tags = Tag.paginate(:order => :name, :page => params[:page], :per_page => 20)
   end
   
   def manage
     @search = Tag.search(params[:search])
     @search.order ||= :ascend_by_name
-    @tags = @search.find(:all, :page => {:current => params[:page], :size => 100})
+    @tags = @search.paginate(:page => params[:page], :per_page => 100)
   end
   
 
@@ -82,16 +82,16 @@ class TagsController < BaseController
     if params[:type]
       case params[:type]
         when 'Post', 'posts'
-          @pages = @posts = Post.recent.find_tagged_with(tag_names, :match_all => true, :page => {:size => 20, :current => params[:page]})
+          @pages = @posts = Post.recent.find_tagged_with(tag_names, :match_all => true).paginate( :per_page => 20, :page => params[:page])
           @photos, @users, @clippings = [], [], []
         when 'Photo', 'photos'
-          @pages = @photos = Photo.recent.find_tagged_with(tag_names, :match_all => true, :page => {:size => 30, :current => params[:page]})
+          @pages = @photos = Photo.recent.find_tagged_with(tag_names, :match_all => true).paginate( :per_page => 30, :page => params[:page])
           @posts, @users, @clippings = [], [], []
         when 'User', 'users'
-          @pages = @users = User.recent.find_tagged_with(tag_names, :match_all => true, :page => {:size => 30, :current => params[:page]})
+          @pages = @users = User.recent.find_tagged_with(tag_names, :match_all => true).paginate( :per_page => 30, :page => params[:page])
           @posts, @photos, @clippings = [], [], []
         when 'Clipping', 'clippings'
-          @pages = @clippings = Clipping.recent.find_tagged_with(tag_names, :match_all => true, :page => {:size => 10, :current => params[:page]})
+          @pages = @clippings = Clipping.recent.find_tagged_with(tag_names, :match_all => true).paginate( :per_page => 10, :page => params[:page])
           @posts, @photos, @users = [], [], []
       else
         @clippings, @posts, @photos, @users = [], [], [], []
