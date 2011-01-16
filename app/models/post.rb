@@ -30,13 +30,13 @@ class Post < ActiveRecord::Base
   attr_accessor :invalid_emails
   
   #Named scopes
-  named_scope :by_featured_writers, :conditions => ["users.featured_writer = ?", true], :include => :user
-  named_scope :recent, :order => 'posts.published_at DESC'
-  named_scope :popular, :order => 'posts.view_count DESC'
-  named_scope :since, lambda { |days|
+  scope :by_featured_writers, :conditions => ["users.featured_writer = ?", true], :include => :user
+  scope :recent, :order => 'posts.published_at DESC'
+  scope :popular, :order => 'posts.view_count DESC'
+  scope :since, lambda { |days|
     {:conditions => "posts.published_at > '#{days.ago.to_s :db}'" }
   }
-  named_scope :tagged_with, lambda {|tag_name|
+  scope :tagged_with, lambda {|tag_name|
     {:conditions => ["tags.name = ?", tag_name], :include => :tags}
   }
   

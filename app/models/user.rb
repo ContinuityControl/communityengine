@@ -82,11 +82,11 @@ class User < ActiveRecord::Base
     has_many    :favorites, :order => "created_at desc", :dependent => :destroy
     
   #named scopes
-  named_scope :recent, :order => 'users.created_at DESC'
-  named_scope :featured, :conditions => ["users.featured_writer = ?", true]
-  named_scope :active, :conditions => ["users.activated_at IS NOT NULL"]  
-  named_scope :vendors, :conditions => ["users.vendor = ?", true]
-  named_scope :tagged_with, lambda {|tag_name|
+  scope :recent, :order => 'users.created_at DESC'
+  scope :featured, :conditions => ["users.featured_writer = ?", true]
+  scope :active, :conditions => ["users.activated_at IS NOT NULL"]  
+  scope :vendors, :conditions => ["users.vendor = ?", true]
+  scope :tagged_with, lambda {|tag_name|
     {:conditions => ["tags.name = ?", tag_name], :include => :tags}
   }
   

@@ -34,9 +34,9 @@ class Photo < ActiveRecord::Base
   has_one :user_as_avatar, :class_name => "User", :foreign_key => "avatar_id"
   
   #Named scopes
-  named_scope :recent, :order => "photos.created_at DESC", :conditions => ["photos.parent_id IS NULL"]
-  named_scope :new_this_week, :order => "photos.created_at DESC", :conditions => ["photos.created_at > ? AND photos.parent_id IS NULL", 7.days.ago.to_s(:db)]
-  named_scope :tagged_with, lambda {|tag_name|
+  scope :recent, :order => "photos.created_at DESC", :conditions => ["photos.parent_id IS NULL"]
+  scope :new_this_week, :order => "photos.created_at DESC", :conditions => ["photos.created_at > ? AND photos.parent_id IS NULL", 7.days.ago.to_s(:db)]
+  scope :tagged_with, lambda {|tag_name|
     {:conditions => ["tags.name = ?", tag_name], :include => :tags}
   }
   attr_accessible :name, :description
