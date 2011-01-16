@@ -1,1 +1,3 @@
-ActionController::Dispatcher.middleware.use FlashSessionCookieMiddleware, ActionController::Base.session_options[:key]
+Rails.application.config.middleware.insert_before(Rails.application.config.session_store, 
+                                                 FlashSessionCookieMiddleware, 
+                                                 Rails.application.config.session_options[:key])
