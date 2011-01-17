@@ -1,4 +1,4 @@
-=box do
+= rounded_box  :div_class => 'bluegray-bg'  do
   %h3= :new_forum.l
   = form_for :forum, :url => forums_path, :html => {:class => "MainForm"} do |f|
     = render :partial => "form", :object => f

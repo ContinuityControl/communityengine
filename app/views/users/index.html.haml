@@ -1,18 +1,17 @@
 - @section = (params[:metro_area_id] ? 'metro_area' : 'users')
 
-.yui-b
+-content_for :sidebar do
   = render :partial => 'users/search_options'
-
-#yui-main
-  .yui-b
-    =box :class => "user_list" do
-      %h3=:site_members.l :site => AppConfig.community_name
-
-      .pagination= paginating_links @users, :params => params if @users.total_pages > 1
   
-      %br.clear
+= rounded_box  :div_class => 'white-fg bluegray-bg', :inner_class => 'user_list'  do
+  %h3=:site_members.l :site => AppConfig.community_name
+
+  .pagination= paginating_links @users, :params => params if @users.total_pages > 1
+
+  %br.clear
+
+  = render :partial => "users/user", :collection => @users
   
-      = render :partial => "users/user", :collection => @users
-      
-      %br.clear
-      .pagination= paginating_links @users, :params => params if @users.total_pages > 1
+  %br.clear
+  .pagination= paginating_links @users, :params => params if @users.total_pages > 1
+  .clear

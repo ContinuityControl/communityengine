@@ -1,7 +1,7 @@
-.yui-b.sidebar
+-content_for :sidebar do
   = render :partial => 'shared/admin_nav'
   
-  =box do
+  = rounded_box  :div_class => 'white-fg bluegray-bg'  do
     %h3=:search.l
     = form_for @search, :html => {:class => "MainForm"} do |f|
 
@@ -10,28 +10,27 @@
 
       %p= f.submit :search.l
   
-#yui-main
-  .yui-b
-    =box do 
-      %h3=:tags.l
+= rounded_box  :div_class => 'white-fg bluegray-bg'  do
+  %h3=:tags.l
 
-      %table{:width=>"100%"}
-        %tr 
-          %th
-            =order @search, :by => :name, :as => :name.l            
-          %th 
-            =order @search, :by => :taggings_count, :as => "##{:taggings.l}"
-          %th=:actions.l
+  %table{:width=>"100%"}
+    %tr 
+      %th
+        =order @search, :by => :name, :as => :name.l            
+      %th 
+        =order @search, :by => :taggings_count, :as => "##{:taggings.l}"
+      %th=:actions.l
 
-        - for tag in @tags
-          %tr
-            %td= tag.name
-            %td= tag.taggings.size	
-            %td
-              = link_to :show.l, tag_path(tag)
-              | 
-              = link_to :edit.l, edit_tag_path(tag)
-              |
-              = link_to :destroy.l, tag_path(tag), :confirm => :are_you_sure.l, :method => :delete
-    .pagination=paginating_links @tags if @tags.total_pages > 1
+    - for tag in @tags
+      %tr
+        %td= tag.name
+        %td= tag.taggings.size	
+        %td
+          = link_to :show.l, tag_path(tag)
+          | 
+          = link_to :edit.l, edit_tag_path(tag)
+          |
+          = link_to :destroy.l, tag_path(tag), :confirm => :are_you_sure.l, :method => :delete
+= rounded_box  :div_class => 'white-fg bluegray-bg'  do
+  .pagination=paginating_links @tags if @tags.total_pages > 1
 

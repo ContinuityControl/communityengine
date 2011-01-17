@@ -1,10 +1,12 @@
-=render :partial => 'messages/sidebar_nav'
+-content_for :sidebar do
+  = rounded_box  :div_class => 'bluegray-bg'  do
+    =render :partial => 'messages/sidebar_nav'
+    %div.clear
 
-#yui-main
-  .yui-b
-    =box do 
-      %h3= :compose_message.l
-      
-      = error_messages_for :message
-      
-      =render :partial => 'form', :locals => {:message => @message, :user => @user}
+= rounded_box  :div_class => 'bluegray-bg'  do
+  =box do 
+    %h3= :compose_message.l
+    
+    = error_messages_for :message
+    
+    =render :partial => 'form', :locals => {:message => @message, :user => @user}

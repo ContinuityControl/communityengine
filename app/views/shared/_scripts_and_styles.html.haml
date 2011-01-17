@@ -1,9 +1,9 @@
-= javascript_include_tag "application"
-= javascript_include_tag "prototype"
-= javascript_include_tag "effects"	
-= javascript_include_tag "event-selectors" 		
+=# javascript_include_tag "application"
+=# javascript_include_tag "prototype"
+=# javascript_include_tag "effects"
+= javascript_include_tag "event-selectors"
 
-= javascript_include_tag "controls" unless current_page?({:controller => 'application', :action => 'index'})
+=# javascript_include_tag "controls" unless current_page?({:controller => 'application', :action => 'index'})
 
 = javascript_include_tag "dragdrop" if @controller.controller_name.eql?('users') && %w(welcome_about edit update).include?(@controller.action_name)
 
@@ -15,10 +15,13 @@
   = javascript_include_tag 'swfupload'
   = javascript_include_tag 'uploader'
 
-= stylesheet_link_tag 'reset-fonts-grids.css'
+=# stylesheet_link_tag 'reset-fonts-grids.css'
 = stylesheet_link_tag 'screen'
 = stylesheet_link_tag 'print', :media => 'print'
 
+- unless current_user
+  = stylesheet_link_tag 'prototip'
+  = javascript_include_tag 'prototip'
 
 - if current_page?({:controller => 'posts', :action => 'show' })
   = javascript_include_tag 'lightbox'
@@ -27,8 +30,8 @@
 = javascript_include_tiny_mce_if_used
 = tiny_mce if using_tiny_mce?
 
-- if forum_page?
-  = javascript_include_tag 'lowpro', 'forum'  
+- if defined?(forum_page?) && forum_page?
+  = javascript_include_tag 'lowpro', 'forum'
   = stylesheet_link_tag 'forum'
   - unless @feed_icons.blank?
     - @feed_icons.each do |feed|

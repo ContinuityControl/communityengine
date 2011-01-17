@@ -1,0 +1,32 @@
+<% content_for :body_id, 'body-community' %>
+<%= rounded_box  :div_class => 'bluegray-bg'  do %>
+  <h3>Community</h3>
+  <ul class="subsection_tabs">
+    <li class="tab">
+      <%= link_to :my_profile.l, user_path(current_user), :class => determine_tab_link_active(request, 'users') %>
+    </li>
+    <li class="tab">
+      <%= link_to 'My Connections', accepted_user_friendships_path(current_user), :class => determine_tab_link_active(request, 'friendships') %>
+    </li>
+    <li class="tab">
+      <%= link_to 'My Inbox', user_messages_path(current_user), :class => determine_tab_link_active(request, 'messages') %>
+    </li>
+  </ul>
+  <ul class="subsection_tabs">
+    <li class="tab">
+      <%= link_to 'Discussions', forums_path, :class => determine_tab_link_active(request, /forums|topics/) %>
+    </li>
+    <li class="tab">
+      <%= link_to 'Blogs', recent_path, :class => determine_tab_link_active(request, 'posts') %>
+    </li>
+    <li class="tab">
+      <%= link_to 'Free Policies', '/featured_documents', :class => determine_tab_link_active(request, 'featured_documents') %>
+    </li>
+    <li class="tab">
+      <%= link_to 'Tags', tags_path, :class => determine_tab_link_active(request, 'tags') %>
+    </li>
+    <li class="tab">
+      <%= link_to 'Groups', community_groups_path, :class => determine_tab_link_active(request, 'community_groups') %>
+    </li>
+  </ul>
+<% end %>

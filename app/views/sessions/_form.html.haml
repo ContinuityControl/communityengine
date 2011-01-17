@@ -1,0 +1,10 @@
+= semantic_form_for @user_session, :url => sessions_path, :html => { :class => 'original' } do |f|
+  - f.inputs do
+    = f.input :login, :label => :username.l, :hint => link_to(:forgot_your_username.l, forgot_username_url)
+    = f.input :password, :label => :password.l, :hint => link_to(:forgot_your_password.l, forgot_password_url)
+    = f.input :remember_me, :as => :boolean, :label => :remember_me.l
+  - f.buttons do
+    %li
+      = styled_save_button :log_in.l, :class => 'green_button'
+      ="&nbsp;"
+      = link_to :click_here_to_sign_up.l, "/signup"

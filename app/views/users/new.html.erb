@@ -1,0 +1,47 @@
+<% content_for :body_id, 'signup' %>
+<% content_for :sidebar do %>
+  <%= rounded_box  :div_class => 'bluegray-bg neonblue-fg'  do %>
+    <h3 class="community_account_offer_header"><%= :community_free_account_offers.l %></h3>
+    <% :community_free_account_offers_items.l.each do |item| %>
+      <h4 class="community_account_offer_verb"><span class="<%= item['class'] %>"><%= item['header'] %></span></h4>
+      <p class="community_account_offer_description"><%= item['text'] %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= rounded_box  :div_class => 'bluegray-bg'  do %>
+  <%= signup_heading %>
+  <h3><%= :sign_up.l %></h3>
+  <p style="background-color:#DEDEDE;padding: 10px;"><%= :sign_up_please_note.l  %></p>
+  <%= error_messages_for :user %>
+  <%= form_for :user, :url => users_path, :html => { :class => 'join-community' } do |f| %>
+    <p>
+      <%= f.label :fullname, 'Full Name:' %>
+      <%= f.text_field :fullname %>
+    </p>
+    <p>
+      <%= f.label :email, (:e_mail_address.l + ':') %>
+      <%= f.text_field :email %>
+    </p>
+    <p>
+      <%= f.label :company_name, 'Institution Name:' %>
+      <%= f.text_field :company_name %>
+    </p>
+    <p>
+      <%= f.label :login, (:username.l + ':') %>
+      <%= f.text_field :login %>
+    </p>
+    <p>
+      <%= f.label :password, :type_your_password.l %>
+      <%= f.password_field :password %>
+    </p>
+    <p>
+      <%= f.label :password_confirmation, :re_type_your_password_to_confirm.l %>
+      <%= f.password_field :password_confirmation %>
+    </p>
+    <%= hidden_field_tag :inviter_id, params[:inviter_id] %>
+    <%= hidden_field_tag :inviter_code, params[:inviter_code] %>
+    <p class="agree_to_terms">By clicking <%= :sign_up_button.l %>, you are indicating that you have read, understood, and agree to <%= AppConfig.community_name %>'s <%= link_to "Terms of Service", '/legal/terms_of_service_and_user_agreement' %> and <%= link_to "Privacy Policy", '/legal/privacy_policy' %>.</p>
+    <%= styled_save_button :sign_up_button.l, :button_type => "green" %>
+  <% end %>
+<% end %>

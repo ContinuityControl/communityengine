@@ -1,0 +1,5 @@
+$('LoginForm').replace("<%= escape_javascript(render :partial => 'shared/flash_without_close') %><%= escape_javascript(render :partial => 'form') %>");  
+$('LoginForm').observe('submit', function(event) {  
+  event.stop();  
+  this.request();  
+});

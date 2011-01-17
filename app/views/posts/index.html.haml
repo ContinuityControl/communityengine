@@ -1,23 +1,28 @@
-.yui-b
-  = render :partial => 'author_profile', :locals => {:user => @user}
 
-  - unless @popular_posts.empty?
-    =box :id => "posts", :class => 'alt' do
-      %h3=:popular_posts.l
-      %ul.list.page
-        - @popular_posts.each do |post|
-          %li= link_to truncate(post.title, :length => 75), user_post_path(@user, post)
+-content_for :sidebar do
+  =render :partial => 'forums/community_nav'
+-content_for :sidebar do
+  = rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
+    = render :partial => 'author_profile', :locals => {:user => @user}
 
-#yui-main
-  .yui-b
-    =box :class => "posts hfeed" do 
-      %h3
-        = link_to :users_blog.l(:user => @user.login), user_posts_path(@user)
-        = @category ? "&raquo; " + link_to(@category.name.upcase, users_posts_in_category_path(@user, @category.name)) : ''
+  = rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
+    - unless @popular_posts.empty?
+      =box :id => "posts", :class => 'alt' do
+        %h3=:popular_posts.l
+        %ul.list.page
+          - @popular_posts.each do |post|
+            %li= link_to truncate(post.title, :length => 75), user_post_path(@user, post)
 
-      = link_to( :new_post.l, new_user_post_path(@user), {:class => "right"})  if @is_current_user
-      %br
+= rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
+  -navspan = '<span class="navigation_settings_gear">Edit</span>'
+  =link_to navspan, manage_user_posts_path(current_user)
+  %h3
+    = link_to :users_blog.l(:user => @user.login), user_posts_path(@user)
+    = @category ? "&raquo; " + link_to(@category.name.upcase, users_posts_in_category_path(@user, @category.name)) : ''
 
-      = render :partial => 'post', :collection => @posts
+  = link_to( :new_post.l, new_user_post_path(@user), {:class => "right"})  if @is_current_user
+  %br
 
-      .pagination=paginating_links @posts if @posts.total_pages > 1
+  = render :partial => 'post', :collection => @posts
+
+  .pagination=paginating_links @posts if @posts.total_pages > 1

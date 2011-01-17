@@ -1,3 +1,8 @@
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
+<% end %>
+<%= rounded_box  :div_class => 'posts hfeed bluegray-bg'  do %>
 <br>
 <br>
 <%= link_to "&raquo; "+:click_here_to_view_as_a_list.l, accepted_user_friendships_path(@user) %>
+<% end %>

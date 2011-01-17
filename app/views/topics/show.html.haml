@@ -3,6 +3,9 @@
 - @page_title = @topic.title
 - @monitoring = logged_in? && current_user.monitoring_topic?(@topic)
 
+-content_for :sidebar do
+  =render :partial => 'forums/community_nav'
+
 %script{:type => 'text/javascript'}
   function monitor_click(checkbox){
   if (checkbox.checked) {
@@ -12,7 +15,7 @@
   }}
 
 
-=box :class => "alt first_alt" do 
+= rounded_box  :div_class => 'bluegray-bg'  do
   - if logged_in?
     = form_tag forum_topic_monitorship_path(@forum, @topic), :style => 'margin-top:0em; float:right;' do
       #monitor_topic
@@ -30,7 +33,7 @@
   
     
     
-=box :class => "forum" do 
+= rounded_box  :div_class => 'forum bluegray-bg'  do
   %h3#topic-title
     = h @topic.title
     - if @topic.locked?
@@ -60,7 +63,7 @@
     .pagination.clear= paginating_links @posts
 
   %a{"name"=>"#{@posts.to_a.first.dom_id}", "id"=>"#{@posts.to_a.first.dom_id}"} &nbsp;
-  %br.clear
+  %br.clearright
   %br
   %table.posts.wide{"cellspacing"=>"0", "border"=>"0", "cellpadding"=>"0"}
     - for post in @posts do
@@ -73,7 +76,7 @@
         %td.author.vcard{:width => "15%"}
           .date
             %a{"href"=>"##{post.dom_id}", "rel"=>"bookmark"}
-              %abbr.updated{"title"=>"#{post.created_at.xmlschema}"}= time_ago_in_words(post.created_at)
+              %abbr.updated{"title"=>"#{post.created_at.xmlschema}"}= sensible_time_ago(post.created_at)
 
           = avatar_for post.user
           %span.fn
@@ -90,7 +93,7 @@
                   = render :partial => '/moderators/toggle', :locals => {:user => post.user, :forum => @forum}
 
         %td.body.entry-content{"id"=>"post-body-#{post.id}", :width => '85%'}
-          = link_to_function image_tag('clearbits/comment.gif', :class => 'icon reply'), "$('reply').toggle()" if logged_in?
+          = link_to_function image_tag('clearbits/comment.png', :class => 'icon reply'), "$('reply').toggle()" if logged_in?
           = post.body_html
 
 
@@ -123,8 +126,9 @@
     = javascript_tag "$('reply').hide();"
   - else
     %p= link_to :log_in_to_reply_to_this_topic.l, new_forum_topic_sb_post_path(@topic.forum, @topic), :class => "utility"
+  .clear
 
-=box :class => "alt" do 
+= rounded_box  :div_class => 'bluegray-bg'  do
   = link_to :forums.l, forum_home_path
   %span.arrow &rarr;
   = link_to h(@topic.forum.name), forum_path(@topic.forum)

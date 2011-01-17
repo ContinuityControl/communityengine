@@ -1,7 +1,15 @@
-=render :partial => 'messages/sidebar_nav'
 
-- form_tag delete_selected_user_messages_path(@user), :class => "MainForm" do
-  - if params[:mailbox] == "sent"
-    = render :partial => "sent"
-  - else
-    = render :partial => "inbox"
+-content_for :sidebar do
+  =render :partial => 'forums/community_nav'
+  = rounded_box  :div_class => 'bluegray-bg'  do
+    =render :partial => 'messages/sidebar_nav'
+    %div.clear
+
+
+= rounded_box  :div_class => 'bluegray-bg'  do
+  = form_tag delete_selected_user_messages_path(@user), :class => "MainForm" do
+    - if params[:mailbox] == "sent"
+      = render :partial => "sent"
+    - else
+      = render :partial => "inbox"
+    %div.clear 

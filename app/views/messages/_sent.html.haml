@@ -21,8 +21,11 @@
                   = link_to h(message.subject), user_message_path(@user, message)                  
                   %br
                   = :to.l + ':'
-                  = link_to h(message.recipient.login), user_path(@user)                  
-                %td.meta{:width => '150px'}= h I18n.l(message.created_at, :format => :time_ago)
+                  = link_to h(message.recipient.login), user_path(message.recipient)                  
+                  -#Above was @user
+                %td.meta{:width => '150px'}
+                  = h sensible_time_ago(message.created_at)
+                  -#I18n.l(message.created_at, :format => :time_ago)
             
             
           %tfoot
@@ -30,3 +33,4 @@
               %td{ :colspan => "4" }
                 -if @messages.any?
                   %p= submit_tag :delete.l
+      .pagination=paginating_links @messages if @messages.total_pages > 1

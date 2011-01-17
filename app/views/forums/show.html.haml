@@ -2,34 +2,46 @@
 - @section = 'forums'
 - @page_title = @forum.name
 
-=box :class => "alt first_alt" do 
+-content_for :sidebar do
+  =render :partial => 'forums/community_nav'
+
+= rounded_box  :div_class => 'bluegray-bg'  do
   = link_to :forums.l, forum_home_path
   %span.arrow
     &rarr;
-  = h @forum.name   
+  = h @forum.name
+  .right
+    - if logged_in?
+      %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
+    - else
+      %h6.all.right= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum)
 
-=box do 
+= rounded_box  :div_class => 'bluegray-bg'  do
+  .right
+    = "Enable Email Notification of Activity"
+    = check_box_tag :watch_this_discussion, 1, @watched, :id => "watch_this_discussion", "data-url" => forum_forums_user_path(@forum)
+
   %p.subtitle
     = feed_icon_tag @forum.name, forum_sb_posts_path(@forum, :format => :rss)
-    = pluralize @forum.topics_count, :topic.l 
-    , 
+    = pluralize @forum.topics_count, :topic.l
+    ,
     = pluralize @forum.sb_posts_count, :post.l
 
   - unless @forum.description.blank?
     = @forum.description_html
-  
+
   - if @forum.moderators.any?
     = "#{:moderators.l}:"
     %ul.flat
       - @forum.moderators.each do |user|
         %li= link_to user.display_name, user_path(user)
-    
-  %br.clear
+
+  %br.clearright
 
   - if @topics.total_pages > 1
     - if logged_in?
       %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
-  
+
     .pagination= paginating_links @topics
 
   - unless @topics.empty?
@@ -37,40 +49,35 @@
       %tr
         %th.la{:colspan=>"2"}= :topics.l
         %th{:width=>"1%"}= :posts.l
-        %th{:width=>"1%"}= :views.l 
+        %th{:width=>"1%"}= :views.l
         %th.la= :last_post.l
-        
+
       - for topic in @topics
         %tr
           %td.c1{:style=>"padding:5px; width:16px;"}
             - icon, color, post = icon_and_color_and_post_for topic
 
             - if recent_topic_activity(topic)
-              = image_tag "clearbits/#{icon}.gif", :class => "icon green", :title => :recent_activity.l+" #{post}"
+              = image_tag "icons/chat-double-16x16-green.png", :class => "icon", :title => :recent_activity.l+" #{post}"
             - else
-              = image_tag "clearbits/#{icon}.gif", :class => "icon grey #{color}", :title => :no_recent_activity.l+" #{post}"
+              = image_tag "clearbits/#{icon}.png", :class => "icon", :title => :no_recent_activity.l+" #{post}"
           %td.c2
             = :sticky.l+": <strong>" if topic.sticky?
             = link_to h(topic.title), forum_topic_path(@forum, topic), :class => "entry-title", :rel => "bookmark"
             = "</strong>" if topic.sticky?
-            - if topic.paged? 
+            - if topic.paged?
               %small= link_to :last.l, forum_topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page)
           %td.ca.inv.stat= topic.sb_posts_count
           %td.ca.inv.stat= number_with_delimiter(topic.views)
           %td.lp
-            %abbr.updated{:title=>"#{topic.replied_at.xmlschema}"}= time_ago_in_words(topic.replied_at)
+            %abbr.updated{:title=>"#{topic.replied_at.xmlschema}"}= sensible_time_ago(topic.replied_at)
             = :by.l
             %span.author
               %strong.fn= h(topic.replied_by_user.display_name)
             %span= link_to :view.l, forum_topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page, :anchor => "posts-#{topic.last_post_id}")
-  
-  - if @topics.total_pages > 1
-    .pagination= paginating_links @topics  
 
-  - if logged_in?
-    %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
-  - else
-    %h6.all.right= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum)
+  - if @topics.total_pages > 1
+    .pagination= paginating_links @topics
 
   - if @topics.size < 10
     - @related = Post.find_tagged_with(@forum.tag_list, :limit => 10)
@@ -83,3 +90,15 @@
           %th.la= :author.l
           -@related.each do |post|
             = render :partial => 'sb_posts/dummy_forum_post', :locals => {:post => post}
+  .clear
+
+= rounded_box  :div_class => 'bluegray-bg'  do
+  = link_to :forums.l, forum_home_path
+  %span.arrow
+    &rarr;
+  = h @forum.name
+  .right
+    - if logged_in?
+      %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
+    - else
+      %h6.all.right= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum)

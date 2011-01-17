@@ -1,0 +1,12 @@
+<div class="community_icon_nav">
+  <ul>
+    <!-- <li title="<%= :my_profile.l %>"><%= link_to '&nbsp;', user_path(current_user), :class => "icon_nav_profile" %></li> -->
+    <!-- <li title="My Connections"><%= link_to '&nbsp;', accepted_user_friendships_path(current_user), :class => "icon_nav_connections" %></li> -->
+    <li title="My Inbox"><%= link_to '&nbsp;', user_messages_path(current_user), :class => "icon_nav_inbox" %></li>
+
+    <li title="Discussions"><%= link_to '&nbsp;', forums_path, :class => "icon_nav_discussions"  %></li>
+    <li title="Blogs"><%= link_to '&nbsp;', recent_path, :class => "icon_nav_blogs"  %></li>
+    <li title="Free Policies"><%= link_to '&nbsp;', featured_documents_path, :class => "icon_nav_policies"  %></li>
+    <!-- <li title="Tags"><%= link_to '&nbsp;', tags_path, :class => "icon_nav_tags"  %></li> -->
+  </ul>
+</div>

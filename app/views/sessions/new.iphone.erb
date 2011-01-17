@@ -1,0 +1,14 @@
+<%= form_tag sessions_path, :class => 'panel', :selected  => "true", :title => "Login", :target => "_self" do %>
+  <h2>Welcome to Control</h2>
+  <fieldset>
+    <div class="row">
+      <%= label_tag :login, :username.l %>
+      <%= text_field_tag 'login', nil %>
+    </div>
+    <div class="row">
+      <%= label_tag :password, :password.l %>
+      <%= password_field_tag 'password', nil %>
+    </div>
+  </fieldset>
+  <a class="whiteButton" href="#" type="submit"><%= :login.l %></a>
+<% end %>
