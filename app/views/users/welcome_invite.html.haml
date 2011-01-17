@@ -3,6 +3,6 @@
   %ul
     %li=link_to "Ask, Answer, Post - Community Discussions", forums_path
     %li=link_to "Shared Free Policies", featured_documents_path
-    %li=link_to "#{ActionpackLibrary.human_name} - We've Got a Compliance #{Actionpack.human_name} for That!", actionpack_library_index_path
+    %li=link_to "#{ActionpackLibrary.model_name.human} - We've Got a Compliance #{Actionpack.model_name.human} for That!", actionpack_library_index_path
 %p{:style => 'padding:20px 70px;'}
-  #{ AppConfig.community_name } is an innovative software foundation that automates, organizes and facilitates the work of compliance across the financial institution.  This is key to addressing what we call the Compliance Tax&trade;. #{ link_to "Learn more about cost-saving #{Actionpack.human_name.pluralize}!", actionpack_library_index_path }
+  #{ AppConfig.community_name } is an innovative software foundation that automates, organizes and facilitates the work of compliance across the financial institution.  This is key to addressing what we call the Compliance Tax&trade;. #{ link_to "Learn more about cost-saving #{Actionpack.model_name.human.pluralize}!", actionpack_library_index_path }

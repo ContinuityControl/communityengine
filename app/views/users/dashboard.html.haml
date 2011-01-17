@@ -12,7 +12,7 @@
 = rounded_box  :div_class => 'bluegray-bg todo_activity', :extra_style =>'overflow: auto;'  do
   %div.h4_right
     =link_to 'On Demand', on_demand_todos_path,{:class => 'lightview create_on_demand', :rel =>  'ajax', :title => "On Demand ToDos :: :: width: 702, height: 702, ajax: { method: 'get' }"}
-  %h4=DistributedToDo.human_name.pluralize
+  %h4=DistributedToDo.model_name.human.pluralize
   %ul.distributed_todos.todo_box
     -if @user.organization
       =render @tsk_task_assignments
@@ -21,13 +21,13 @@
         .right=link_to 'Learn More', '/how-it-works', :class => 'todo_action', :target => '_blank'
         Continuity Control is more than just a community...
       %li
-        .right=link_to 'Get ' + Actionpack.human_name.pluralize, actionpack_library_index_path, :class => 'todo_action'
+        .right=link_to 'Get ' + Actionpack.model_name.human.pluralize, actionpack_library_index_path, :class => 'todo_action'
         We're here to help you organize and automate your compliance efforts.<br />
         Start getting ahead today!
 
   -if @user.organization
     =center_float do
-      =styled_save_link "Show All #{DistributedToDo.human_name.pluralize}", "#", :button_type => "blue", :class => "todos_toggle_button", :style => "display: none;", "data-show" => "Show More", "data-hide" => "Show Less"
+      =styled_save_link "Show All #{DistributedToDo.model_name.human.pluralize}", "#", :button_type => "blue", :class => "todos_toggle_button", :style => "display: none;", "data-show" => "Show More", "data-hide" => "Show Less"
   .clear
 
 = rounded_box  :div_class => 'bluegray-bg'  do
