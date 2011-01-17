@@ -1,9 +1,9 @@
 .yui-b.sidebar
   = render :partial => 'shared/admin_nav'
   
-  -box do
+  =box do
     %h3=:search.l
-    - form_for @search, :html => {:class => "MainForm"} do |f|
+    = form_for @search, :html => {:class => "MainForm"} do |f|
 
       = f.label :name.l
       = f.text_field :name_begins_with
@@ -12,7 +12,7 @@
   
 #yui-main
   .yui-b
-    -box do 
+    =box do 
       %h3=:tags.l
 
       %table{:width=>"100%"}

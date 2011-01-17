@@ -1,8 +1,8 @@
 .yui-b.sidebar
   = render :partial => 'shared/admin_nav'
 
-  -box do
-    - form_for @search, :html => {:class => "MainForm"} do |f|
+  =box do
+    = form_for @search, :html => {:class => "MainForm"} do |f|
     
       = f.label :commentable_type.l
       = f.text_field :commentable_type_like
@@ -18,9 +18,9 @@
   
 
 
-- form_tag delete_selected_comments_path, :id => 'comments' do
+= form_tag delete_selected_comments_path, :id => 'comments' do
   #yui-main
-    -box :class => "yui-b" do
+    =box :class => "yui-b" do
       %h3
         = AppConfig.community_name
         = :comments.l

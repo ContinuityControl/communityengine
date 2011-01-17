@@ -1,5 +1,5 @@
 .yui-b
-  -box do 
+  =box do 
     %h3=:dashboard.l
     .yui-g
       .yui-u.first
@@ -21,7 +21,7 @@
           %li=link_to :my_blog_posts.l, manage_user_posts_path(@user)
           -if current_user.admin?
             %li=link_to :admin_dashboard.l, admin_dashboard_path
-  -box :class => "alt" do 
+  =box :class => "alt" do 
     %h3=:stats.l
     %ul
       - if @user.last_login_at

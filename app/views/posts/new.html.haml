@@ -1,5 +1,5 @@
 .yui-b
-  -box :id => 'category_tips' do
+  =box :id => 'category_tips' do
     -if @post.contest
       = render :partial => "contest"
     -elsif @post.category
@@ -7,17 +7,17 @@
     - else 
       = render :partial => "/categories/tips", :locals => {:category => nil}
 
-  -box :class => "alt" do 
+  =box :class => "alt" do 
     %a.button.positive{:href => '#', :onclick => "tinyMCE.execCommand('mceCurblyAdvImage');return false;"}=:upload_an_image_for_your_post.l
     
 #yui-main
   .yui-b
-    -box do 
+    =box do 
       %h3
         =@post.category ? (:new_post_for_category.l :category => @post.category.name) : :new_post.l
 
       = error_messages_for :post
-      - form_for(:post, :url => user_posts_path, :html => {:class => "MainForm", :id => 'post_form'}) do |f|			
+      = form_for(:post, :url => user_posts_path, :html => {:class => "MainForm", :id => 'post_form'}) do |f|			
         - unless @post.category || @post.contest || @categories.blank?        
           %label
             =:category.l

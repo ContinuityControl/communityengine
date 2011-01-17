@@ -1,4 +1,4 @@
--box do
+=box do
   %h3
     =:get_started.l + ' ' + :invite_some_friends.l
     = :invite_some_customers.l if @user.vendor?
@@ -6,7 +6,7 @@
     =:invite_message.l(:site=> AppConfig.community_name)
   %p=:people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends.l
     
-  - form_for(:invitation, :url => user_invitations_path(:user_id => @user.id), :html => {:class => "MainForm"} ) do |f|
+  = form_for(:invitation, :url => user_invitations_path(:user_id => @user.id), :html => {:class => "MainForm"} ) do |f|
     %label{"for"=>"email_addresses"} 
       =:enter_e_mail_addresses.l
       %em= :comma_separated.l

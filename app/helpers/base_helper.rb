@@ -40,18 +40,17 @@ module BaseHelper
     options = {:class=>"box"}.merge(options)
     options[:class] = "box " << options[:class] if options[:class]!="box"
 
-    str = '<div'
-    options.collect {|key,val| str << " #{key}=\"#{val}\"" }
-    str << '><div class="box_top"></div>'
-    str << "\n"
-    
-    concat(str)
-    yield(content)
-    concat('<br class="clear" /><div class="box_bottom"></div></div>')
+    content_tag(:div, options) do
+      output = content_tag(:div, nil, :class => 'box_top')
+      output += capture(&content)
+      output += content_tag :br, :class => 'clear'
+      output += content_tag :div, nil, :class => 'box_bottom'
+      output
+    end
   end
   
   def block_to_partial(partial_name, html_options = {}, &block)
-    concat(render(:partial => partial_name, :locals => {:body => capture(&block), :html_options => html_options}))
+    render(:partial => partial_name, :locals => {:body => capture(&block), :html_options => html_options})
   end
 
   def box(html_options = {}, &block)

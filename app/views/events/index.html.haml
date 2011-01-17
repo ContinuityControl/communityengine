@@ -2,18 +2,18 @@
 
 .yui-b
   - if @is_admin_user
-    -box :class => "alt first_alt" do 
+    =box :class => "alt first_alt" do 
       = link_to_unless_current :past_events.l, past_events_path
       = link_to_unless_current :upcoming_events.l, events_path
       %br
       = link_to :administer_events.l, admin_events_path
-  -box do 
+  =box do 
     %h3= :events.l
     = :find_out_where_to_be_and_when_to_be_there.l
   =render :partial=>'subscribe'
 #yui-main
   .yui-b
-    -box do 
+    =box do 
     
       .pagination=paginating_links @events if @events.total_pages > 1      
 

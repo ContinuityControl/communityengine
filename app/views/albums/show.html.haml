@@ -5,7 +5,7 @@
 
   #yui-main
     .yui-b
-      -box :class => "hfeed" do 
+      =box :class => "hfeed" do 
         %h3= h @album.title
         %p= h @album.description
 
@@ -18,7 +18,7 @@
           .pagination= paginating_links @album_photos if @album_photos.total_pages > 1
 
 
-      -box :class => "hfeed comments", :id => 'comments' do
+      =box :class => "hfeed comments", :id => 'comments' do
         %h3=:album_comments.l
         %h2=:add_your_comment.l
         %p= render :partial => 'comments/comment_form', :locals => {:commentable => @album}

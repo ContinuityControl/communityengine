@@ -3,7 +3,7 @@
 
 #yui-main
   .yui-b.main_column
-    -box do 
+    =box do 
       %h3=:resend_your_activation_e_mail.l
 
       - form_tag resend_activation_url, :class => 'MainForm' do

@@ -12,9 +12,9 @@
   }}
 
 
--box :class => "alt first_alt" do 
+=box :class => "alt first_alt" do 
   - if logged_in?
-    - form_tag forum_topic_monitorship_path(@forum, @topic), :style => 'margin-top:0em; float:right;' do
+    = form_tag forum_topic_monitorship_path(@forum, @topic), :style => 'margin-top:0em; float:right;' do
       #monitor_topic
         %input#monitor_checkbox{:type=>"checkbox", :checked=> @monitoring, :onclick=>"monitor_click(this);"}
         %label#monitor_label{"for"=>"monitor_checkbox"}
@@ -30,7 +30,7 @@
   
     
     
--box :class => "forum" do 
+=box :class => "forum" do 
   %h3#topic-title
     = h @topic.title
     - if @topic.locked?
@@ -109,7 +109,7 @@
         .container
           = content_tag 'p', h(flash[:bad_reply]), :class => 'notice' if flash[:bad_reply]
 
-          - form_for :post, :url => sb_posts_path(:forum_id => @forum, :topic_id => @topic, :page => @topic.last_page) do |f|
+          = form_for :post, :url => sb_posts_path(:forum_id => @forum, :topic_id => @topic, :page => @topic.last_page) do |f|
             %table{"cellspacing"=>"0", "border"=>"0", "cellpadding"=>"0", "width"=>"100%"}
               %tr
                 %td{"rowspan"=>"2", "width"=>"70%"}
@@ -124,7 +124,7 @@
   - else
     %p= link_to :log_in_to_reply_to_this_topic.l, new_forum_topic_sb_post_path(@topic.forum, @topic), :class => "utility"
 
--box :class => "alt" do 
+=box :class => "alt" do 
   = link_to :forums.l, forum_home_path
   %span.arrow &rarr;
   = link_to h(@topic.forum.name), forum_path(@topic.forum)

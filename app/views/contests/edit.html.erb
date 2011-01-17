@@ -3,7 +3,7 @@
 		<div class="yui-b section">
 			<h2><%= :edit_contest.l %></h2>
 
-			<% form_for(:contest, :url => contest_path(@contest), :html => { :method => :put }) do |f| %>
+			<%= form_for(:contest, :url => contest_path(@contest), :html => { :method => :put }) do |f| %>
 								
 				Title (required):
 				<p><%= f.text_field :title %></p>

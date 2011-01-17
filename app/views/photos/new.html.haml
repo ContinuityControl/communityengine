@@ -1,5 +1,5 @@
 .yui-b
-  -box do 
+  =box do 
     %h3
       =:tips.l
     %p 
@@ -7,12 +7,12 @@
     %p 
       =:photo_tip_2.l
 
-  -box :class => 'alt' do
+  =box :class => 'alt' do
     = link_to "&raquo; " + :back_to_my_photos.l, user_photos_path(@user)
 
 #yui-main
 
-  -box :id => "single_upload", :class => "yui-b" do
+  =box :id => "single_upload", :class => "yui-b" do
     %h3 
       =:new_photo.l
 
@@ -21,7 +21,7 @@
       %a{"href"=>"#", "onclick"=>"$('single_upload').toggle(); $('multiple_upload').toggle(); return false"}
         = :want_to_upload_multiple_files_at_once.l
 
-    - form_for(:photo, :url => user_photos_path(:user_id => current_user.id, :album_id => params[:album_id]), :html => {:multipart =>true, :class => "MainForm"} ) do |f|
+    = form_for(:photo, :url => user_photos_path(:user_id => current_user.id, :album_id => params[:album_id]), :html => {:multipart =>true, :class => "MainForm"} ) do |f|
       = f.file_field :uploaded_data
 
       %label
@@ -53,7 +53,7 @@
         = :or.l
         = link_to :cancel_and_go_back_to_photo_manager.l, user_photo_manager_index_path(current_user)
   
-  -box :class => 'yui-b', :id => 'multiple_upload', :style => "display:none;" do
+  =box :class => 'yui-b', :id => 'multiple_upload', :style => "display:none;" do
     %h3 
       =:new_photos_multiple_uploader.l
 

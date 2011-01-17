@@ -1,5 +1,5 @@
 .yui-b
-  -box :id => 'category_tips' do
+  =box :id => 'category_tips' do
     - if @post.contest
       = render :partial => "contest"
     - elsif @post.category
@@ -9,11 +9,11 @@
 
 #yui-main
   .yui-b
-    -box do 
+    =box do 
       %h3=:editing_post.l
 
       = error_messages_for :post
-      - form_for(:post, :url => user_post_path(@user, @post), :html => { :method => :put, :class =>'MainForm' }) do |f|
+      = form_for(:post, :url => user_post_path(@user, @post), :html => { :method => :put, :class =>'MainForm' }) do |f|
         %label 
           =:title.l
           %em= '('+:required.l+')'
