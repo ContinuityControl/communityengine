@@ -93,15 +93,6 @@ class User < ActiveRecord::Base
 
   ## Class Methods
 
-  # override activerecord's find to allow us to find by name or id transparently
-  def self.find(*args)
-    if args.is_a?(Array) and args.first.is_a?(String) and (args.first.index(/[a-zA-Z\-_]+/) or args.first.to_i.eql?(0) )
-      find_by_login_slug(args)
-    else
-      super
-    end
-  end
-  
   def self.find_country_and_state_from_search_params(search)
     country     = Country.find(search['country_id']) if !search['country_id'].blank?
     state       = State.find(search['state_id']) if !search['state_id'].blank?
@@ -235,7 +226,7 @@ class User < ActiveRecord::Base
   end  
   
   def to_param
-    login_slug
+    "#{id}-#{login_slug}"
   end
   
   def this_months_posts
