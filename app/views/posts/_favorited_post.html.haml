@@ -6,7 +6,7 @@
       %br
       %small.quiet= link_to :by.l+" #{post.user.login}", user_path(post.user)
       %br
-      = truncate_words(post.post, 7, '...' )
-      = link_to( '<small>&raquo;'+:more.l+'</small>', user_post_path(post.user, post))
+      = truncate_words(post.post, :length => 70)
+      = link_to( content_tag(:small, '&raquo;'.html_safe+:more.l), user_post_path(post.user, post))
 
     =render :partial => 'posts/meta', :locals => {:post => post}

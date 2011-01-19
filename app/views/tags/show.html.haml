@@ -25,7 +25,7 @@
         - @posts.each do |post|
           %li
             = link_to( truncate(post.display_title, :length => 75), user_post_path(post.user, post), :title => :by.l+" #{post.user.login}" )
-            %p.post_excerpt= truncate_words(post.post, 35, '...' )
+            %p.post_excerpt= truncate_words(post.post, :length => 350)
       %h6.all= link_to :all_posts_tagged.l(:tag_name => @tags_raw), show_tag_type_path(:id => @tags_raw, :type => 'Post') unless params[:type]
     -else 
       =box :class => 'first_alt hfeed' do

@@ -23,7 +23,7 @@
         - if @search && @search['description']
           = truncate_words_with_highlight user.description, @search['description']
         - else
-          = truncate_words user.description, 18, '...'
+          = truncate_words(user.description, :length => 180).html_safe
 
         - if current_user && current_user.admin?
           %br

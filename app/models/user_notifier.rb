@@ -92,7 +92,7 @@ class UserNotifier < ActionMailer::Base
     @body[:signup_link] = (current_user ?  signup_by_id_url(current_user, current_user.invite_code) : signup_url )
     @body[:message]  = message
     @body[:url]  = user_post_url(post.user, post)
-    @body[:description] = truncate_words(post.post, 100, @body[:url] )     
+    @body[:description] = truncate_words(post.post, :length => 100, :omission => @body[:url] )     
   end
   
   def activation(user)

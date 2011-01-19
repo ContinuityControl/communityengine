@@ -5,4 +5,4 @@
     =link_to user.login, user_path(user), :class => 'url'
   %dd
     - if user.description
-      %p= truncate_words( user.description, 10, '...')
+      %p= truncate_words(user.description, :length => 100).html_safe

@@ -1,5 +1,5 @@
 = rounded_box  :div_class => 'bluegray-bg'  do
-- navspan = '<span class="navigation_settings_gear"></span>'
+- navspan = '<span class="navigation_settings_gear"></span>'.html_safe
   %h3=:view.l
   %ul
     %li=link_to 'Dashboard', dashboard_user_path(@user)

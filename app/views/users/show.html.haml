@@ -24,9 +24,9 @@
     %h3
       =:my_friends.l
       = link_to "(#{@friend_count})", accepted_user_friendships_path(@user) if @friend_count > 5
-    = link_to "&raquo; #{:invite_a_friend.l :site => AppConfig.community_name}", invite_user_path(@user) if @is_current_user
+    = link_to "&raquo;".html_safe + " #{:invite_a_friend.l :site => AppConfig.community_name}", invite_user_path(@user) if @is_current_user
     %br
-    = link_to "&raquo; #{:view_all_my_friend_requests.l} (#{@pending_friendships_count})", pending_user_friendships_path(@user) if @is_current_user
+    = link_to "&raquo;".html_safe + " #{:view_all_my_friend_requests.l} (#{@pending_friendships_count})", pending_user_friendships_path(@user) if @is_current_user
     %br
     %br
     - @accepted_friendships.each do |user|
@@ -50,7 +50,7 @@
               %br
               %strong= :on_commentable.l + ": #{link_to comment.commentable_name, commentable_url(comment)} (#{comment.commentable_type})"
           %dd
-            %p= "\"#{truncate_words( comment.comment, 10, '...')}\""
+            %p= "\"#{truncate_words( comment.comment, :length => 100)}\""
 
 
   - unless @photo_comments.empty?
@@ -62,9 +62,9 @@
             = link_to(image_tag(comment.commentable.public_filename(:thumb), :width => '50', :height => '50'), user_photo_path(@user, comment.commentable))
           %dd.fn= "#{comment.username}" + " " + :says.l + ":"
           %dd
-            = truncate_words(comment.comment, 10)
+            = truncate_words(comment.comment, :length => 100)
             %br
-            = link_to "&raquo; " + :view_comment.l, user_photo_path(@user, comment.commentable) + "#comment_#{comment.id}"
+            = link_to "&raquo; ".html_safe + :view_comment.l, user_photo_path(@user, comment.commentable) + "#comment_#{comment.id}"
 
 - unless @recent_posts.empty?
   = rounded_box  :div_class => 'bluegray-bg'  do
@@ -82,7 +82,7 @@
     %h6.all.right= link_to :view_all_my_clippings.l, user_clippings_path(@user)
 
 = rounded_box  :div_class => 'bluegray-bg'  do
-  -navspan = '<span class="navigation_settings_gear">Edit</span>'
+  -navspan = '<span class="navigation_settings_gear">Edit</span>'.html_safe
   =link_to navspan, edit_user_path(current_user)
   %h3=:profile_comments.l
   %h2=:add_your_comment.l

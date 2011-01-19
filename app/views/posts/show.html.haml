@@ -7,7 +7,7 @@
   =render :partial => 'forums/community_nav'
 
 - @section = (@post.category && @post.category.name)
-- @meta = { :title => "#{@post.title}", :description => "#{truncate_words(@post.post, 75, '...' )}", :keywords => "#{@post.tags.join(", ") unless @post.tags.nil?}", :robots => AppConfig.robots_meta_show_content }
+- @meta = { :title => "#{@post.title}", :description => "#{truncate_words(@post.post, :length => 750)}", :keywords => "#{@post.tags.join(", ") unless @post.tags.nil?}", :robots => AppConfig.robots_meta_show_content }
 
   = rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
     %h3=:users_blog.l :user=>  @user.login

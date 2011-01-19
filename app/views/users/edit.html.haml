@@ -5,7 +5,7 @@
   = rounded_box  :div_class => 'bluegray-bg'  do
     =box :class => "alt first_alt" do
       %h3=:you_are_editing_your_profile.l
-      = link_to "&raquo; " + :edit_your_account_settings_instead.l, edit_account_user_path(@user)
+      = link_to "&raquo; ".html_safe + :edit_your_account_settings_instead.l, edit_account_user_path(@user)
 
   = error_messages_for :user
 

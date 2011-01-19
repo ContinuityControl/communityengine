@@ -85,25 +85,25 @@ module BaseHelper
     }
   end
 
-  def truncate_words(text, length = 30, end_string = '...')
-    return if text.blank?
-    words = strip_tags(text).split()
-    words[0..(length-1)].join(' ') + (words.length > length ? end_string : '')
+  def truncate_words(text, options = {})
+    options.reverse_merge! :length => 300, :omission => '...'
+    stripped = strip_tags(text)
+    stripped.truncate(options.delete(:length), options) if stripped
   end
   
   def truncate_words_with_highlight(text, phrase)
     t = excerpt(text, phrase)
-    highlight truncate_words(t, 18), phrase
+    highlight truncate_words(t, :length => 180), phrase
   end
 
-  def excerpt_with_jump(text, end_string = ' ...')
+  def excerpt_with_jump(text, end_string = '...')
     return if text.blank?
     doc = Hpricot( text )
     paragraph = doc.at("p")
     if paragraph
       paragraph.to_html + end_string
     else
-      truncate_words(text, 150, end_string) 
+      truncate_words(text, :length => 1500, :omission => end_string) 
     end
   end
 
@@ -208,17 +208,17 @@ module BaseHelper
   # end
   
   def more_comments_links(commentable)
-    html = link_to "&raquo; " + :all_comments.l, comments_url(commentable.class.to_s.underscore, commentable.to_param)
+    html = link_to "&raquo; ".html_safe + :all_comments.l, comments_url(commentable.class.to_s.underscore, commentable.to_param)
     html += "<br />"
-		html += link_to "&raquo; " + :comments_rss.l, comments_url(commentable.class.to_s.underscore, commentable.to_param, :format => :rss)
+		html += link_to "&raquo; ".html_safe + :comments_rss.l, comments_url(commentable.class.to_s.underscore, commentable.to_param, :format => :rss)
 		html
   end
   
   def more_user_comments_links(user = @user)
-    html = link_to "&raquo; " + :all_comments.l, user_comments_url(user)
-    html += "<br />"
-		html += link_to "&raquo; " + :comments_rss.l, user_comments_url(user.to_param, :format => :rss)
-		html  
+    html = link_to "&raquo; ".html_safe + :all_comments.l, user_comments_url(user)
+    html += "<br />".html_safe
+    html += link_to "&raquo; ".html_safe + :comments_rss.l, user_comments_url(user.to_param, :format => :rss)
+    html  
   end
   
   def activities_line_graph(options = {})

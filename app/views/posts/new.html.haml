@@ -17,7 +17,7 @@
 
     
 = rounded_box  :div_class => 'bluegray-bg'  do
-  -navspan = '<span class="navigation_settings_gear_manage">Manage</span>'
+  -navspan = '<span class="navigation_settings_gear_manage">Manage</span>'.html_safe
   =link_to navspan, manage_user_posts_path(current_user)
   =box do 
     %h3

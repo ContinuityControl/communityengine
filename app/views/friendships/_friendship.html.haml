@@ -11,7 +11,7 @@
       
         %ul
           - if user.metro_area        
-            %li.geo= :from2.l + " #{user.metro_area_name}<br/>" 
+            %li.geo= :from2.l + " #{user.metro_area_name}" 
           %li.update
             %abbr.published{:title=>"#{user.created_at}"}
               =:joined.l + " #{distance_of_time_in_words_to_now user.created_at} ago"
@@ -20,11 +20,11 @@
           - if current_user and current_user.can_request_friendship_with(user)
             %li.addfriend= add_friend_link(user)
 
-        = "<p>" + user.tags[0...6].collect{|t| link_to( t.name, tag_url(t), :class => "tag") if t }.join(" ") + "</p>" unless user.tags.empty?
+        = ( "<p>" + user.tags[0...6].collect{|t| link_to( t.name, tag_url(t), :class => "tag") if t }.join(" ") + "</p>" ).html_safe unless user.tags.empty?
 
       .yui-u{"style"=>"overflow:hidden"}
         - if @search && @search['description']
-          = truncate_words_with_highlight user.description, @search['description']
+          = truncate_words_with_highlight(user.description, @search['description']).html_safe
         - else
-          = truncate_words user.description, 18, '...'
+          = truncate_words(user.description, :length => 1000).html_safe
   .clear
