@@ -1,5 +1,6 @@
 <div id="send_to_friend" style="width:500px;height:100px" >
-  <%= form_remote_tag( { 
+  <%= form_tag( { 
+    :remote => true,
     :loading => "$('send_to_friend_spinner').show();", 	
     :url => send_to_friend_user_post_path(:user_id => params[:user_id], :id => params[:id]), 
     :complete => "$('send_to_friend_spinner').hide();", 	
