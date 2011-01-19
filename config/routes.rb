@@ -102,7 +102,7 @@ Control::Application.routes.draw do
   resources :sb_posts
   resources :monitorship
 
-  resources :sb_posts, :path => 'all_sb_posts' do
+  resources :sb_posts, :as => 'all_sb_posts' do
     collection do
       get :monitored
       get :search
