@@ -87,7 +87,7 @@ Control::Application.routes.draw do
     resources :comments
     resources :photo_manager, :only => [:index]
 
-    resources :albums, :path => '/:user_id/photo_manager' do
+    resources :albums, :path => '/:user_id/photo_manager/albums' do
       resources :photos do
         collection do
           post :swfupload
@@ -109,7 +109,7 @@ Control::Application.routes.draw do
     end
   end
 
-  resources :sb_posts, :as => "forum_sb_posts", :path => '/forums/:forum_id'
+  resources :sb_posts, :as => "forum_sb_posts", :path => '/forums/:forum_id/sb_posts'
 
   resources :forums do
     resources :moderators
@@ -131,7 +131,7 @@ Control::Application.routes.draw do
   end
   match '/' => 'base#site_index', :as => :application
 
-  resources :pages, :as => 'admin_pages', :path => '/admin', :except => [:show] do
+  resources :pages, :as => 'admin_pages', :path => '/admin/pages', :except => [:show] do
     member do
       get :preview
     end
@@ -206,8 +206,8 @@ Control::Application.routes.draw do
     resources :rsvps, :except => [:index, :show]
   end
 
-  resources :favorites, :path => '/:favoritable_type/:favoritable_id'
-  resources :comments, :path => '/:commentable_type/:commentable_id'
+  resources :favorites, :path => '/:favoritable_type/:favoritable_id/favorites'
+  resources :comments, :path => '/:commentable_type/:commentable_id/comments'
   match 'comments/delete_selected' => 'comments#delete_selected', :as => :delete_selected_comments
 
   resources :homepage_features
