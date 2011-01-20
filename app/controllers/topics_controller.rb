@@ -1,5 +1,6 @@
 class TopicsController < BaseController
-  before_filter :find_forum_and_topic, :except => :index
+  before_filter :find_forum, :except => :index
+  before_filter :find_topic, :except => [ :index, :create ]
   before_filter :login_required, :except => [:index, :show]
 
   uses_tiny_mce :only => [:show, :new], :options => AppConfig.default_mce_options
@@ -47,32 +48,19 @@ class TopicsController < BaseController
   end
   
   def create
-    # this is icky - move the topic/first post workings into the topic model?
-    Topic.transaction do
-      @topic  = @forum.topics.build(params[:topic])
-      assign_protected
-      @post   = @topic.sb_posts.build(params[:topic])
-      @post.topic=@topic
-      @post.user = current_user
-      # only save topic if post is valid so in the view topic will be a new record if there was an error
-      @topic.tag_list = params[:tag_list] || ''
-      @topic.save if @post.valid?
-      @post.save
-    end
-    if !@topic.valid?
-      respond_to do |format|
-        format.html { 
-          render :action => 'new' and return
-        }
-      end
-    else
-      respond_to do |format|
-        format.html { 
-          redirect_to forum_topic_path(@forum, @topic) 
-        }
-        format.xml  { 
-          head :created, :location => forum_topic_url(:forum_id => @forum, :id => @topic, :format => :xml) 
-        }
+    @topic = @forum.topics.build(params[:topic])
+    assign_protected
+    @post = @topic.sb_posts.build(params[:topic])
+    @post.topic = @topic
+    @post.user = current_user
+    @topic.tag_list = params[:tag_list] || ''
+
+    respond_to do |format|
+      if @topic.save
+        format.html { redirect_to forum_topic_path(@forum, @topic) }
+        format.xml  { head :created, :location => forum_topic_url(:forum_id => @forum, :id => @topic, :format => :xml) }
+      else
+        format.html { render :action => 'new' and return }
       end
     end
   end
@@ -108,8 +96,11 @@ class TopicsController < BaseController
       @topic.forum_id = params[:topic][:forum_id] if params[:topic][:forum_id]
     end
     
-    def find_forum_and_topic
+    def find_forum
       @forum = Forum.find(params[:forum_id])
+    end
+
+    def find_topic
       @topic = @forum.topics.find(params[:id]) if params[:id]
     end
 
