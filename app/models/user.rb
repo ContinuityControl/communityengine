@@ -1,6 +1,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  has_friendly_id :login_slug
   has_many :albums
   
   MALE    = 'M'
@@ -13,19 +14,6 @@ class User < ActiveRecord::Base
     :notify_friend_requests, :password, :password_confirmation,
     :profile_public, :state_id, :stylesheet, :time_zone, :vendor, :zip
 
-  
-  acts_as_authentic do |c|
-#    c.crypto_provider = CommunityEngineSha1CryptoMethod
-#
-#    c.validates_length_of_password_field_options = { :within => 6..20, :if => :password_required? }
-#    c.validates_length_of_password_confirmation_field_options = { :within => 6..20, :if => :password_required? }
-#
-#    c.validates_length_of_login_field_options = { :within => 5..20 }
-#    c.validates_format_of_login_field_options = { :with => /^[\sA-Za-z0-9_-]+$/ }
-#
-#    c.validates_length_of_email_field_options = { :within => 3..100 }
-#    c.validates_format_of_email_field_options = { :with => /^([^@\s]+)@((?:[-a-z0-9A-Z]+\.)+[a-zA-Z]{2,})$/ }
-  end
   acts_as_taggable  
   acts_as_commentable
   has_private_messages
@@ -226,7 +214,7 @@ class User < ActiveRecord::Base
   end  
   
   def to_param
-    "#{id}-#{login_slug}"
+    login_slug
   end
   
   def this_months_posts
