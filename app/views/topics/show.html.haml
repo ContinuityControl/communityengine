@@ -87,7 +87,7 @@
             %p
               %span.edit
                 = ajax_spinner_for "edit-post-#{post.id}", "spinner_bounce.gif"
-                = link_to_remote(:edit_post.l, {:url => edit_forum_topic_sb_post_path(@forum, @topic, post), :method => :get, :before => "EditForm.init(#{post.id});", :condition => "!EditForm.isEditing(#{post.id})" }, {:class => "utility"})
+                = link_to(:edit_post.l, {:remote => true, :url => edit_forum_topic_sb_post_path(@forum, @topic, post), :method => :get, :before => "EditForm.init(#{post.id});", :condition => "!EditForm.isEditing(#{post.id})" }, {:class => "utility"})
               - if admin? && !post.user.admin?
                 %div{"class"=>"make-moderator-#{post.user_id}"}
                   = render :partial => '/moderators/toggle', :locals => {:user => post.user, :forum => @forum}

@@ -11,8 +11,8 @@
       %br
       %small.quiet= link_to :in_your_favorites.l, user_favorite_path(current_user, favorite) if logged_in?    
 
-      %small= link_to_remote '(un-favorite)', :url => favorite_path('clipping', clipping.id, favorite.id), :method => :delete, :loading => "new Effect.Fade($$('#clipping_#{clipping.id} .favorite img').first())", :title => :un_favorite_this.l if logged_in?
+      %small= link_to '(un-favorite)', :remote => true, :url => favorite_path('clipping', clipping.id, favorite.id), :method => :delete, :loading => "new Effect.Fade($$('#clipping_#{clipping.id} .favorite img').first())", :title => :un_favorite_this.l if logged_in?
   - else
     .favorite  
-      = link_to_remote image_tag('icons/heart.png'), :url => favorites_path('clipping', clipping.id), :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id} .favorite img').first() )", :title => :un_favorite_this.l
+      = link_to image_tag('icons/heart.png'), :remote => true, :url => favorites_path('clipping', clipping.id), :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id} .favorite img').first() )", :title => :un_favorite_this.l
       = clipping.favorited_count
