@@ -19,11 +19,9 @@ class CategoriesController < BaseController
     @category = Category.find(params[:id])
     @sidebar_right = true
     
-    cond = Caboose::EZ::Condition.new
-    cond.category_id  == @category.id
     order = (params[:popular] ? "view_count #{params[:popular].eql?('DESC') ? 'DESC' : 'ASC'}": "published_at DESC")
 
-    @posts = Post.paginate :page => params[:page], :order => order, :conditions => cond.to_sql, :include => :tags
+    @posts = Post.includes(:tags).order(order).where(Post.arel_table[:category_id].eq @category.id).paginate :page => params[:page]
     
     
     @popular_posts = @category.posts.find(:all, :limit => 10, :order => "view_count DESC")

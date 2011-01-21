@@ -53,13 +53,9 @@ class UsersController < BaseController
   end
 
   def index
-    cond, @search, @metro_areas, @states = User.paginated_users_conditions_with_search(params)    
+    @users, @search, @metro_areas, @states = User.paginated_users_conditions_with_search(params)
     
-    @users = User.recent.paginate(
-      :conditions => cond.to_sql, 
-      :include => [:tags], 
-      :page => params[:page], :per_page => 20
-      )
+    @users = @users.recent.includes(:tags).paginate( :page => params[:page], :per_page => 20 )
     
     @tags = User.tag_counts :limit => 10
     

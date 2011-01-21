@@ -8,21 +8,16 @@ class ClippingsController < BaseController
   cache_sweeper :taggable_sweeper, :only => [:create, :update, :destroy]    
 
   def site_index
-    cond = Caboose::EZ::Condition.new
+    @clippings = Clipping
     if params[:tag_name]
-      cond.append ['tags.name = ?', params[:tag_name]]
+      @clippings = @clippings.where('tags.name = ?', params[:tag_name])
     end
 
-    cond.append ['created_at > ?', 4.weeks.ago] unless params[:recent]
-    order = (params[:recent] ? "created_at DESC" : "clippings.favorited_count DESC")
+    @clippings = @clippings.where('created_at > ?', 4.weeks.ago) unless params[:recent]
+    @clippings = @clippings.order(params[:recent] ? "created_at DESC" : "clippings.favorited_count DESC")
 
 
-    @clippings = Clipping.paginate(
-      :per_page => 30, :page => params[:page],
-      :order => order,
-      :conditions => cond.to_sql,
-      :include => :tags
-      )
+    @clippings = @clippings.includes(:tags).paginate( :per_page => 30, :page => params[:page])
 
     @rss_title = "#{AppConfig.community_name}: #{params[:popular] ? :popular.l : :recent.l} "+:clippings.l
     @rss_url = rss_site_clippings_path
@@ -45,17 +40,11 @@ class ClippingsController < BaseController
   def index
     @user = User.find(params[:user_id])
 
-    cond = Caboose::EZ::Condition.new
-    cond.user_id == @user.id
+    @clippings = Clipping.where(:user_id => @user.id)
     if params[:tag_name]
-      cond.append ['tags.name = ?', params[:tag_name]]
+      @clippings = @clippings.where('tags.name = ?', params[:tag_name])
     end
-
-    @clippings = Clipping.paginate(
-      :per_page => 30, :page => params[:page],
-      :order => "created_at DESC",
-      :conditions => cond.to_sql,
-      :include => :tags )
+    @clippings = @clippings.includes(:tags).order('created_at DESC').paginate(:per_page => 30, :page => params[:page])
 
     @tags = Clipping.tag_counts :conditions => { :user_id => @user.id }, :limit => 20
     @clippings_data = @clippings.collect {|c| [c.id, c.image_url, c.description, c.url ]  }

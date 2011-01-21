@@ -113,28 +113,27 @@ class User < ActiveRecord::Base
   end
   
   def self.build_conditions_for_search(search)
-    cond = Caboose::EZ::Condition.new
-
-    cond.append ['activated_at IS NOT NULL ']
+    user = User.arel_table
+    users = User.where(user[:activated_at].not_eq nil)
     if search['country_id'] && !(search['metro_area_id'] || search['state_id'])
-      cond.append ['country_id = ?', search['country_id'].to_s]
+      users = users.where(user[:country_id].eq search['country_id'])
     end
     if search['state_id'] && !search['metro_area_id']
-      cond.append ['state_id = ?', search['state_id'].to_s]
+      users = users.where(user[:state_id].eq search['state_id'])
     end
     if search['metro_area_id']
-      cond.append ['metro_area_id = ?', search['metro_area_id'].to_s]
+      users = users.where(user[:metro_area_id].eq search['metro_area_id'])
     end
     if search['login']    
-      cond.login =~ "%#{search['login']}%"
+      users = users.where('`users`.login LIKE ?', "%#{search['login']}%")
     end
     if search['vendor']
-      cond.vendor == true
+      users = users.where(user[:vendor].eq true)
     end    
     if search['description']
-      cond.description =~ "%#{search['description']}%"
+      users = users.where('`users`.description LIKE ?', "%#{search['description']}%")
     end    
-    cond
+    users
   end  
   
   def self.find_by_activity(options = {})
@@ -160,8 +159,8 @@ class User < ActiveRecord::Base
 
     metro_areas, states = find_country_and_state_from_search_params(search)
     
-    cond = build_conditions_for_search(search)
-    return cond, search, metro_areas, states
+    users = build_conditions_for_search(search)
+    return users, search, metro_areas, states
   end  
 
   

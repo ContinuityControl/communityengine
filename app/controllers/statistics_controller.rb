@@ -62,11 +62,8 @@ class StatisticsController < BaseController
     
   protected
   def find_new_users(from, to, limit= nil)
-    new_user_cond = Caboose::EZ::Condition.new
-    new_user_cond << ["activated_at IS NOT NULL"]
-    new_user_cond.created_at >= from
-    new_user_cond.created_at <= to    
-    return User.find(:all, :conditions => new_user_cond.to_sql, :limit => limit)
+    user = User.arel_table
+    User.where(user[:activated_at].not_eq nil).where(user[:created_at].gteq from).where(user[:created_at].lteq to).limit(limit)
   end
   
 

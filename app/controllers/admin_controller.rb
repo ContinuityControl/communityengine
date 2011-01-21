@@ -20,15 +20,17 @@ class AdminController < BaseController
   end
   
   def users
-    cond = Caboose::EZ::Condition.new
+    @users = User.recent
+    user = User.arel_table
+
     if params['login']    
-      cond.login =~ "%#{params['login']}%"
+      @users = @users.where('`users`.login LIKE ?', "%#{params['login']}%")
     end
     if params['email']
-      cond.email =~ "%#{params['email']}%"
+      @users = @users.where('`users`.email LIKE ?', "%#{params['email']}%")
     end        
     
-    @users = User.recent.paginate(:page => params[:page], :per_page => 100, :conditions => cond.to_sql)      
+    @users = @users.paginate(:page => params[:page], :per_page => 100)
   end
   
   def comments

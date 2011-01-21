@@ -21,13 +21,12 @@ class PhotosController < BaseController
   def index
     @user = User.find(params[:user_id])
 
-    cond = Caboose::EZ::Condition.new
-    cond.user_id == @user.id
+    @photos = Photo.where :user_id => @user.id
     if params[:tag_name]
-      cond.append ['tags.name = ?', params[:tag_name]]
+      @photos = @photos.where('tags.name = ?', params[:tag_name])
     end
 
-    @photos = Photo.recent.find(:all, :conditions => cond.to_sql, :include => :tags, :page => {:current => params[:page]})
+    @photos = @photos.includes(:tags).recent.paginate(:page => params[:page])
 
     @tags = Photo.tag_counts :conditions => { :user_id => @user.id }, :limit => 20
 
@@ -52,14 +51,13 @@ class PhotosController < BaseController
   def manage_photos
     if logged_in?
       @user = current_user
-      cond = Caboose::EZ::Condition.new
-      cond.user_id == @user.id
+      @photos = Photo.where :user_id => @user.id
       if params[:tag_name]
-        cond.append ['tags.name = ?', params[:tag_name]]
+        @photos = @photos.where('tags.name = ?', params[:tag_name])
       end
 
       @selected = params[:photo_id]
-      @photos = Photo.recent.paginate :conditions => cond.to_sql, :include => :tags, :per_page => 10, :page => params[:page]
+      @photos = @photos.includes(:tags).recent.paginate(:page => params[:page], :per_page => 10)
 
     end
     respond_to do |format|

@@ -27,12 +27,12 @@ class PostsController < BaseController
   def index
     @user = User.find(params[:user_id])            
     @category = Category.find_by_name(params[:category_name]) if params[:category_name]
-    cond = Caboose::EZ::Condition.new
+    @posts = @user.posts
     if @category
-      cond.append ['category_id = ?', @category.id]
+      @posts = @posts.where('category_id = ?', @category.id)
     end
 
-    @posts = @user.posts.recent.paginate :conditions => cond.to_sql, :per_page => 10, :page => params[:page]
+    @posts = @posts.recent.paginate :per_page => 10, :page => params[:page]
     
     @is_current_user = @user.eql?(current_user)
 
