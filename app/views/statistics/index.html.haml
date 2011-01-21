@@ -2,8 +2,6 @@
   = render :partial => 'shared/admin_nav'
   
 = rounded_box  :div_class => 'white-fg bluegray-bg'  do
-  %h3= :statistics.l
-  = ziya_chart( activities_chart_statistics_url(:range => params[:range]), {:bgcolor => '#ffffff', :width => 600, :height => 400, :id => "Activities", :swf_path => "/plugin_assets/community_engine/charts/"} )
   %h3
     = :total_users.l+":"
     = @total_users

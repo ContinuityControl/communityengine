@@ -1,5 +1,4 @@
 class StatisticsController < BaseController
-  include Ziya
   before_filter :login_required
   before_filter :admin_required
 
@@ -33,7 +32,6 @@ class StatisticsController < BaseController
   def activities_chart
     range = (params[:range].blank? ? 10 : params[:range].to_i ) #days
     
-    chart = Ziya::Charts::Line.new
     @logins = Activity.count(:group => "date(created_at)", :conditions => ["action = ? AND created_at > ?", 'logged_in', range.days.ago ] )
     @comments = Activity.count(:group => "date(created_at)", :conditions => ["action = ? AND created_at > ?", 'comment', range.days.ago ] )    
     @posts = Activity.count(:group => "date(created_at)", :conditions => ["action = ? AND created_at > ?", 'post', range.days.ago ] )        
@@ -49,13 +47,6 @@ class StatisticsController < BaseController
       days << current.to_date.to_s(:db)
     end
 
-    chart.add( :axis_category_text, labels )
-    
-    chart.add( :series, :logins.l, days.collect{|d| @logins[d] || 0 } )
-    chart.add( :series, :comments.l, days.collect{|d| @comments[d] || 0 } )    
-    chart.add( :series, :posts.l, days.collect{|d| @posts[d] || 0 } )        
-    chart.add( :series, :photos.l, days.collect{|d| @photos[d] || 0 } )        
-    chart.add( :series, :clippings.l, days.collect{|d| @clippings[d] || 0 } )            
     render :xml => chart.to_s    
   end
   
