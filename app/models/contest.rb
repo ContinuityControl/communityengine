@@ -1,5 +1,5 @@
 class Contest < ActiveRecord::Base
-  xss_foliate :scrub => [:raw_post]
+  xss_foliate :strip => [:raw_post]
   has_many :posts, :order => "published_at desc"
 
   validates_presence_of :begin_date, :end_date, :title, :banner_title, :banner_subtitle

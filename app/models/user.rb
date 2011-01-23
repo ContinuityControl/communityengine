@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  xss_foliate :scrub => [:raw_post, :title]
+  xss_foliate :strip => [:raw_post, :title]
   has_friendly_id :login_slug
   has_many :albums
   

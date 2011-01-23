@@ -1,5 +1,5 @@
 class Comment < ActiveRecord::Base
-  xss_foliate :scrub => [:comment]
+  xss_foliate :strip => [:comment]
 
   belongs_to :commentable, :polymorphic => true
   belongs_to :user

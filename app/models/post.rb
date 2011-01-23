@@ -1,5 +1,5 @@
 class Post < ActiveRecord::Base
-  xss_foliate :scrub => [:raw_post, :title]
+  xss_foliate :strip => [:raw_post, :title]
   acts_as_commentable
   acts_as_taggable
   acts_as_activity :user, :if => Proc.new{|r| r.is_live?}
