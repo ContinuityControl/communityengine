@@ -1,4 +1,5 @@
 class Post < ActiveRecord::Base
+  xss_foliate :scrub => [:raw_post, :title]
   acts_as_commentable
   acts_as_taggable
   acts_as_activity :user, :if => Proc.new{|r| r.is_live?}
@@ -15,7 +16,6 @@ class Post < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :published_at, :if => Proc.new{|r| r.is_live? }
 
-  before_save :transform_post
   before_validation :set_published_at
   
   after_save do |post|
@@ -103,13 +103,6 @@ class Post < ActiveRecord::Base
   def tag_for_first_image_in_body
     image = first_image_in_body
     image.nil? ? '' : "<img src='#{image}' />"
-  end
-  
-  ## transform the text and title into valid html
-  def transform_post
-   # self.raw_post  = force_relative_urls(self.raw_post)
-   self.post  = white_list(self.raw_post)
-   self.title = white_list(self.title)
   end
   
   def set_published_at

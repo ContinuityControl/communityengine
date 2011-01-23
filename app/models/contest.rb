@@ -1,6 +1,6 @@
 class Contest < ActiveRecord::Base
+  xss_foliate :scrub => [:raw_post]
   has_many :posts, :order => "published_at desc"
-  before_save :transform_post
 
   validates_presence_of :begin_date, :end_date, :title, :banner_title, :banner_subtitle
   
@@ -10,10 +10,6 @@ class Contest < ActiveRecord::Base
     active.find(:first)
   end
 
-  def transform_post
-    self.post = white_list(self.raw_post)
-  end
-  
   def self.get_active
     Contest.find(:first, :conditions => ["begin_date < ? AND end_date > ?", Time.now, Time.now], :order => 'created_at desc')
   end

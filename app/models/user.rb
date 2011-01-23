@@ -1,6 +1,7 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  xss_foliate :scrub => [:raw_post, :title]
   has_friendly_id :login_slug
   has_many :albums
   
@@ -435,8 +436,6 @@ class User < ActiveRecord::Base
     # before filters
     def whitelist_attributes
       self.login = self.login.strip
-      self.description = white_list(self.description )
-      self.stylesheet = white_list(self.stylesheet )
     end
 
     def password_required?

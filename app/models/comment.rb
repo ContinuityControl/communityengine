@@ -1,4 +1,5 @@
 class Comment < ActiveRecord::Base
+  xss_foliate :scrub => [:comment]
 
   belongs_to :commentable, :polymorphic => true
   belongs_to :user
@@ -9,8 +10,6 @@ class Comment < ActiveRecord::Base
   
   validates_length_of :comment, :maximum => 2000
   
-  before_save :whitelist_attributes  
-
   validates_presence_of :user, :unless => Proc.new{|record| AppConfig.allow_anonymous_commenting }
   validates_presence_of :author_email, :unless => Proc.new{|record| record.user }  #require email unless logged in
   validates_presence_of :author_ip, :unless => Proc.new{|record| record.user} #log ip unless logged in
@@ -116,10 +115,4 @@ class Comment < ActiveRecord::Base
     end
   end
   
-  protected
-  def whitelist_attributes
-    self.comment = white_list(self.comment)
-  end
-  
-
 end
