@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   after_create  :update_last_login
   after_create  :deliver_signup_notification
   after_save    :deliver_activation, :if => Proc.new { |user| user.recently_activated? }
-  before_save   :generate_login_slug
+  before_validation   :generate_login_slug
   after_save    :recount_metro_area_users
   after_destroy :recount_metro_area_users
 
