@@ -1,4 +1,6 @@
 class Forum < ActiveRecord::Base
+  before_validation :format_content # keep this before xss_foliate
+  xss_foliate :strip => [:description_html]
   acts_as_taggable
   acts_as_list
 
@@ -29,10 +31,29 @@ class Forum < ActiveRecord::Base
 
   belongs_to :owner, :polymorphic => true
 
-  format_attribute :description
-  
   def to_param
     id.to_s << "-" << (name ? name.parameterize : '' )
   end
   
+  def body
+    read_attribute :description
+  end
+
+  def body_html
+    read_attribute :description_html
+  end
+
+  def body_html=(value)
+    write_attribute :description_html, value
+  end
+
+  protected
+
+  def format_content
+    self.body_html = body.blank? ? '' : body_html_with_formatting
+  end
+
+  def body_html_with_formatting
+    body_html = auto_link(body) { |text| truncate(text, :length => 50) }
+  end
 end

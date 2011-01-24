@@ -1,11 +1,12 @@
 class SbPost < ActiveRecord::Base
+  before_validation :format_content # keep this before xss_foliate
+  xss_foliate :strip => [:body_html]
   acts_as_activity :user
   
   belongs_to :forum, :counter_cache => true
   belongs_to :user,  :counter_cache => true
   belongs_to :topic, :counter_cache => true
 
-  format_attribute :body
   before_create { |r| r.forum_id = r.topic.forum_id }
   after_create  { |r| Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', r.created_at, r.user_id, r.id], ['id = ?', r.topic_id]) }
   after_destroy { |r| t = Topic.find(r.topic_id) ; Topic.update_all(['replied_at = ?, replied_by = ?, last_post_id = ?', t.sb_posts.last.created_at, t.sb_posts.last.user_id, t.sb_posts.last.id], ['id = ?', t.id]) if t.sb_posts.last }
@@ -38,5 +39,15 @@ class SbPost < ActiveRecord::Base
     options[:except] ||= []
     options[:except] << :topic_title << :forum_name
     super
+  end
+
+  protected
+
+  def format_content
+    self.body_html = body.blank? ? '' : body_html_with_formatting
+  end
+
+  def body_html_with_formatting
+    body_html = auto_link(body) { |text| truncate(text, :length => 50) }
   end
 end
