@@ -27,7 +27,7 @@ class Friendship < ActiveRecord::Base
     end
   end  
     
-  before_validation_on_create :set_pending
+  before_validation(:on => :create) { set_pending }
   after_save :notify_requester, :if => Proc.new{|fr| fr.accepted? && fr.initiator }
 
   attr_protected :friendship_status_id
