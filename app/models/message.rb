@@ -11,7 +11,7 @@ class Message < ActiveRecord::Base
   after_create :notify_recipient
   
   def ensure_not_sending_to_self
-    errors.add_to_base("You may not send a message to yourself.") if self.recipient && self.recipient.eql?(self.sender)    
+    errors.add(:base, "You may not send a message to yourself.") if self.recipient && self.recipient.eql?(self.sender)    
   end
   
   def notify_recipient

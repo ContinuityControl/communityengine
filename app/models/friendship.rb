@@ -23,7 +23,7 @@ class Friendship < ActiveRecord::Base
   
   def validate  
     if new_record? && initiator && user.has_reached_daily_friend_request_limit?
-      errors.add_to_base("Sorry, you'll have to wait a little while before requesting any more friendships.")       
+      errors.add(:base, "Sorry, you'll have to wait a little while before requesting any more friendships.")       
     end
   end  
     
