@@ -1,4 +1,4 @@
-Control::Application.routes.draw do
+ContinuityControl::Application.routes.draw do
   resources :users do
     member do
       get :dashboard 
