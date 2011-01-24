@@ -27,5 +27,5 @@
       %strong= h(forum.sb_posts.last.user.display_name)
       %span
         (
-        = link_to :view.l, forum_topic_path(:forum_id => forum, :id => forum.sb_posts.last.topic_id, :page => forum.sb_posts.last.topic.last_page, :anchor => forum.sb_posts.last.dom_id) 
+        = link_to :view.l, forum_topic_path(:forum_id => forum, :id => forum.sb_posts.last.topic_id, :page => forum.sb_posts.last.topic.last_page, :anchor => dom_id(forum.sb_posts.last)) 
         )
