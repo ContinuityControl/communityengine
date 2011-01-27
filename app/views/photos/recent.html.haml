@@ -5,4 +5,4 @@
 
   %ul
     - @photos.each do |photo|
-      %li= image_tag photo.public_filename(:thumb) 
+      %li= image_tag photo.photo.url(:thumb) 

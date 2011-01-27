@@ -14,16 +14,12 @@
 = rounded_box  :div_class => 'bluegray-bg'  do
   %h3= :profile_photo_crop.l  
 
-  = image_tag( @photo.public_filename, :id => 'photo' )
+  = image_tag( @photo.photo.url, :id => 'photo' )
   
   = error_messages_for :photo
   = form_for(:photo, :url => crop_profile_photo_user_path(@user), :html => { :method => :put, :class => "MainForm" }) do |f|
-    %input{ :type=>"hidden", :name=>"x1", :id=>"x1", :size=>"4"}
-    %input{ :type=>"hidden", :name=>"y1", :id=>"y1", :size=>"4"}
-    %input{ :type=>"hidden", :name=>"x2", :id=>"x2", :size=>"4"}
-    %input{ :type=>"hidden", :name=>"y2", :id=>"y2", :size=>"4"}
-    %input{ :type=>"hidden", :name=>"width", :id=>"width", :size=>"4"}
-    %input{ :type=>"hidden", :name=>"height", :id=>"height", :size=>"4"}      
+    - [:crop_x, :crop_y, :crop_w, :crop_h].each do |attribute|
+      %input{ :type=>"hidden", :name=>attribute, :id=>attribute, :size=>"4"}
     
     %p
       = submit_tag :update.l
@@ -33,12 +29,10 @@
 %script{:type => 'text/javascript'}
   :plain
     function onEndCrop( coords, dimensions ) {
-      $( 'x1' ).value = coords.x1;
-      $( 'y1' ).value = coords.y1;
-      $( 'x2' ).value = coords.x2;
-      $( 'y2' ).value = coords.y2;
-      $( 'width' ).value = dimensions.width;
-      $( 'height' ).value = dimensions.height;
+      $( 'crop_x' ).value = coords.x1;
+      $( 'crop_y' ).value = coords.y1;
+      $( 'crop_w' ).value = dimensions.width;
+      $( 'crop_h' ).value = dimensions.height;
     }
     function loadExample() {
       new Cropper.ImgWithPreview( 'photo', { previewWrap: 'previewWrap', minWidth: 100, minHeight: 100, ratioDim: { x: 290, y: 290 }, onEndCrop: onEndCrop } );      

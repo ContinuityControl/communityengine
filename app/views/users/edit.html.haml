@@ -1,7 +1,7 @@
 -content_for :sidebar do
   =render :partial => 'settings/settings_menu'
 
-= form_tag user_url(@user), :method => 'put', :multipart =>true, :class => 'MainForm' do
+= semantic_form_for @user, :url => user_path(@user), :html => { :multipart => true, :class => 'MainForm' } do |f|
   = rounded_box  :div_class => 'bluegray-bg'  do
     =box :class => "alt first_alt" do
       %h3=:you_are_editing_your_profile.l
@@ -14,9 +14,8 @@
     %h3=:profile_photo.l
     = @user.vendor ? "<div class='right_corner'><div class='community_pro'></div></div>" : ''
     = image_tag( @user.avatar_photo_url(:thumb), :class => "polaroid" )
-    %label
-      =:choose_a_photo_for_your_profile.l
-    = file_field :avatar, :uploaded_data, :size => "15"
+    = f.inputs :for => :avatar do |avatar_form|
+      = avatar_form.input :photo, :size => '15', :label => :choose_a_photo_for_your_profile.l
 
   = rounded_box  :div_class => 'bluegray-bg'  do
     .right= submit_tag :save_changes.l

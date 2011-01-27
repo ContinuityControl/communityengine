@@ -9,12 +9,6 @@ class User < ActiveRecord::Base
   FEMALE  = 'F'
   #attr_protected :admin, :featured, :role_id
   
-  attr_accessible :avatar_id, :company_name, :country_id, :description, :email,
-    :firstname, :fullname, :gender, :lastname, :login, :metro_area_id,
-    :middlename, :notify_comments, :notify_community_news,
-    :notify_friend_requests, :password, :password_confirmation,
-    :profile_public, :state_id, :stylesheet, :time_zone, :vendor, :zip
-
   acts_as_taggable  
   acts_as_commentable
   has_private_messages
@@ -79,6 +73,13 @@ class User < ActiveRecord::Base
     {:conditions => ["tags.name = ?", tag_name], :include => :tags}
   }
   
+
+  accepts_nested_attributes_for :avatar
+  attr_accessible :avatar_id, :company_name, :country_id, :description, :email,
+    :firstname, :fullname, :gender, :lastname, :login, :metro_area_id,
+    :middlename, :notify_comments, :notify_community_news,
+    :notify_friend_requests, :password, :password_confirmation,
+    :profile_public, :state_id, :stylesheet, :time_zone, :vendor, :zip, :avatar_attributes
 
   ## Class Methods
 
@@ -227,7 +228,7 @@ class User < ActiveRecord::Base
   
   def avatar_photo_url(size = nil)
     if avatar
-      avatar.public_filename(size)
+      avatar.photo.url(size)
     else
       case size
         when :thumb

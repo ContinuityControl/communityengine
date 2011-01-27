@@ -116,7 +116,6 @@ class UsersController < BaseController
   end
   
   def update
-    @user.attributes      = params[:user]
     @metro_areas, @states = setup_locations_for(@user)
 
     unless params[:metro_area_id].blank?
@@ -127,14 +126,9 @@ class UsersController < BaseController
       @user.metro_area = @user.state = @user.country = nil
     end
   
-    @avatar       = Photo.new(params[:avatar])
-    @avatar.user  = @user
-
-    @user.avatar  = @avatar if @avatar.save
-    
     @user.tag_list = params[:tag_list] || ''
 
-    if @user.save!
+    if @user.update_attributes(params[:user])
       @user.track_activity(:updated_profile)
       
       flash[:notice] = :your_changes_were_saved.l
@@ -143,9 +137,9 @@ class UsersController < BaseController
       else
         redirect_to :action => "welcome_#{params[:welcome]}", :id => @user
       end
+    else
+      render :action => 'edit'
     end
-  rescue ActiveRecord::RecordInvalid
-    render :action => 'edit'
   end
   
   def destroy
@@ -181,16 +175,7 @@ class UsersController < BaseController
     end
     return unless request.put?
     
-    if @photo
-      if params[:x1]
-        img = Magick::Image::read(@photo.path_or_s3_url_for_image).first.crop(params[:x1].to_i, params[:y1].to_i,params[:width].to_i, params[:height].to_i, true)
-        img.format = @photo.content_type.split('/').last
-        crop = {'tempfile' => StringIO.new(img.to_blob), 'content_type' => @photo.content_type, 'filename' => "custom_#{@photo.filename}"}
-        @photo.uploaded_data = crop
-        @photo.save!
-      end
-    end
-
+    @photo.update_attributes(:crop_x => params[:crop_x], :crop_y => params[:crop_y], :crop_w => params[:crop_w], :crop_h => params[:crop_h])
     redirect_to user_path(@user)
   end
   
