@@ -90,7 +90,7 @@
                   = render :partial => '/moderators/toggle', :locals => {:user => post.user, :forum => @forum}
 
         %td.body.entry-content{"id"=>"post-body-#{post.id}", :width => '85%'}
-          = link_to_function image_tag('/clearbits/comment.gif', :class => 'icon reply', :plugin => 'community_engine'), "$('reply').toggle()" if logged_in?
+          = link_to_function image_tag('/clearbits/comment.gif', :class => 'icon reply'), "$('reply').toggle()" if logged_in?
           = post.body_html
 
 
@@ -101,7 +101,7 @@
     #edit
     - if @topic.locked?
       %p
-        = image_tag "clearbits/lock.gif", :class => "icon grey", :title => :topic_locked.l, :plugin => "community_engine"
+        = image_tag "clearbits/lock.gif", :class => "icon grey", :title => :topic_locked.l
         %label= :this_topic_is_locked.l
     - else
       %h6.all.right= link_to_function :reply_to_topic.l, "ReplyForm.init()", :class => "utility"

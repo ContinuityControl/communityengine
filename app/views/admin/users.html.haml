@@ -35,7 +35,7 @@
           %td
             = link_to( :assume_id.l , assume_user_path(user) )
             = (" | " + link_to(:activate.l, :controller => "/admin", :action => "activate_user", :id => user.id)) unless user.active?
-            = link_to_remote(image_tag('icons/delete.png', :plugin => 'community_engine'), {:url => user_path(user), :method => :delete, :success => visual_effect(:fade, "user_#{user.id}"), :confirm => "Are you sure you want to permanently delete this user"} )                                                
+            = link_to_remote(image_tag('icons/delete.png'), {:url => user_path(user), :method => :delete, :success => visual_effect(:fade, "user_#{user.id}"), :confirm => "Are you sure you want to permanently delete this user"} )                                                
 
     -if @users.total_pages > 1
       .pagination= paginating_links @users, :link_to_current_page => true

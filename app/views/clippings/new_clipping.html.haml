@@ -5,8 +5,8 @@
       \- 
       =:new_clipping.l
     = render :partial => '/shared/scripts_and_styles'
-    = javascript_include_tag 'lightbox', :plugin => "community_engine"
-    = stylesheet_link_tag 'lightbox', :plugin => "community_engine"
+    = javascript_include_tag 'lightbox'
+    = stylesheet_link_tag 'lightbox'
     %style{"type"=>"text/css"}
       :plain
         body {
@@ -46,7 +46,7 @@
             %p
               %small=:click_on_an_image_below_to_clip_it.l
             %ul#clipping_image_list
-              = image_tag 'spinner.gif', :plugin => "community_engine"
+              = image_tag 'spinner.gif'
               =:loading_images.l
               %script{"type"=>"text/javascript"}
                 = remote_function(:url => { :action => "load_images_from_uri", :params => {:uri => params[:uri]} } )

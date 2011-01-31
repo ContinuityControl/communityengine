@@ -46,9 +46,9 @@
             - icon, color, post = icon_and_color_and_post_for topic
 
             - if recent_topic_activity(topic)
-              = image_tag "clearbits/#{icon}.gif", :class => "icon green", :title => :recent_activity.l+" #{post}", :plugin => "community_engine"
+              = image_tag "clearbits/#{icon}.gif", :class => "icon green", :title => :recent_activity.l+" #{post}"
             - else
-              = image_tag "clearbits/#{icon}.gif", :class => "icon grey #{color}", :title => :no_recent_activity.l+" #{post}", :plugin => "community_engine"
+              = image_tag "clearbits/#{icon}.gif", :class => "icon grey #{color}", :title => :no_recent_activity.l+" #{post}"
           %td.c2
             = :sticky.l+": <strong>" if topic.sticky?
             = link_to h(topic.title), forum_topic_path(@forum, topic), :class => "entry-title", :rel => "bookmark"

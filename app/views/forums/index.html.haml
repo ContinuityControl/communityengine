@@ -28,9 +28,9 @@
       %tr
         %td.vat.c1  
           - if recent_forum_activity(forum)
-            = image_tag "clearbits/comment.gif", :class => "icon green", :title => :recent_activity.l, :plugin => "community_engine"
+            = image_tag "clearbits/comment.gif", :class => "icon green", :title => :recent_activity.l
           - else
-            = image_tag "clearbits/comment.gif", :class => "icon grey", :title => :no_recent_activity.l, :plugin => "community_engine"
+            = image_tag "clearbits/comment.gif", :class => "icon grey", :title => :no_recent_activity.l
         %td.c2.vat
           = link_to h(forum.name), forum_path(forum), :class => "title"
           .posts

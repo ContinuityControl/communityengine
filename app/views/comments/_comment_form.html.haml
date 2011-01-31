@@ -41,7 +41,7 @@
     
     %p
       = submit_tag :add_comment.l
-      = image_tag 'spinner.gif', :plugin => "community_engine", :style => 'display:none;', :id => 'comment_spinner'
+      = image_tag 'spinner.gif', :style => 'display:none;', :id => 'comment_spinner'
 - else
   = link_to :log_in_to_leave_a_comment.l, new_comment_path(commentable.class, commentable.id)
   = :or.l
