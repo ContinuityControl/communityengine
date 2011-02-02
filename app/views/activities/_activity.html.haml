@@ -3,7 +3,7 @@
     =time_ago_in_words_or_date(activity.created_at)
   %dd
     -if activity.can_be_deleted_by?(current_user)
-      =link_to image_tag("icons/delete.png"), :remote => true, :url => activity_path(activity), :method => :delete, :html => {:class => 'right'}
+      =link_to image_tag("icons/delete.png"), activity_path(activity), :remote => true, :method => :delete, :class => 'right'
   
     =link_to activity.user.login.capitalize, user_path(activity.user.login_slug)  
     - if activity.item
