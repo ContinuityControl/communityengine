@@ -1,38 +1,13 @@
-=# javascript_include_tag "application"
-=# javascript_include_tag "prototype"
-=# javascript_include_tag "effects"
-= javascript_include_tag "event-selectors"
+= javascript_include_tag "event-selectors", :plugin => :community_engine
 
-=# javascript_include_tag "controls" unless current_page?({:controller => 'application', :action => 'index'})
-
-= javascript_include_tag "dragdrop" if @controller.controller_name.eql?('users') && %w(welcome_about edit update).include?(@controller.action_name)
-
-= javascript_include_tag "application"		
-
-= javascript_include_tag "AC_RunActiveContent" if current_page?(:controller => 'photos', :action => 'new') or current_page?(:controller => 'statistics', :action => 'index')		
+= javascript_include_tag "application", :plugin => :community_engine
 
 - if (controller_name == 'photos' && action_name == 'new')
-  = javascript_include_tag 'swfupload'
-  = javascript_include_tag 'uploader'
-
-=# stylesheet_link_tag 'reset-fonts-grids.css'
-= stylesheet_link_tag 'screen'
-= stylesheet_link_tag 'print', :media => 'print'
-
-- unless current_user
-  = stylesheet_link_tag 'prototip'
-  = javascript_include_tag 'prototip'
-
-- if current_page?({:controller => 'posts', :action => 'show' })
-  = javascript_include_tag 'lightbox'
-  = stylesheet_link_tag 'lightbox'	
-  
-= javascript_include_tiny_mce_if_used
-= tiny_mce if using_tiny_mce?
+  = javascript_include_tag 'swfupload', :plugin => :community_engin
+  = javascript_include_tag 'uploader', :plugin => :community_engine
 
 - if defined?(forum_page?) && forum_page?
-  = javascript_include_tag 'lowpro', 'forum'
-  = stylesheet_link_tag 'forum'
+  = javascript_include_tag 'forum', :plugin => :community_engine
   - unless @feed_icons.blank?
     - @feed_icons.each do |feed|
       = auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'"
