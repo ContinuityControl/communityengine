@@ -12,7 +12,7 @@ module BaseHelper
   end
   
   def forum_page?
-    %w(forums topics sb_posts).include?(@controller.controller_name)
+    %w(forums topics sb_posts).include?(controller.controller_name)
   end
   
   def is_current_user_and_featured?(u)
@@ -112,7 +112,7 @@ module BaseHelper
     tagline = " | #{AppConfig.community_tagline}"
 
 		title = app_base
-		case @controller.controller_name
+		case controller.controller_name
 			when 'base'
 					title += tagline
                         when 'pages'
@@ -143,7 +143,7 @@ module BaseHelper
           title = :user_clippings.l(:user => @user.login) + ' &raquo; ' + app_base + tagline
         end
       when 'tags'
-        case @controller.action_name
+        case controller.action_name
           when 'show'
             if params[:type]
               title = I18n.translate('all_' + params[:type].downcase.pluralize + '_tagged', :tag_name => @tags.map(&:name).join(', '))
@@ -175,7 +175,7 @@ module BaseHelper
     if @page_title
       title = @page_title + ' &raquo; ' + app_base + tagline
     elsif title == app_base          
-		  title = :showing.l + ' ' + @controller.controller_name.l + ' &raquo; ' + app_base + tagline
+		  title = :showing.l + ' ' + controller.controller_name.l + ' &raquo; ' + app_base + tagline
     end
 
     title
