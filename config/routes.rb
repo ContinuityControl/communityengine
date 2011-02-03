@@ -54,7 +54,7 @@ ContinuityControl::Application.routes.draw do
       member do
         get :contest
         post :send_to_friend
-        post :update_views
+        put :update_views
       end
     end
 
