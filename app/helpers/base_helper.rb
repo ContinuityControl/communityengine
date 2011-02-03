@@ -259,33 +259,10 @@ module BaseHelper
   
   def paginating_links(paginator, options = {}, html_options = {})
     if paginator.total_pages > 1
-  		name = options[:name] || PaginatingFind::Helpers::DEFAULT_OPTIONS[:name]
- 
-    	our_params = (options[:params] || params).clone
-      
-      our_params.delete("authenticity_token")
-      our_params.delete("commit")
-
-    	links = paginating_links_each(paginator, options) do |n|
-    	  our_params[name] = n
-    	  link_to(n, our_params, html_options.merge(:class => (paginator.page.eql?(n) ? 'active' : '')))
-    	end
-    end
-    
-    if options[:show_info].eql?(false)
-      (links || '')
-    else
-      content_tag(:div, pagination_info_for(paginator), :class => 'pagination_info') + (links || '')
+      will_paginate paginator
     end
   end  
-  
-  def pagination_info_for(paginator, options = {})
-    options = {:prefix => :showing.l, :connector => '-', :suffix => ""}.merge(options)
-    window = paginator.first_item.to_s + options[:connector] + paginator.last_item.to_s
-    options[:prefix] + " <strong>#{window}</strong> " + :of.l + " #{paginator.size} " + options[:suffix]
-  end
-  
-  
+
   def last_active
     session[:last_active] ||= Time.now.utc
   end
