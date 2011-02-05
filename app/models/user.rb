@@ -169,10 +169,10 @@ class User < ActiveRecord::Base
   def self.recent_activity(options = {})
     options.reverse_merge! :per_page => 10, :page => 1
     Activity.recent.paginate(
-      :select => 'activities.*', 
-      :conditions => "users.activated_at IS NOT NULL", 
-      :joins => "LEFT JOIN users ON users.id = activities.user_id",
-      *options)    
+      options.merge(
+        :select => 'activities.*', 
+        :conditions => "users.activated_at IS NOT NULL", 
+        :joins => "LEFT JOIN users ON users.id = activities.user_id"))
   end
 
   def self.currently_online
@@ -366,9 +366,8 @@ class User < ActiveRecord::Base
     page.reverse_merge :per_page => 10, :page => 1
 
     Activity.recent.since(since).paginate( 
-      :conditions => ['comments.recipient_id = ? AND activities.user_id != ?', self.id, self.id], 
-      :joins => "LEFT JOIN comments ON comments.id = activities.item_id AND activities.item_type = 'Comment'",
-      *page)
+      page.merge(:conditions => ['comments.recipient_id = ? AND activities.user_id != ?', self.id, self.id], 
+      :joins => "LEFT JOIN comments ON comments.id = activities.item_id AND activities.item_type = 'Comment'"))
   end
 
   def friends_ids
