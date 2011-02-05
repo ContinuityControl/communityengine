@@ -88,7 +88,7 @@ class ClippingsController < BaseController
     begin
       doc = Hpricot( open( uri ) )
     rescue
-      render :inline => "<h1>Sorry, there was an error fetching the images from the page you requested</h1><a href='#{params[:uri]}'>Go back...</a>"
+      render :inline => "<h1>Sorry, there was an error fetching the images from the page you requested</h1><a href='#{params[:uri]}'>Go back...</a>".html_safe
       return
     end
     @page_title = (doc/"title")
@@ -186,6 +186,6 @@ class ClippingsController < BaseController
   protected
 
   def description_for_rss(clip)
-    "<a href='#{user_clipping_url(clip.user, clip)}' title='#{clip.title_for_rss}'><img src='#{clip.image_url}' alt='#{clip.description}' /></a>"
+    "<a href='#{user_clipping_url(clip.user, clip)}' title='#{clip.title_for_rss}'><img src='#{clip.image_url}' alt='#{clip.description}' /></a>".html_safe
   end
 end

@@ -204,7 +204,7 @@ class PhotosController < BaseController
   protected
 
   def description_for_rss(photo)
-    "<a href='#{user_photo_url(photo.user, photo)}' title='#{photo.name}'><img src='#{photo.photo.url(:large)}' alt='#{photo.name}' /><br />#{photo.description}</a>"
+    "<a href='#{user_photo_url(photo.user, photo)}' title='#{photo.name}'><img src='#{photo.photo.url(:large)}' alt='#{photo.name}' /><br />#{photo.description}</a>".html_safe
   end
 
 end

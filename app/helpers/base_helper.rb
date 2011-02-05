@@ -117,30 +117,30 @@ module BaseHelper
 					title += tagline
                         when 'pages'
                           if @page and @page.title
-                            title = @page.title + ' &raquo; ' + app_base + tagline
+                            title = @page.title + ' &raquo; '.html_safe + app_base + tagline
                           end
 			when 'posts'
         if @post and @post.title
-          title = @post.title + ' &raquo; ' + app_base + tagline
-          title += (@post.tags.empty? ? '' : " &laquo; "+:keywords.l+": " + @post.tags[0...4].join(', ') )
+          title = @post.title + ' &raquo; '.html_safe + app_base + tagline
+          title += (@post.tags.empty? ? '' : " &laquo; ".html_safe+:keywords.l+": " + @post.tags[0...4].join(', ') )
           @canonical_url = user_post_url(@post.user, @post)
         end
       when 'users'
         if @user && !@user.new_record? && @user.login 
           title = @user.login
           title += ', ' + :expert_in.l + ' ' + @user.offerings.collect{|o| o.skill.name }.join(', ') if @user.vendor? and !@user.offerings.empty?
-          title += ' &raquo; ' + app_base + tagline
+          title += ' &raquo; '.html_safe + app_base + tagline
           @canonical_url = user_url(@user)          
         else
-          title = :showing_users.l+' &raquo; ' + app_base + tagline
+          title = :showing_users.l+' &raquo; '.html_safe + app_base + tagline
         end
       when 'photos'
         if @user and @user.login
-          title = :users_photos.l(:user => @user.login)+' &raquo; ' + app_base + tagline
+          title = :users_photos.l(:user => @user.login)+' &raquo; '.html_safe + app_base + tagline
         end
       when 'clippings'
         if @user and @user.login
-          title = :user_clippings.l(:user => @user.login) + ' &raquo; ' + app_base + tagline
+          title = :user_clippings.l(:user => @user.login) + ' &raquo; '.html_safe + app_base + tagline
         end
       when 'tags'
         case controller.action_name
@@ -154,53 +154,53 @@ module BaseHelper
             title += ' | ' + app_base    
             @canonical_url = tag_url(URI.escape(@tags_raw, /[\/.?#]/)) if @tags_raw
           else
-            title = 'Showing tags &raquo; ' + app_base + tagline            
+            title = 'Showing tags &raquo; '.html_safe + app_base + tagline            
           end
       when 'categories'
         if @category and @category.name
-          title = :posts_photos_and_bookmarks.l(:name => @category.name) + ' &raquo; ' + app_base + tagline
+          title = :posts_photos_and_bookmarks.l(:name => @category.name) + ' &raquo; '.html_safe + app_base + tagline
         else
-          title = :showing_categories.l + ' &raquo; ' + app_base + tagline            
+          title = :showing_categories.l + ' &raquo; '.html_safe + app_base + tagline            
         end
       when 'skills'
         if @skill and @skill.name
-          title = :find_an_expert_in.l + ' ' + @skill.name + ' &raquo; ' + app_base + tagline
+          title = :find_an_expert_in.l + ' ' + @skill.name + ' &raquo; '.html_safe + app_base + tagline
         else
-          title = :find_experts.l + ' &raquo; ' + app_base + tagline            
+          title = :find_experts.l + ' &raquo; '.html_safe + app_base + tagline            
         end
       when 'sessions'
-        title = :login.l + ' &raquo; ' + app_base + tagline            
+        title = :login.l + ' &raquo; '.html_safe + app_base + tagline            
     end
 
     if @page_title
-      title = @page_title + ' &raquo; ' + app_base + tagline
+      title = @page_title + ' &raquo; '.html_safe + app_base + tagline
     elsif title == app_base          
-		  title = :showing.l + ' ' + controller.controller_name.l + ' &raquo; ' + app_base + tagline
+		  title = :showing.l + ' ' + controller.controller_name.l + ' &raquo; '.html_safe + app_base + tagline
     end
 
     title
   end
 
   def add_friend_link(user = nil)
-		html = "<span class='friend_request' id='friend_request_#{user.id}'>"
-    html += link_to :request_friendship.l,
-				{:remote => true, :update => "friend_request_#{user.id}",
-					:loading => "$$('span#friend_request_#{user.id} span.spinner')[0].show(); $$('span#friend_request_#{user.id} a.add_friend_btn')[0].hide()", 
-					:complete => visual_effect(:highlight, "friend_request_#{user.id}", :duration => 1),
-          500 => "alert('"+:sorry_there_was_an_error_requesting_friendship.l.gsub(/'/, "\\\\'")+"')",
-					:url => hash_for_user_friendships_url(:user_id => current_user.id, :friend_id => user.id), 
-					:method => :post }, {:class => "add_friend button"}
-		html +=	"<span style='display:none;' class='spinner'>"
-		html += image_tag 'spinner.gif'
-		html += :requesting_friendship.l+" ...</span></span>"
-		html
+    content_tag :span, :class => 'friend_request', :id => "friend_request_#{user.id}" do
+      output = link_to :request_friendship.l,
+          hash_for_user_friendships_url(:user_id => current_user.id, :friend_id => user.id),
+          'data-message' => :sorry_there_was_an_error_requesting_friendship.l,
+          :method => :post, :class => "add_friend", :remote => true
+      output += content_tag :span, :class => 'spinner', :style => 'display:none;' do
+        output2 = image_tag 'spinner.gif'
+        output2 += :requesting_friendship.l
+      end
+    end
   end
 
   def topnav_tab(name, options)
     classes = [options.delete(:class)]
     classes << 'current' if options[:section] && (options.delete(:section).to_a.include?(@section))
     
-    "<li class='#{classes.join(' ')}'>" + link_to( "<span>"+name+"</span>", options.delete(:url), options) + "</li>"
+    content_tag(:li, :class => classes.join(' ')) do
+      link_to( content_tag(:span, name), options.delete(:url), options)
+    end
   end
 
   # def format_post_totals(posts)
@@ -209,14 +209,14 @@ module BaseHelper
   
   def more_comments_links(commentable)
     html = link_to "&raquo; ".html_safe + :all_comments.l, comments_url(commentable.class.to_s.underscore, commentable.to_param)
-    html += "<br />"
-		html += link_to "&raquo; ".html_safe + :comments_rss.l, comments_url(commentable.class.to_s.underscore, commentable.to_param, :format => :rss)
-		html
+    html += tag :br
+    html += link_to "&raquo; ".html_safe + :comments_rss.l, comments_url(commentable.class.to_s.underscore, commentable.to_param, :format => :rss)
+    html
   end
   
   def more_user_comments_links(user = @user)
     html = link_to "&raquo; ".html_safe + :all_comments.l, user_comments_url(user)
-    html += "<br />".html_safe
+    html += tag :br
     html += link_to "&raquo; ".html_safe + :comments_rss.l, user_comments_url(user.to_param, :format => :rss)
     html  
   end
@@ -268,7 +268,7 @@ module BaseHelper
   end
     
   def ajax_spinner_for(id, spinner="spinner.gif")
-    "<img src='/plugin_assets/community_engine/images/#{spinner}' style='display:none; vertical-align:middle;' id='#{id.to_s}_spinner'> "
+    image_tag spinner, :style => 'display:none; vertical-align:middle;', :id => "#{id.to_s}_spinner"
   end
 
   def avatar_for(user, size=32)

@@ -35,7 +35,7 @@ class Photo < ActiveRecord::Base
   end
 
   def description_for_rss
-    "<a href='#{self.link_for_rss}' title='#{self.name}'><img src='#{self.photo.url(:large)}' alt='#{self.name}' /><br />#{self.description}</a>"
+    "<a href='#{self.link_for_rss}' title='#{self.name}'><img src='#{self.photo.url(:large)}' alt='#{self.name}' /><br />#{self.description}</a>".html_safe
   end
 
   def owner

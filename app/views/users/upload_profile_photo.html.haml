@@ -3,7 +3,7 @@
   = error_messages_for :avatar
   =box :id => "profile_details" do
     %h3=:profile_photo.l
-    = @user.vendor ? "<div class='right_corner'><div class='community_pro'></div></div>" : ''
+    = @user.vendor ? "<div class='right_corner'><div class='community_pro'></div></div>".html_safe : ''
     = image_tag( @user.avatar_photo_url(:medium), :class => "polaroid" )
     %label
       =:choose_a_photo_for_your_profile.l

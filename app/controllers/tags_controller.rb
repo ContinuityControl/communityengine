@@ -10,7 +10,7 @@ class TagsController < BaseController
 
   def auto_complete_for_tag_name
     @tags = Tag.find(:all, :limit => 10, :conditions => [ 'LOWER(name) LIKE ?', '%' + (params[:id] || params[:tag_list]) + '%' ])
-    render :inline => "<%= auto_complete_result(@tags, 'name') %>"
+    render :inline => "<%= auto_complete_result(@tags, 'name') %>".html_safe
   end
   
   def index  

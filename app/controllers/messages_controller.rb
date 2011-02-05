@@ -7,7 +7,7 @@ class MessagesController < BaseController
   
   def auto_complete_for_username
     @users = User.find(:all, :conditions => [ 'LOWER(login) LIKE ?', '%' + (params[:message][:to]) + '%' ])
-    render :inline => "<%= auto_complete_result(@users, 'login') %>"
+    render :inline => "<%= auto_complete_result(@users, 'login') %>".html_safe
   end
     
   def index

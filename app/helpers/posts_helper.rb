@@ -10,7 +10,7 @@ module PostsHelper
     
     if paragraphs.length > 4
       graph_html = paragraphs[2].inner_html
-      paragraphs[2].swap(string + "<p id='jump'>#{graph_html}</p>")
+      paragraphs[2].swap(string + content_tag(:p, :graph_html, :id => 'jump'))
     end
     
     doc.to_html
@@ -20,7 +20,7 @@ module PostsHelper
   # Facebook seems to ignore them (it uses title and description meta tags
   # instead).  MySpace, however, only works if you set these attributes.
   def sharethis_options(post)
-    content_tag :script, :type=>"text/javascript" do   
+    javascript_tag do 
       <<-eos
         var shared_object = SHARETHIS.addEntry({
           title: document.title,

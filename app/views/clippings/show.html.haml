@@ -6,8 +6,8 @@
 
   - if @previous || @next
     =box :class => "alt" do 
-      = link_to "<img src='#{@previous.image_uri(:thumb)}' /><br />&laquo; #{:previous.l} ".html_safe, user_clipping_path(@user, @previous), :class => 'left' if @previous
-      = link_to "<img src='#{@next.image_uri(:thumb)}' /><br />#{:next.l} &raquo;".html_safe, user_clipping_path(@user, @next), :class => 'right' if @next
+      = link_to image_tag( @previous.image_uri(:thumb) ) + tag(:br) + "&laquo; ".html_safe + :previous.l, user_clipping_path(@user, @previous), :class => 'left' if @previous
+      = link_to image_tag( @next.image_uri(:thumb) ) + tag(:br) + "&raquo; ".html_safe + :next.l, user_clipping_path(@user, @previous), :class => 'right' if @next
 
   - if @related.any?
     =box :class => "alt" do 

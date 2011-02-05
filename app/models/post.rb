@@ -102,7 +102,7 @@ class Post < ActiveRecord::Base
   
   def tag_for_first_image_in_body
     image = first_image_in_body
-    image.nil? ? '' : "<img src='#{image}' />"
+    image.nil? ? '' : "<img src='#{image}' />".html_safe
   end
   
   def set_published_at

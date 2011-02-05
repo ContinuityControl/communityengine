@@ -6,7 +6,7 @@
     %p= submit_tag :go.l
 
     - if current_user.admin?
-      %p= link_to "&laquo; "+:back_to_all_statistics.l, statistics_path
+      %p= link_to "&laquo; ".html_safe+:back_to_all_statistics.l, statistics_path
       %p
         =:estimated_total_for_this_month.l+":"
         %strong= "$#{@estimated_payment}"

@@ -57,14 +57,12 @@
           %li
             %ul
               %li
-                = link_to("<span>#{post.tag_for_first_image_in_body} #{truncate(post.display_title, :length => 75)}</span>", user_post_path(post.user, post))
-                = "&larr; Posted #{:by.l} "
+                = link_to(content_tag(:span, "#{post.tag_for_first_image_in_body} #{truncate(post.display_title, :length => 75)}" ), user_post_path(post.user, post))
+                = "&larr; ".html_safe + "Posted #{:by.l} "
                 = link_to("#{post.user.login}", user_path(post.user))
               %li
-                -#= "<span class='post_excerpt'>#{truncate_words(post.post, 25, '...')}</span>"
-                -#= link_to( "Read More", user_post_path(post.user, post))
-                -# = link_to( "#{post.tag_for_first_image_in_body} #{truncate(post.display_title, :length => 75)} <span class='post_excerpt'>#{ truncate_words(post.post, 35, '...' )} (:by.l #{post.user.login})</span>", user_post_path(post.user, post), :title => ":by.l #{post.user.login}" )
-              %li="<span class=\"quiet\">Selected for you because it has the tag(s): #{@user.show_intersecting_tags(post).join(', ')}</span>"
+                %span.quiet
+                  Selected for you because it has the tag(s): #{@user.show_intersecting_tags(post).join(', ')}
   -unless @recommended_discussions.empty?
     %h4=:recommended_discussions.l
     #discussions
@@ -73,10 +71,12 @@
           %li
             %ul
               %li
-                = link_to("<span>#{truncate(sb_post.topic.title, :length => 75)}</span>", forum_topic_path(sb_post.forum, sb_post.topic))
-                = "&larr; Posted #{:by.l} "
+                = link_to(content_tag(:span, truncate(sb_post.topic.title, :length => 75)), forum_topic_path(sb_post.forum, sb_post.topic))
+                = "&larr; ".html_safe + "Posted #{:by.l} "
                 = link_to("#{sb_post.user.login}", user_path(sb_post.user))
-              %li="<span class=\"quiet\">Selected for you because it has the tag(s): #{@user.show_intersecting_tags(sb_post.topic).join(', ')}</span>"
+              %li
+                %span.quiet
+                  Selected for you because it has the tag(s): #{@user.show_intersecting_tags(sb_post.topic).join(', ')}
 
   -unless @monitorships.empty?
     %h4

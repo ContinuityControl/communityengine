@@ -12,7 +12,7 @@
   = rounded_box  :div_class => 'bluegray-bg'  do
     .right= submit_tag :save_changes.l
     %h3=:profile_photo.l
-    = @user.vendor ? "<div class='right_corner'><div class='community_pro'></div></div>" : ''
+    = @user.vendor ? "<div class='right_corner'><div class='community_pro'></div></div>".html_safe : ''
     = image_tag( @user.avatar_photo_url(:thumb), :class => "polaroid" )
     = f.inputs :for => :avatar do |avatar_form|
       = avatar_form.input :photo, :size => '15', :label => :choose_a_photo_for_your_profile.l
