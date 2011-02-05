@@ -33,7 +33,7 @@
         %tr.spacer
           %td{ :colspan => "2" }
             \&nbsp;
-      %tr.post{ :id => post.dom_id }
+      %tr.post{ :id => dom_id(post) }
         %td.author.vcard
           .date
             %abbr.updated{ :title => post.created_at.xmlschema }

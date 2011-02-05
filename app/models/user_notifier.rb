@@ -62,7 +62,7 @@ class UserNotifier < ActionMailer::Base
   def new_forum_post_notice(user, post)
      setup_email(user)
      @subject     += "#{:has_posted_in_a_thread_you_are_monitoring.l(:user => post.user.login)}"
-     @body[:url]  = "#{forum_topic_url(:forum_id => post.topic.forum, :id => post.topic, :page => post.topic.last_page)}##{post.dom_id}"
+     @body[:url]  = "#{forum_topic_url(:forum_id => post.topic.forum, :id => post.topic, :page => post.topic.last_page)}##{dom_id post}"
      @body[:post] = post
      @body[:author] = post.user
    end

@@ -62,7 +62,7 @@
   - if @posts.total_pages > 1
     .pagination.clear= paginating_links @posts
 
-  %a{"name"=>"#{@posts.to_a.first.dom_id}", "id"=>"#{@posts.to_a.first.dom_id}"} &nbsp;
+  %a{"name"=>"#{dom_id @posts.to_a.first}", "id"=>"#{dom_id @posts.to_a.first}"} &nbsp;
   %br.clearright
   %br
   %table.posts.wide{"cellspacing"=>"0", "border"=>"0", "cellpadding"=>"0"}
@@ -70,12 +70,12 @@
       - unless post.eql?(@posts.to_a.first)
         %tr.spacer
           %td{"colspan"=>"2"}
-            %a{"name"=>"#{post.dom_id}", "id"=>"#{post.dom_id}"} &nbsp;
+            %a{"name"=>"#{dom_id post}", "id"=>"#{dom_id post}"} &nbsp;
           
-      %tr.post{"id"=>"posts-#{post.dom_id}-row"}
+      %tr.post{"id"=>"posts-#{dom_id post}-row"}
         %td.author.vcard{:width => "15%"}
           .date
-            %a{"href"=>"##{post.dom_id}", "rel"=>"bookmark"}
+            %a{"href"=>"##{dom_id post}", "rel"=>"bookmark"}
               %abbr.updated{"title"=>"#{post.created_at.xmlschema}"}= sensible_time_ago(post.created_at)
 
           = avatar_for post.user
