@@ -1,6 +1,6 @@
 #reload CE in development
 config.after_initialize do
-  if RAILS_ENV == 'development'
+  if Rails.env.development?
     ActiveSupport::Dependencies.autoload_once_paths = ActiveSupport::Dependencies.autoload_once_paths.select {|path| (path =~ /(community_engine)/).nil? }  
   end
 end 
@@ -66,11 +66,11 @@ end
 module ApplicationConfiguration
   require 'ostruct'
   require 'yaml'  
-  if File.exists?( File.join(RAILS_ROOT, 'config', 'application.yml') )
-    file = File.join(RAILS_ROOT, 'config', 'application.yml')
+  if File.exists?( File.join(Rails.root.to_s, 'config', 'application.yml') )
+    file = Rails.root.join('config', 'application.yml').to_s
     users_app_config = YAML.load_file file
   end
-  default_app_config = YAML.load_file(File.join(RAILS_ROOT, 'vendor', 'plugins', 'community_engine', 'config', 'application.yml'))
+  default_app_config = YAML.load_file(Rails.root.join('vendor', 'plugins', 'community_engine', 'config', 'application.yml').to_s)
   
   config_hash = (users_app_config||{}).reverse_merge!(default_app_config)
 

@@ -355,7 +355,7 @@ class UsersController < BaseController
     end
 
     respond_to do |format|
-      format.js {
+      format.html {
         render :partial => 'shared/location_chooser', :locals => {
           :states => states, 
           :metro_areas => metro_areas, 
