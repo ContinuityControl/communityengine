@@ -1,5 +1,5 @@
 <%= box do %>
-<%  form_tag( statistics_user_path(@user), :class => "MainForm") do %>
+<%=  form_tag( statistics_user_path(@user), :class => "MainForm") do %>
 <label><%= :month.l+":" %>
 </label>
 <%=  select_month(@month) %>
