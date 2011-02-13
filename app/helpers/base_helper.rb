@@ -98,8 +98,8 @@ module BaseHelper
 
   def excerpt_with_jump(text, end_string = '...')
     return if text.blank?
-    doc = Hpricot( text )
-    paragraph = doc.at("p")
+    doc = Nokogiri::HTML( text )
+    paragraph = doc.css("p")[0]
     if paragraph
       paragraph.to_html + end_string
     else

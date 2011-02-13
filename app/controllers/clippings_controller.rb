@@ -86,15 +86,15 @@ class ClippingsController < BaseController
   def load_images_from_uri
     uri = URI.parse(params[:uri])
     begin
-      doc = Hpricot( open( uri ) )
+      doc = Nokogiri::HTML( open( uri ) )
     rescue
       render :inline => "<h1>Sorry, there was an error fetching the images from the page you requested</h1><a href='#{params[:uri]}'>Go back...</a>".html_safe
       return
     end
-    @page_title = (doc/"title")
+    @page_title = doc.css( "title" )[0].content
     # get the images
     @images = []
-    (doc/"img").each do |img|
+    doc.css("img").each do |img|
       begin
         if URI.parse(URI.escape(img['src'])).scheme.nil?
           img_uri = "#{uri.scheme}://#{uri.host}/#{img['src']}"

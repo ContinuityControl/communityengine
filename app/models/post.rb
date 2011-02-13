@@ -95,8 +95,8 @@ class Post < ActiveRecord::Base
   end
   
   def first_image_in_body(size = nil, options = {})
-    doc = Hpricot( post )
-    image = doc.at("img")
+    doc = Nokogiri::HTML( post )
+    image = doc.css("img")[0]
     image ? image['src'] : nil
   end
   

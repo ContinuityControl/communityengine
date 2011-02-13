@@ -1,4 +1,3 @@
-require 'hpricot'
 require 'open-uri'
 require 'pp'
 
