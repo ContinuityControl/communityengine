@@ -3,7 +3,7 @@
 #image_list_pages.clear
   .pagination= paginating_links @photos if @photos.total_pages > 1
 
-=javascript_tag do
+:javascript
   $('image_list_pages').select('a').invoke('observe', 'click', remote_paginate )
   function remote_paginate(event){
     $('dynamic_images_list').update("Loading images...<br /><img src='images/spinner.gif'>");
