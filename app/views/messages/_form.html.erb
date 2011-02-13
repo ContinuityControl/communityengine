@@ -1,20 +1,32 @@
-= form_for message, :url => user_messages_path(user), :html => {:class => "MainForm"} do |f|
+<%=  form_for message, :url => user_messages_path(user), :html => {:class => "MainForm"} do |f| %>
+<% if message.reply_to %>
+<%= f.hidden_field :to %>
 
-  -if message.reply_to
-    =f.hidden_field :to
-  -else
-    %label{:for => 'message_to'} 
-      =:to.l
-      %em= "(" + :type_a_username.l + ")"
-    = text_field_tag 'message[to]', @message.to, {:autocomplete => "off", :size => 35, :id => "message_to"}
-    .auto_complete#message_to_auto_complete
-      = auto_complete_field 'message_to', {:url => auto_complete_for_username_user_messages_path(@user), :tokens=>','}
+<% else %>
+<label for='message_to'>
+    <%= :to.l %>
 
-  %label{:for => 'message_subject'}= :subject.l + ":"
-  = f.text_field :subject
+  <em>  <%= "(" + :type_a_username.l + ")" %>
+</em>
+</label>
+<%=  text_field_tag 'message[to]', @message.to, {:autocomplete => "off", :size => 35, :id => "message_to"} %>
 
-  %label{:for => "message_body"}= :message.l + ":"
-  = f.text_area :body
+<div class='auto_complete' id='message_to_auto_complete'>
+    <%=  auto_complete_field 'message_to', {:url => auto_complete_for_username_user_messages_path(@user), :tokens=>','} %>
 
-  %p
-    = submit_tag :send.l
+</div>
+<% end %>
+<label for='message_subject'><%= :subject.l + ":" %>
+</label>
+<%=  f.text_field :subject %>
+
+<label for='message_body'><%= :message.l + ":" %>
+</label>
+<%=  f.text_area :body %>
+
+<p>
+    <%=  submit_tag :send.l %>
+
+</p>
+<% end %>
+

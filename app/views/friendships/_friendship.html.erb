@@ -1,33 +1,55 @@
-- user = friendship.friend
+<%  user = friendship.friend %>
+<div class='yui-gf row hentry'>
+  <div class='vcard author'>
+    <div class='friendship_control right'>    <%= friendship_control_links(friendship) if @is_current_user %>
+</div>
+    <div class='clear'></div>
+    <div class='yui-u first centered'>    <%= image_tag( user.avatar_photo_url(:thumb), :class => "polaroid" ) %>
+</div>
+    <div class='yui-g'>
+      <div class='yui-u first'>
+        <h2>        <%= link_to user.login, user_path(user) %>
+</h2>
+        <ul>
+          <%  if user.metro_area %>
+          <li class='geo'>          <%= :from2.l + " #{user.metro_area_name}" %>
+</li>
+          <% end %>
+          <li class='update'>
+            <abbr class="published" title="<%= user.created_at %>">
 
-.yui-gf.row.hentry
-  .vcard.author
-    .friendship_control.right= friendship_control_links(friendship) if @is_current_user
-    .clear
-    .yui-u.first.centered= image_tag( user.avatar_photo_url(:thumb), :class => "polaroid" )
-    .yui-g
-      .yui-u.first
-        %h2= link_to user.login, user_path(user)
-      
-        %ul
-          - if user.metro_area        
-            %li.geo= :from2.l + " #{user.metro_area_name}" 
-          %li.update
-            %abbr.published{:title=>"#{user.created_at}"}
-              =:joined.l + " #{distance_of_time_in_words_to_now user.created_at} ago"
-          - if user.offerings.any?
-            %li.skills= user.offerings.collect{|o| link_to o.skill.name, skill_url(o.skill) }.join(', ')
-          - if current_user and current_user.can_request_friendship_with(user)
-            %li.addfriend= add_friend_link(user)
+                            <%= :joined.l + " #{distance_of_time_in_words_to_now user.created_at} ago" %>
 
-        - unless user.tags.empty?
-          %p
-            - user.tags[0...6].each do |t|
-              =link_to( t.name, tag_url(t), :class => "tag") if t
+            </abbr>
+          </li>
+          <%  if user.offerings.any? %>
+          <li class='skills'>          <%= user.offerings.collect{|o| link_to o.skill.name, skill_url(o.skill) }.join(', ') %>
+</li>
+          <% end %>
+          <%  if current_user and current_user.can_request_friendship_with(user) %>
+          <li class='addfriend'>          <%= add_friend_link(user) %>
+</li>
+          <% end %>
+        </ul>
+        <%  unless user.tags.empty? %>
+        <p>
+          <%  user.tags[0...6].each do |t| %>
+                    <%= link_to( t.name, tag_url(t), :class => "tag") if t %>
 
-      .yui-u{"style"=>"overflow:hidden"}
-        - if @search && @search['description']
-          = truncate_words_with_highlight(user.description, @search['description']).html_safe
-        - else
-          = truncate_words(user.description, :length => 1000).html_safe
-  .clear
+          <% end %>
+        </p>
+        <% end %>
+      </div>
+      <div class='yui-u' style='overflow:hidden'>
+        <%  if @search && @search['description'] %>
+                <%=  truncate_words_with_highlight(user.description, @search['description']).html_safe %>
+
+        <%  else %>
+                <%=  truncate_words(user.description, :length => 1000).html_safe %>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class='clear'></div>
+</div>

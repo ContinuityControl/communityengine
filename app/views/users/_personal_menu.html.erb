@@ -1,12 +1,23 @@
-= rounded_box  :div_class => 'bluegray-bg'  do
-  %h3="My Profile"
-  %ul.subsection_tabs
-    %li.tab
-      = link_to 'My Connections', accepted_user_friendships_path(current_user)
-    %li.tab
-      = link_to 'Inbox', user_messages_path(current_user)
-    %li.tab
-      = link_to 'My Blog', user_posts_path(current_user)
-      -# link_to '<span class="navigation_settings_gear_small">&nbsp;</span>'.html_safe, manage_user_posts_path(current_user)
-    %li.tab
-      = link_to :my_profile.l, user_path(current_user)
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= "My Profile" %>
+</h3>
+<ul class='subsection_tabs'>
+  <li class='tab'>
+        <%=  link_to 'My Connections', accepted_user_friendships_path(current_user) %>
+
+  </li>
+  <li class='tab'>
+        <%=  link_to 'Inbox', user_messages_path(current_user) %>
+
+  </li>
+  <li class='tab'>
+        <%=  link_to 'My Blog', user_posts_path(current_user) %>
+
+  </li>
+  <li class='tab'>
+        <%=  link_to :my_profile.l, user_path(current_user) %>
+
+  </li>
+</ul>
+<% end %>
+

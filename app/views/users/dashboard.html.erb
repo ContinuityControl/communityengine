@@ -1,90 +1,153 @@
-- @section = 'my_profile'
-=content_for :body_id, 'body-home'
+<%  @section = 'my_profile' %>
+<%= content_for :body_id, 'body-home' %>
 
--#content_for :sidebar do
-  -#=render :partial => "users/dashboard_nav"
--content_for :head do
-  =stylesheet_link_tag 'compiled/tsk_task_assignments'
-  =javascript_include_tag 'on_demand_todos'
+<% content_for :head do %>
+<%= stylesheet_link_tag 'compiled/tsk_task_assignments' %>
 
-= rounded_box  :div_class => 'bluegray-bg todo_activity', :extra_style =>'overflow: auto;'  do
-  %div.h4_right
-    =link_to 'On Demand', on_demand_todos_path,{:class => 'lightview create_on_demand', :rel =>  'ajax', :title => "On Demand ToDos :: :: width: 702, height: 702, ajax: { method: 'get' }"}
-  %h4=DistributedToDo.model_name.human.pluralize
-  %ul.distributed_todos.todo_box
-    -if @user.organization
-      =render @tsk_task_assignments
-    -else
-      %li
-        .right=link_to 'Learn More', '/how-it-works', :class => 'todo_action', :target => '_blank'
-        Continuity Control is more than just a community...
-      %li
-        .right=link_to 'Get ' + Actionpack.model_name.human.pluralize, actionpack_library_index_path, :class => 'todo_action'
-        We're here to help you organize and automate your compliance efforts.<br />
-        Start getting ahead today!
+<%= javascript_include_tag 'on_demand_todos' %>
 
-  -if @user.organization
-    =center_float do
-      =styled_save_link "Show All #{DistributedToDo.model_name.human.pluralize}", "#", :button_type => "blue", :class => "todos_toggle_button", "data-show" => "Show More", "data-hide" => "Show Less"
-  .clear
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg todo_activity', :extra_style =>'overflow: auto;' do %>
+<div class='h4_right'>
+    <%= link_to 'On Demand', on_demand_todos_path,{:class => 'lightview create_on_demand', :rel => 'ajax', :title => "On Demand ToDos :: :: width: 702, height: 702, ajax: { method: 'get' }"} %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  =render :partial => 'users/icon_nav'
-  %h4='Community Activity'
-  -if @user.pending_friendships.any?
-    %p=link_to "#{image_tag 'icons/user_add.png'} "+:you_have_pending_friendship_requests.l, pending_user_friendships_path(@user)
+</div>
+<h4><%= DistributedToDo.model_name.human.pluralize %>
+</h4>
+<ul class='distributed_todos todo_box'>
+  <% if @user.organization %>
+    <%= render @tsk_task_assignments %>
 
-  -if @network_activity.empty? && @recommended_posts.empty? && @recommended_discussions.empty? && @monitorships.empty?
-    %p
-      =:this_is_your_dashboard.l
-    %p
-      =:dashboard_friends.l :site => AppConfig.community_name
-    %p
-      =link_to :update_profile_and_tag_yourself.l, edit_user_path(current_user)
-      =:to_get_recommended_content_on_your_dashboard.l
+  <% else %>
+  <li>
+    <div class='right'>    <%= link_to 'Learn More', '/how-it-works', :class => 'todo_action', :target => '_blank' %>
+</div>
+    Continuity Control is more than just a community...
+  </li>
+  <li>
+    <div class='right'>    <%= link_to 'Get ' + Actionpack.model_name.human.pluralize, actionpack_library_index_path, :class => 'todo_action' %>
+</div>
+    We're here to help you organize and automate your compliance efforts.<br />
+    Start getting ahead today!
+  </li>
+  <% end %>
+</ul>
+<% if @user.organization %>
+<%= center_float do %>
+<%= styled_save_link "Show All #{DistributedToDo.model_name.human.pluralize}", "#", :button_type => "blue", :class => "todos_toggle_button", "data-show" => "Show More", "data-hide" => "Show Less" %>
 
-  -unless @network_activity.empty?
-    .fresh
-      =render :partial => "activities/activity", :collection => @network_activity
+<% end %>
 
-  -unless @recommended_posts.empty?
-    %h4=:recommended_posts.l
-    #posts
-      %ul
-        -@recommended_posts.each do |post|
-          %li
-            %ul
-              %li
-                = link_to(content_tag(:span, "#{post.tag_for_first_image_in_body} #{truncate(post.display_title, :length => 75)}" ), user_post_path(post.user, post))
-                = "&larr; ".html_safe + "Posted #{:by.l} "
-                = link_to("#{post.user.login}", user_path(post.user))
-              %li
-                %span.quiet
-                  Selected for you because it has the tag(s): #{@user.show_intersecting_tags(post).join(', ')}
-  -unless @recommended_discussions.empty?
-    %h4=:recommended_discussions.l
-    #discussions
-      %ul
-        -@recommended_discussions.each do |sb_post|
-          %li
-            %ul
-              %li
-                = link_to(content_tag(:span, truncate(sb_post.topic.title, :length => 75)), forum_topic_path(sb_post.forum, sb_post.topic))
-                = "&larr; ".html_safe + "Posted #{:by.l} "
-                = link_to("#{sb_post.user.login}", user_path(sb_post.user))
-              %li
-                %span.quiet
-                  Selected for you because it has the tag(s): #{@user.show_intersecting_tags(sb_post.topic).join(', ')}
+<% end %>
+<div class='clear'></div>
+<% end %>
 
-  -unless @monitorships.empty?
-    %h4
-      ="Discussion Activity"
-    -@monitorships.each do |watched|
-      %p
-        -last_post_in_topic = SbPost.find(watched.topic.last_post_id)
-        = link_to watched.topic.title, forum_topic_path(watched.topic.forum, watched.topic)
-        &rarr; New response by
-        = link_to last_post_in_topic.user.fullname, user_path(last_post_in_topic.user)
-        on
-        = time_ago_in_words_or_date(last_post_in_topic.updated_at)
-  .clear
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= render :partial => 'users/icon_nav' %>
+
+<h4><%= 'Community Activity' %>
+</h4>
+<% if @user.pending_friendships.any? %>
+<p><%= link_to "#{image_tag 'icons/user_add.png'} "+:you_have_pending_friendship_requests.l, pending_user_friendships_path(@user) %>
+</p>
+<% end %>
+<% if @network_activity.empty? && @recommended_posts.empty? && @recommended_discussions.empty? && @monitorships.empty? %>
+<p>
+    <%= :this_is_your_dashboard.l %>
+
+</p>
+<p>
+    <%= :dashboard_friends.l :site => AppConfig.community_name %>
+
+</p>
+<p>
+    <%= link_to :update_profile_and_tag_yourself.l, edit_user_path(current_user) %>
+
+    <%= :to_get_recommended_content_on_your_dashboard.l %>
+
+</p>
+<% end %>
+<% unless @network_activity.empty? %>
+<div class='fresh'>
+    <%= render :partial => "activities/activity", :collection => @network_activity %>
+
+</div>
+<% end %>
+<% unless @recommended_posts.empty? %>
+<h4><%= :recommended_posts.l %>
+</h4>
+<div id='posts'>
+  <ul>
+    <% @recommended_posts.each do |post| %>
+    <li>
+      <ul>
+        <li>
+                    <%=  link_to(content_tag(:span, "#{post.tag_for_first_image_in_body} #{truncate(post.display_title, :length => 75)}" ), user_post_path(post.user, post)) %>
+
+                    <%=  "&larr; ".html_safe + "Posted #{:by.l} " %>
+
+                    <%=  link_to("#{post.user.login}", user_path(post.user)) %>
+
+        </li>
+        <li>
+          <span class='quiet'>
+                        <%= "Selected for you because it has the tag(s): #{@user.show_intersecting_tags(post).join(', ')}" %>
+
+          </span>
+        </li>
+      </ul>
+    </li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+<% unless @recommended_discussions.empty? %>
+<h4><%= :recommended_discussions.l %>
+</h4>
+<div id='discussions'>
+  <ul>
+    <% @recommended_discussions.each do |sb_post| %>
+    <li>
+      <ul>
+        <li>
+                    <%=  link_to(content_tag(:span, truncate(sb_post.topic.title, :length => 75)), forum_topic_path(sb_post.forum, sb_post.topic)) %>
+
+                    <%=  "&larr; ".html_safe + "Posted #{:by.l} " %>
+
+                    <%=  link_to("#{sb_post.user.login}", user_path(sb_post.user)) %>
+
+        </li>
+        <li>
+          <span class='quiet'>
+                        <%= "Selected for you because it has the tag(s): #{@user.show_intersecting_tags(sb_post.topic).join(', ')}" %>
+
+          </span>
+        </li>
+      </ul>
+    </li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+<% unless @monitorships.empty? %>
+<h4>
+    <%= "Discussion Activity" %>
+
+</h4>
+<% @monitorships.each do |watched| %>
+<p>
+  <% last_post_in_topic = SbPost.find(watched.topic.last_post_id) %>
+    <%=  link_to watched.topic.title, forum_topic_path(watched.topic.forum, watched.topic) %>
+
+  &rarr; New response by
+    <%=  link_to last_post_in_topic.user.fullname, user_path(last_post_in_topic.user) %>
+
+  on
+    <%=  time_ago_in_words_or_date(last_post_in_topic.updated_at) %>
+
+</p>
+<% end %>
+<% end %>
+<div class='clear'></div>
+<% end %>
+

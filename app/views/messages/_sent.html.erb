@@ -1,36 +1,60 @@
-#yui-main
-  .yui-b
-    =box do 
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>    <%= :sent_messages.l %>
+</h3>
+    <table border="0" class="messages" width="100%">
 
-      %h3= :sent_messages.l
-      %table.messages{:border => 0, :width => '100%'}
-        %tbody
-          - if @messages.empty?
-            %tr
-              %td{ :colspan => "4" }
-                = :no_messages.l
-          - else
-            - @messages.each do |message|
-              %tr
-                %td{:width => '10px'}
-                  %fieldset.inline= check_box_tag "delete[]", message.id
-                %td{:width => '60px'}
-                  .photo= link_to image_tag( message.recipient.avatar_photo_url(:thumb), "height"=>"50px", "alt"=>"#{message.recipient.login}", "width"=>"50px" ), user_path(message.recipient), :title => :users_profile.l(:user => message.recipient.login)
+      <tbody>
+        <%  if @messages.empty? %>
+        <tr>
+          <td colspan='4'>
+                        <%=  :no_messages.l %>
 
-                %td
-                  = link_to h(message.subject), user_message_path(@user, message)                  
-                  %br
-                  = :to.l + ':'
-                  = link_to h(message.recipient.login), user_path(message.recipient)                  
-                  -#Above was @user
-                %td.meta{:width => '150px'}
-                  = h sensible_time_ago(message.created_at)
-                  -#I18n.l(message.created_at, :format => :time_ago)
-            
-            
-          %tfoot
-            %tr
-              %td{ :colspan => "4" }
-                -if @messages.any?
-                  %p= submit_tag :delete.l
-      .pagination=paginating_links @messages if @messages.total_pages > 1
+          </td>
+        </tr>
+        <%  else %>
+        <%  @messages.each do |message| %>
+        <tr>
+          <td width='10px'>
+            <fieldset class='inline'>            <%= check_box_tag "delete[]", message.id %>
+</fieldset>
+          </td>
+          <td width='60px'>
+            <div class='photo'>            <%= link_to image_tag( message.recipient.avatar_photo_url(:thumb), "height"=>"50px", "alt"=>"#{message.recipient.login}", "width"=>"50px" ), user_path(message.recipient), :title => :users_profile.l(:user => message.recipient.login) %>
+</div>
+          </td>
+          <td>
+                        <%=  link_to h(message.subject), user_message_path(@user, message) %>
+
+            <br />
+                        <%=  :to.l + ':' %>
+
+                        <%=  link_to h(message.recipient.login), user_path(message.recipient) %>
+
+          </td>
+          <td class='meta' width='150px'>
+                        <%=  h sensible_time_ago(message.created_at) %>
+
+          </td>
+        </tr>
+        <% end %>
+        <% end %>
+        <tfoot>
+          <tr>
+            <td colspan='4'>
+              <% if @messages.any? %>
+              <p>              <%= submit_tag :delete.l %>
+</p>
+              <% end %>
+            </td>
+          </tr>
+        </tfoot>
+      </tbody>
+    </table>
+    <div class='pagination'>    <%= paginating_links @messages if @messages.total_pages > 1 %>
+</div>
+    <% end %>
+
+  </div>
+</div>

@@ -1,13 +1,20 @@
-= javascript_include_tag "event-selectors", :plugin => :community_engine
+<%=  javascript_include_tag "event-selectors", :plugin => :community_engine %>
 
-= javascript_include_tag "application", :plugin => :community_engine
+<%=  javascript_include_tag "application", :plugin => :community_engine %>
 
-- if (controller_name == 'photos' && action_name == 'new')
-  = javascript_include_tag 'swfupload', :plugin => :community_engin
-  = javascript_include_tag 'uploader', :plugin => :community_engine
+<%  if (controller_name == 'photos' && action_name == 'new') %>
+<%=  javascript_include_tag 'swfupload', :plugin => :community_engin %>
 
-- if defined?(forum_page?) && forum_page?
-  = javascript_include_tag 'forum', :plugin => :community_engine
-  - unless @feed_icons.blank?
-    - @feed_icons.each do |feed|
-      = auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'"
+<%=  javascript_include_tag 'uploader', :plugin => :community_engine %>
+
+<% end %>
+<%  if defined?(forum_page?) && forum_page? %>
+<%=  javascript_include_tag 'forum', :plugin => :community_engine %>
+
+<%  unless @feed_icons.blank? %>
+<%  @feed_icons.each do |feed| %>
+<%=  auto_discovery_link_tag :rss, feed[:url], :title => "Subscribe to '#{feed[:title]}'" %>
+
+<% end %>
+<% end %>
+<% end %>

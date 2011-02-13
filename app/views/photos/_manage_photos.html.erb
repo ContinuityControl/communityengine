@@ -1,13 +1,17 @@
-= render :partial => 'show_image_list', :locals => { :photos => photos }
+<%=  render :partial => 'show_image_list', :locals => { :photos => photos } %>
 
-#image_list_pages.clear
-  .pagination= paginating_links @photos if @photos.total_pages > 1
-
-:javascript
-  $('image_list_pages').select('a').invoke('observe', 'click', remote_paginate )
-  function remote_paginate(event){
-    $('dynamic_images_list').update("Loading images...<br /><img src='images/spinner.gif'>");
-    element = Event.element(event);
-    new Ajax.Request(element.href, {asynchronous:true, evalScripts:true, method:'get'});
-    Event.stop(event);
-  }
+<div class='clear' id='image_list_pages'>
+  <div class='pagination'>  <%= paginating_links @photos if @photos.total_pages > 1 %>
+</div>
+</div>
+<script type='text/javascript'>
+  //<![CDATA[
+    $('image_list_pages').select('a').invoke('observe', 'click', remote_paginate )
+    function remote_paginate(event){
+      $('dynamic_images_list').update("Loading images...<br /><img src='images/spinner.gif'>");
+      element = Event.element(event);
+      new Ajax.Request(element.href, {asynchronous:true, evalScripts:true, method:'get'});
+      Event.stop(event);
+    }
+  //]]>
+</script>

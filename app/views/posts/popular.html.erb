@@ -1,20 +1,33 @@
-- @meta = { :description => :popular_posts_on.l+" #{AppConfig.community_name}",:keywords => "#{AppConfig.meta_keywords}", :robots => AppConfig.robots_meta_list_content}
-- @section = 'popular'
+<%  @meta = { :description => :popular_posts_on.l+" #{AppConfig.community_name}",:keywords => "#{AppConfig.meta_keywords}", :robots => AppConfig.robots_meta_list_content} %>
+<%  @section = 'popular' %>
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :this_month_best.l %>
+</h3>
+<ul class='list page'>
+  <%  @monthly_popular_posts.each do |post| %>
+    <%= render :partial => 'posts/sidebar_post', :locals => {:post => post} %>
 
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3= :this_month_best.l 
-    %ul.list.page    
-      - @monthly_popular_posts.each do |post|
-        =render :partial => 'posts/sidebar_post', :locals => {:post => post}
+  <% end %>
+</ul>
+<% end %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  .right
-    %ul.list.checks
-      %li=link_to :write_a_blog_post.l, new_user_post_path({:user_id => current_user})
-  %h3 
-    =:what_is_popular.l
-  = render :partial => 'posts/post', :collection => @posts
-  .clear
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<div class='right'>
+  <ul class='list checks'>
+    <li>    <%= link_to :write_a_blog_post.l, new_user_post_path({:user_id => current_user}) %>
+</li>
+  </ul>
+</div>
+<h3>
+    <%= :what_is_popular.l %>
+
+</h3>
+<%=  render :partial => 'posts/post', :collection => @posts %>
+
+<div class='clear'></div>
+<% end %>
+

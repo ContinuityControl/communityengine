@@ -1,30 +1,36 @@
-!!!
-%html
-%head
-  %link{:rel=>"shortcut icon", :href=>"#{application_url}favicon.ico"}
-  %meta{"http-equiv"=>"Content-Type", :content=>"text/html;charset=utf-8"}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <link href="<%= application_url %>favicon.ico" rel="shortcut icon" />
 
-  %title
-    = AppConfig.community_name
-    |
-    = AppConfig.community_tagline
-  
-  = render :partial => "shared/scripts_and_styles"
-    
-  %body
-    #doc2.yui-t6
-      #hd
-        %h1
-          %a{:href=>application_url, :title=>"#{AppConfig.community_name}"}= AppConfig.community_name
+    <meta content='text/html;charset=utf-8' http-equiv='Content-Type' />
+    <title>
+      <%= AppConfig.community_name %> | <%= AppConfig.community_tagline %>
 
-        #NavBar
-          %ul
-            
-      #bd
-        = render :partial => "shared/messages"
-                  
-        = @content_for_layout
-                            
-      #ft
-      #CommunityFooter
-        %p= AppConfig.community_tagline
+    </title>
+    <%= render :partial => "shared/scripts_and_styles" %>
+
+    <body>
+      <div class='yui-t6' id='doc2'>
+        <div id='hd'>
+          <h1>
+            <a href="<%= application_url %>" title="<%= AppConfig.community_name %>">
+              <%= AppConfig.community_name %>
+            </a>
+          </h1>
+          <div id='NavBar'>
+            <ul></ul>
+          </div>
+        </div>
+        <div id='bd'>
+          <%= render :partial => "shared/messages" %>
+          <%= @content_for_layout %>
+        </div>
+        <div id='ft'></div>
+        <div id='CommunityFooter'>
+          <p><%= AppConfig.community_tagline %></p>
+        </div>
+      </div>
+    </body>
+  </head>
+</html>

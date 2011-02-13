@@ -1,3 +1,5 @@
-.box{html_options}
-  %div{:class => "#{html_options[:content_class]}"}
-    =body
+<%= content_tag(:div, html_options.merge(:class => "box html_options[:class]")) do %>
+  <div class="<%= html_options[:content_class] %>">
+    <%= body %>
+  </div>
+<% end %>

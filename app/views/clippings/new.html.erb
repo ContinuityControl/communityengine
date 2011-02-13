@@ -1,29 +1,51 @@
-.yui-b
-  =box do 
-    %h3= :help.l
-    %p= :clippings_are_a_way_to_save_images_you_like_from_around_the_web.l
+<div class='yui-b'>
+    <%= box do %>
+  <h3>  <%= :help.l %>
+</h3>
+  <p>  <%= :clippings_are_a_way_to_save_images_you_like_from_around_the_web.l %>
+</p>
+  <% end %>
 
-#yui-main
-  .yui-b
-    =box do 
-      %h3= :new_clipping.l
-      %img{"src"=>"#{h @clipping.image_uri}"}
-      = form_for(:clipping, :url => user_clippings_path(@user), :html => { :class => "MainForm" }) do |f|
-        %label= :url.l
-        = f.text_field :url
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>    <%= :new_clipping.l %>
+</h3>
+    <img src="<%= h @clipping.image_uri %>" />
 
-        %label= :image_url.l
-        = f.text_field :image_url
-        
-        %label= :description.l
-        = f.text_field :description
+        <%=  form_for(:clipping, :url => user_clippings_path(@user), :html => { :class => "MainForm" }) do |f| %>
+    <label>    <%= :url.l %>
+</label>
+        <%=  f.text_field :url %>
 
-        %label
-          =:tags.l
-          %em="(#{:optional_keywords_describing_this_clipping_separated_by_commas.l})"
-        = text_field_tag 'tag_list', @clipping.tag_list
+    <label>    <%= :image_url.l %>
+</label>
+        <%=  f.text_field :image_url %>
 
-        %p
-          = submit_tag :create.l
-          = :or.l
-          = link_to :cancel_and_go_back_to_my_clippings.l, user_clippings_path(@user)
+    <label>    <%= :description.l %>
+</label>
+        <%=  f.text_field :description %>
+
+    <label>
+            <%= :tags.l %>
+
+      <em>      <%= "(#{:optional_keywords_describing_this_clipping_separated_by_commas.l})" %>
+</em>
+    </label>
+        <%=  text_field_tag 'tag_list', @clipping.tag_list %>
+
+    <p>
+            <%=  submit_tag :create.l %>
+
+            <%=  :or.l %>
+
+            <%=  link_to :cancel_and_go_back_to_my_clippings.l, user_clippings_path(@user) %>
+
+    </p>
+    <% end %>
+
+    <% end %>
+
+  </div>
+</div>

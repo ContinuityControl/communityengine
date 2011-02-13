@@ -1,13 +1,20 @@
-.profile
-  .column.span-9.first
-    .favorites.section
-      .favorite
-        %h2= link_to "#{@user.login}'s "+:favorites.l, user_favorites_path(@user)        
+<div class='profile'>
+  <div class='column span-9 first'>
+    <div class='favorites section'>
+      <div class='favorite'>
+        <h2>        <%= link_to "#{@user.login}'s "+:favorites.l, user_favorites_path(@user) %>
+</h2>
+        <p>
+                    <%= render :partial => 'favorites/favorite', :locals => {:favorite => @favorite} %>
 
-        %p
-          =render :partial => 'favorites/favorite', :locals => {:favorite => @favorite}
-        
-  #sidebar.column.span-5.last
-    = Ad.display(:sidebar_1, logged_in?)
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class='column span-5 last' id='sidebar'>
+        <%=  Ad.display(:sidebar_1, logged_in?) %>
 
-    = Ad.display(:sidebar_2, logged_in?)
+        <%=  Ad.display(:sidebar_2, logged_in?) %>
+
+  </div>
+</div>

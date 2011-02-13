@@ -1,8 +1,15 @@
-= render :partial => 'about_nav'
+<%=  render :partial => 'about_nav' %>
 
-#yui-main
-  .yui-b
-    =box do 
-      %h3
-        =:advertise_on.l
-        =" #{AppConfig.community_name}"
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>
+            <%= :advertise_on.l %>
+
+            <%= " #{AppConfig.community_name}" %>
+
+    </h3>
+    <% end %>
+
+  </div>
+</div>

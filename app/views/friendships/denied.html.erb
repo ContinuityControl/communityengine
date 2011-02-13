@@ -1,7 +1,13 @@
--content_for :sidebar do
-  = render :partial => 'users/profile_user_info_sidebar'
+<% content_for :sidebar do %>
+<%=  render :partial => 'users/profile_user_info_sidebar' %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  %h3
-    =:denied_friendships.l
-  .user_list= render :partial => "friendships/friendship", :collection => @friendships
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3>
+    <%= :denied_friendships.l %>
+
+</h3>
+<div class='user_list'><%= render :partial => "friendships/friendship", :collection => @friendships %>
+</div>
+<% end %>
+

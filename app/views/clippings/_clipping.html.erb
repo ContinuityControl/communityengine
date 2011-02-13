@@ -1,18 +1,24 @@
-.clipping{:id => "clipping_#{clipping.id}"}
-  %a{:href=>"#{user_clipping_url(clipping.user, clipping)}", :title => h(truncate_words(clipping.description)) }     
-    = image_tag clipping.image_uri(:medium_square), :class => 'clipping_image'
-  %p
-    = h(truncate_words(clipping.description))
+<div class="clipping" id="clipping_<%= clipping.id %>">
 
-  - if favorite = clipping.has_been_favorited_by(current_user, request.remote_ip)
-    .favorite
-      = image_tag 'icons/heart_off.png'
-      = clipping.favorited_count
-      %br
-      %small.quiet= link_to :in_your_favorites.l, user_favorite_path(current_user, favorite) if logged_in?    
+  <a href="<%= user_clipping_url(clipping.user, clipping) %>" title="<%= h(truncate_words(clipping.description)) %>" )
+    <%= image_tag clipping.image_uri(:medium_square), :class => 'clipping_image' %>
+  </a>
+  <p>
+    <%= h(truncate_words(clipping.description)) %>
+  </p>
+  <% if favorite = clipping.has_been_favorited_by(current_user, request.remote_ip) %>
+    <div class='favorite'>
+      <%= image_tag 'icons/heart_off.png' %>
+      <%= clipping.favorited_count %>
 
-      %small= link_to '(un-favorite)', :remote => true, :url => favorite_path('clipping', clipping.id, favorite.id), :method => :delete, :loading => "new Effect.Fade($$('#clipping_#{clipping.id} .favorite img').first())", :title => :un_favorite_this.l if logged_in?
-  - else
-    .favorite  
-      = link_to image_tag('icons/heart.png'), :remote => true, :url => favorites_path('clipping', clipping.id), :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id} .favorite img').first() )", :title => :un_favorite_this.l
-      = clipping.favorited_count
+      <br />
+      <small class='quiet'><%= link_to :in_your_favorites.l, user_favorite_path(current_user, favorite) if logged_in? %></small>
+      <small><%= link_to '(un-favorite)', :remote => true, :url => favorite_path('clipping', clipping.id, favorite.id), :method => :delete, :loading => "new Effect.Fade($$('#clipping_#{clipping.id} .favorite img').first())", :title => :un_favorite_this.l if logged_in? %></small>
+    </div>
+  <% else %>
+    <div class='favorite'>
+      <%= link_to image_tag('icons/heart.png'), :remote => true, :url => favorites_path('clipping', clipping.id), :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id} .favorite img').first() )", :title => :un_favorite_this.l %>
+      <%= clipping.favorited_count %>
+    </div>
+  <% end %>
+</div>

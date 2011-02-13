@@ -1,46 +1,59 @@
-- @user_skills = @user.offerings.collect{|o| o.skill}
-- @skills = Skill.find(:all) - @user_skills
+<%  @user_skills = @user.offerings.collect{|o| o.skill} %>
+<%  @skills = Skill.find(:all) - @user_skills %>
+<%= box :class => "yui-g" do %>
+<h3><%= :my_skills %>
+</h3>
+<div class='yui-u first'>
+  <ul class='sortable' id='skills'>
+    <%  @skills.each do |s| %>
+    <li id="skill_<%=  s.id  %>">
 
-=box :class => "yui-g" do
-  %h3= :my_skills
-  .yui-u.first
-    %ul#skills.sortable
-      - @skills.each do |s|
-        %li{:id => "skill_#{ s.id }"}
-          = s.name
-      %br.clear
-  .yui-u
-    %ul#users_skills.sortable
-      = render :partial => 'skill', :collection => @user.offerings.collect{ |o| o.skill }
-    %label
-      %em
-        = :drag_and_drop_up_to_three_skills_into_the_gray_area_above.l
+            <%=  s.name %>
 
-  %script{"type"=>"text/javascript"}
-    \//
-    Sortable.create('skills',{tag:'li',dropOnEmpty: true,
-    containment: ['skills', 'users_skills'], hoverclass : "sortable_hover", constraint: false, overlap:'horizontal'
-    }
-    );
-    
-    offerings = Sortable.create('users_skills',{
-    onUpdate: function(){
-    limitListTo(3);
-    ="new Ajax.Request('#{ replace_user_offerings_path(@user) }',"
-    {parameters:Sortable.serialize('users_skills'),
-    asynchronous:true, evalScripts:true, method:'put'}
-    );
-    },
-    tag:'li',dropOnEmpty: true, containment: ['skills', 'users_skills'], constraint: false,
-    hoverclass : "sortable_hover"
-    }
-    );
-    
-    function limitListTo(i){
-    items = Sortable.findElements($('users_skills'), {tag:'li'});
-    if (items && (items.length > i)){
-    last_item = items[ items.length - 1 ]
-    $('skills').appendChild(last_item)
-    }
-    }
-    \//
+    </li>
+    <% end %>
+    <br class='clear' />
+  </ul>
+</div>
+<div class='yui-u'>
+  <ul class='sortable' id='users_skills'>
+        <%=  render :partial => 'skill', :collection => @user.offerings.collect{ |o| o.skill } %>
+
+  </ul>
+  <label>
+    <em>
+            <%=  :drag_and_drop_up_to_three_skills_into_the_gray_area_above.l %>
+
+    </em>
+  </label>
+</div>
+<script type='text/javascript'>
+  //
+  Sortable.create('skills',{tag:'li',dropOnEmpty: true,
+  containment: ['skills', 'users_skills'], hoverclass : "sortable_hover", constraint: false, overlap:'horizontal'
+  }
+  );
+  offerings = Sortable.create('users_skills',{
+  onUpdate: function(){
+  limitListTo(3);
+    <%= "new Ajax.Request('#{ replace_user_offerings_path(@user) }'," %>
+
+  {parameters:Sortable.serialize('users_skills'),
+  asynchronous:true, evalScripts:true, method:'put'}
+  );
+  },
+  tag:'li',dropOnEmpty: true, containment: ['skills', 'users_skills'], constraint: false,
+  hoverclass : "sortable_hover"
+  }
+  );
+  function limitListTo(i){
+  items = Sortable.findElements($('users_skills'), {tag:'li'});
+  if (items && (items.length > i)){
+  last_item = items[ items.length - 1 ]
+  $('skills').appendChild(last_item)
+  }
+  }
+  //
+</script>
+<% end %>
+

@@ -1,15 +1,21 @@
-%label{:for => 'poll_question'} 
-  =:question.l
-  %br
-  =text_field_tag 'poll[question]', poll.question, :class => 'text'
+<label for='poll_question'>
+    <%= :question.l %>
 
-%br
-%label
-  =:choices.l
-  %ol#options
-    -poll.choices.each do |choice|
-      %li= text_field_tag "choices[]", choice.description, :class => 'text'
-  
-%br
-%br
-%hr
+  <br />
+    <%= text_field_tag 'poll[question]', poll.question, :class => 'text' %>
+
+</label>
+<br />
+<label>
+    <%= :choices.l %>
+
+  <ol id='options'>
+    <% poll.choices.each do |choice| %>
+    <li>    <%= text_field_tag "choices[]", choice.description, :class => 'text' %>
+</li>
+    <% end %>
+  </ol>
+</label>
+<br />
+<br />
+<hr />

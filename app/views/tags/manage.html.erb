@@ -1,36 +1,60 @@
--content_for :sidebar do
-  = render :partial => 'shared/admin_nav'
-  
-  = rounded_box  :div_class => 'white-fg bluegray-bg'  do
-    %h3=:search.l
-    = form_for @search, :html => {:class => "MainForm"} do |f|
+<% content_for :sidebar do %>
+<%=  render :partial => 'shared/admin_nav' %>
 
-      = f.label :name.l
-      = f.text_field :name_begins_with
+<%=  rounded_box :div_class => 'white-fg bluegray-bg' do %>
+<h3><%= :search.l %>
+</h3>
+<%=  form_for @search, :html => {:class => "MainForm"} do |f| %>
+<%=  f.label :name.l %>
 
-      %p= f.submit :search.l
-  
-= rounded_box  :div_class => 'white-fg bluegray-bg'  do
-  %h3=:tags.l
+<%=  f.text_field :name_begins_with %>
 
-  %table{:width=>"100%"}
-    %tr 
-      %th
-        =order @search, :by => :name, :as => :name.l            
-      %th 
-        =order @search, :by => :taggings_count, :as => "##{:taggings.l}"
-      %th=:actions.l
+<p><%= f.submit :search.l %>
+</p>
+<% end %>
 
-    - for tag in @tags
-      %tr
-        %td= tag.name
-        %td= tag.taggings.size	
-        %td
-          = link_to :show.l, tag_path(tag)
-          | 
-          = link_to :edit.l, edit_tag_path(tag)
-          |
-          = link_to :destroy.l, tag_path(tag), :confirm => :are_you_sure.l, :method => :delete
-= rounded_box  :div_class => 'white-fg bluegray-bg'  do
-  .pagination=paginating_links @tags if @tags.total_pages > 1
+<% end %>
+
+<% end %>
+<%=  rounded_box :div_class => 'white-fg bluegray-bg' do %>
+<h3><%= :tags.l %>
+</h3>
+<table width='100%'>
+  <tr>
+    <th>
+            <%= order @search, :by => :name, :as => :name.l %>
+
+    </th>
+    <th>
+            <%= order @search, :by => :taggings_count, :as => "##{:taggings.l}" %>
+
+    </th>
+    <th>    <%= :actions.l %>
+</th>
+  </tr>
+  <%  for tag in @tags %>
+  <tr>
+    <td>    <%= tag.name %>
+</td>
+    <td>    <%= tag.taggings.size %>
+</td>
+    <td>
+            <%=  link_to :show.l, tag_path(tag) %>
+
+      |
+            <%=  link_to :edit.l, edit_tag_path(tag) %>
+
+      |
+            <%=  link_to :destroy.l, tag_path(tag), :confirm => :are_you_sure.l, :method => :delete %>
+
+    </td>
+  </tr>
+  <% end %>
+</table>
+<% end %>
+
+<%=  rounded_box :div_class => 'white-fg bluegray-bg' do %>
+<div class='pagination'><%= paginating_links @tags if @tags.total_pages > 1 %>
+</div>
+<% end %>
 

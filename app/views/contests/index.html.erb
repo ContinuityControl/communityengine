@@ -1,10 +1,19 @@
--content_for :sidebar do
-  = render :partial => 'shared/admin_nav'
-  
-= rounded_box  :div_class => 'white-fg bluegray-bg'  do
-  %h3= :contests.l
-  - @contests.each do |contest|
-    %h2
-      =link_to contest.title, contest
-      %small  
-        %em=contest.time_and_date
+<% content_for :sidebar do %>
+<%=  render :partial => 'shared/admin_nav' %>
+
+<% end %>
+<%=  rounded_box :div_class => 'white-fg bluegray-bg' do %>
+<h3><%= :contests.l %>
+</h3>
+<%  @contests.each do |contest| %>
+<h2>
+    <%= link_to contest.title, contest %>
+
+  <small>
+    <em>    <%= contest.time_and_date %>
+</em>
+  </small>
+</h2>
+<% end %>
+<% end %>
+

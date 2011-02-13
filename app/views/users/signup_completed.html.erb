@@ -1,11 +1,20 @@
--content_for :sidebar do
-  = rounded_box  :div_class => 'bluegray-bg login_help'  do
-    %h4= :no_activation_email.l
-    = link_to(:resend_my_activation_e_mail.l, "/resend_activation?id=#{@user.to_param}", :method => 'post')
+<% content_for :sidebar do %>
+<%=  rounded_box :div_class => 'bluegray-bg login_help' do %>
+<h4><%= :no_activation_email.l %>
+</h4>
+<%=  link_to(:resend_my_activation_e_mail.l, "/resend_activation?id=#{@user.to_param}", :method => 'post') %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  %h3=:go_check_your_e_mail.l
-  %ul.list.checks
-    %li= :look_for_a_message_from.l :from => AppConfig.community_name
-    %li= :see_you_back_here_in_a_short_while.l        
+<% end %>
+
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :go_check_your_e_mail.l %>
+</h3>
+<ul class='list checks'>
+  <li>  <%= :look_for_a_message_from.l :from => AppConfig.community_name %>
+</li>
+  <li>  <%= :see_you_back_here_in_a_short_while.l %>
+</li>
+</ul>
+<% end %>
 

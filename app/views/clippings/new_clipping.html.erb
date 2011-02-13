@@ -1,136 +1,164 @@
-%html
-  %head
-    %title
-      = AppConfig.community_name
-      \- 
-      =:new_clipping.l
-    = render :partial => '/shared/scripts_and_styles'
-    = javascript_include_tag 'lightbox'
-    = stylesheet_link_tag 'lightbox'
-    %style{"type"=>"text/css"}
-      :plain
-        body {
-        font: 1em "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-        background: none;
-        }
-        ul#clipping_image_list {
-        list-style:none;
-        padding:none;
-        width: 400px;
-        height: 400px;
-        overflow: auto;
-        }
-        ul#clipping_image_list li {
-        display:inline;
-        margin:1em;
-        }
-        ul#clipping_image_list li img {
-        cursor:pointer;
-        cursor: hand;
-        padding:3px;
-        border:1px solid #ccc;
-        width: 200px;
-        }
-      
-        div#form_div {
-        width:550px;
-        padding:10px;
-        }
-  %body
-    #doc3
-      #bd
-        .yui-g
-          =box :class => "yui-u first" do
-            %h3 
-              =:create_a_clipping.l
-            %p
-              %small=:click_on_an_image_below_to_clip_it.l
-            %ul#clipping_image_list
-              = image_tag 'spinner.gif'
-              =:loading_images.l
-              %script{"type"=>"text/javascript"}
-                = remote_function(:url => { :action => "load_images_from_uri", :params => {:uri => params[:uri]} } )
-            %small
-              %a{"href"=>"#{ params[:uri] }"}
-                =:cancel_and_go_back_to.l
-                = @clipping.url
-            #form_div{"style"=>"display:none;"}
-              = form_for(:clipping, :url => user_clippings_path(@user), :html => {:class => "MainForm"} ) do |f|
-                %label=:url.l
-                = f.text_field :url
+<html>
+  <head>
+    <title>
+      <%= AppConfig.community_name %> - <%= :new_clipping.l %>
+    </title>
+    <%= render :partial => '/shared/scripts_and_styles' %>
 
-                %img#clipping_preview{"src"=>nil, "width"=>"175px", "style"=>"float:right"}
-                
-                %label=:image_url.l
-                = f.text_field :image_url
+    <%= javascript_include_tag 'lightbox' %>
 
-                %label
-                  =:tags.l
-                  %em="(#{:optional_keywords_describing_this_clipping_separated_by_commas.l})"
-                = text_field_tag 'tag_list', @clipping.tag_list, {:autocomplete => "off",:id => 'clipping_tag_list'}
+    <%= stylesheet_link_tag 'lightbox' %>
 
-                #clipping_tag_list_auto_complete.auto_complete
-                = auto_complete_field 'clipping_tag_list', {:url => {:controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','], :update => 'clipping_tag_list_auto_complete' }
+    <style type='text/css'>
+      body {
+      font: 1em "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+      background: none;
+      }
+      ul#clipping_image_list {
+      list-style:none;
+      padding:none;
+      width: 400px;
+      height: 400px;
+      overflow: auto;
+      }
+      ul#clipping_image_list li {
+      display:inline;
+      margin:1em;
+      }
+      ul#clipping_image_list li img {
+      cursor:pointer;
+      cursor: hand;
+      padding:3px;
+      border:1px solid #ccc;
+      width: 200px;
+      }
 
-                %label=:description.l
-                = f.text_field :description
+      div#form_div {
+      width:550px;
+      padding:10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='doc3'>
+      <div id='bd'>
+        <div class='yui-g'>
+          <%= box :class => "yui-u first" do %>
+            <h3>
+              <%= :create_a_clipping.l %>
+            </h3>
+            <p>
+              <small> <%= :click_on_an_image_below_to_clip_it.l %> </small>
+            </p>
+            <ul id='clipping_image_list'>
+              <%= image_tag 'spinner.gif' %>
+              <%= :loading_images.l %>
 
-                %p= submit_tag :create.l
+              <%= javascript_tag do %>
+                <%= remote_function(:url => { :action => "load_images_from_uri", :params => {:uri => params[:uri]} } ) %>
+                <% end %<
+              </ul>
+              <small>
+                <a href="<%= params[:uri] %>">
+                  <%= :cancel_and_go_back_to.l %>
+                  <%= @clipping.url %>
+                </a>
+              </small>
+              <div id='form_div' style='display:none;'>
+                <%= form_for(:clipping, :url => user_clippings_path(@user), :html => {:class => "MainForm"} ) do |f| %>
+                  <label> <%= :url.l %> </label>
+                  <%= f.text_field :url %>
 
-          %script{"type"=>"text/javascript"}
-            image_list = $('clipping_image_list')
-            Event.observe(image_list, 'click', function(e){
-            element = Event.element(e);
-            if (element.parentNode.tagName.toLowerCase() == 'li' ){
-            $('clipping_image_url').value = element.src;
-            $('clipping_preview').src = element.src;
-            new Lightbox.base('form_div');
-            }
-            return;
-            });
-          =box :class => "yui-u" do
-            %h3=:create_a_post.l
-            = form_for(:post, :url => user_posts_path(current_user), :html => {:class => "MainForm"}) do |f|
-              = hidden_field_tag 'post[published_as]', 'live'
+                  <img id="clipping_preview" style="float:right" width="175px" />
 
-              - unless @post.category || @post.contest
-                %label 
-                  =:category.l
-                  \:
-                %select#post_category_id{"name"=>"post[category_id]", "id"=>"post_category_id"}
-                  - Category.find(:all).each do |category|
-                    %option{:value => category.id}
-                      = h(category.name)
-              - else
-                = f.hidden_field :category_id
-                = f.hidden_field :contest_id
+                  <label> <%= :image_url.l %> </label>
+                  <%= f.text_field :image_url %>
 
-              %label 
-                =:title.l
-                %em="("+:required.l+")"
-                \:
-              = f.text_field :title
-              
-              
-              %label
-                =:body_text.l
-                %em="("+:required.l+")"
-                \:
-              = f.text_area :raw_post, :size => "50x15"
-              
-              %label 
-                =:tags.l
-                %em="("+:optional_keywords_describing_this_post_separated_by_commas.l+")"
-                \:
+                  <label>
+                    <%= :tags.l %>
+                    <em> <%= "(#{:optional_keywords_describing_this_clipping_separated_by_commas.l})" %> </em>
+                  </label>
+                  <%= text_field_tag 'tag_list', @clipping.tag_list, {:autocomplete => "off",:id => 'clipping_tag_list'} %>
 
-              = text_field_tag 'tag_list', @post.tag_list, {:autocomplete => "off", :size => 35, :id => 'post_tag_list'}
-              #post_tag_list_auto_complete.auto_complete
-              = auto_complete_field 'post_tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [',', ' '], :update=> 'post_tag_list_auto_complete' }
+                  <div class='auto_complete' id='clipping_tag_list_auto_complete'></div>
+                  <%= auto_complete_field 'clipping_tag_list', {:url => {:controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','], :update => 'clipping_tag_list_auto_complete' } %>
 
-              %label
-                =:save_post_as.l
-              = f.select(:published_as, [[:published.l, 'live'], [:draft.l, 'draft']])
+                  <label> <%= :description.l %> </label>
+                  <%= f.text_field :description %>
 
+                  <p> <%= submit_tag :create.l %> </p>
+                <% end %>
 
-              %p= submit_tag :save.l
+              </div>
+            <% end %>
 
+            <%= javascript_tag do %>
+              image_list = $('clipping_image_list')
+              Event.observe(image_list, 'click', function(e){
+                element = Event.element(e);
+                if (element.parentNode.tagName.toLowerCase() == 'li' ){
+                  $('clipping_image_url').value = element.src;
+                  $('clipping_preview').src = element.src;
+                  new Lightbox.base('form_div');
+                }
+                return;
+              });
+            <% end %>
+            <%= box :class => "yui-u" do %>
+              <h3> <%= :create_a_post.l %> </h3>
+              <%= form_for(:post, :url => user_posts_path(current_user), :html => {:class => "MainForm"}) do |f| %>
+                <%= hidden_field_tag 'post[published_as]', 'live' %>
+
+                <% unless @post.category || @post.contest %>
+                  <label>
+                    <%= :category.l %>:
+                  </label>
+                  <select id='post_category_id_post_category_id' name='post[category_id]'>
+                    <% Category.find(:all).each do |category| %>
+                      <option value="<%= category.id %>">
+                      <%= h(category.name) %>
+                      </option>
+                    <% end %>
+                  </select>
+                <% else %>
+                  <%= f.hidden_field :category_id %>
+                  <%= f.hidden_field :contest_id %>
+                <% end %>
+                <label>
+                  <%= :title.l %>
+
+                  <em><%= "("+:required.l+")" %></em>:
+                </label>
+                <%= f.text_field :title %>
+
+                <label>
+                  <%= :body_text.l %>
+
+                  <em><%= "("+:required.l+")" %></em>:
+                </label>
+                <%= f.text_area :raw_post, :size => "50x15" %>
+
+                <label>
+                  <%= :tags.l %>
+                  <em><%= "("+:optional_keywords_describing_this_post_separated_by_commas.l+")" %></em>:
+                </label>
+                <%= text_field_tag 'tag_list', @post.tag_list, {:autocomplete => "off", :size => 35, :id => 'post_tag_list'} %>
+
+                <div class='auto_complete' id='post_tag_list_auto_complete'></div>
+                <%= auto_complete_field 'post_tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [',', ' '], :update=> 'post_tag_list_auto_complete' } %>
+
+                <label>
+                  <%= :save_post_as.l %>
+                </label>
+                <%= f.select(:published_as, [[:published.l, 'live'], [:draft.l, 'draft']]) %>
+
+                <p> <%= submit_tag :save.l %> </p>
+              <% end %>
+
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+    </body>
+  </html>

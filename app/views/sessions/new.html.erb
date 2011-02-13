@@ -1,4 +1,9 @@
-= rounded_box  :div_class => 'bluegray-bg'  do
-  %h3
-    =:log_in_to_site.l(:site => AppConfig.community_name)
-  = render :partial => 'form'
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3>
+    <%= :log_in_to_site.l(:site => AppConfig.community_name) %>
+
+</h3>
+<%=  render :partial => 'form' %>
+
+<% end %>
+

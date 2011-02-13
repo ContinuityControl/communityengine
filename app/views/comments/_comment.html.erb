@@ -1,39 +1,63 @@
--if comment.user
-  .hentry{:id => "comment_#{comment.id}"}
-    .vcard.author
-      %h5= link_to image_tag(comment.user.avatar_photo_url(:thumb), :height => '50', :width => '50', :alt => "#{comment.user.login}"), user_path(comment.user), :rel => 'bookmark', :class => 'photo', :title => :users_profile.l(:user => comment.user.login)
-      %ul
-        %li.fn
-          = link_to comment.user.login, user_path(comment.user), :class => 'url'
-        %li.update
-          %a{"href"=> commentable_url(comment), "rel"=>"bookmark"}
-            %abbr.published{"title"=>"#{comment.created_at}"}
-              = I18n.l(comment.created_at, :format => :short_literal_date)
-        -if ( comment.can_be_deleted_by(current_user) )
-          %li.delete=link_to(:delete.l, {:remote => true, :url => comment_path(comment.commentable_type, comment.commentable_id, comment), :method => :delete, 500 => 'alert(\'Sorry, there was a server error\'); return false',  :success => visual_effect(:fade, "comment_#{comment.id}"), :confirm => :are_you_sure_you_want_to_permanently_delete_this_comment.l} )
-    .entry-content= comment.comment
-    .clear
+<% if comment.user %>
+  <div class="hentry" id="comment_<%= comment.id %>">
 
--else
-  .hentry{:id => "comment_#{comment.id}"}
-    .vcard.author
-      %h5
-        %a{:href => '#', :rel => 'bookmark', :class => 'photo', :onclick => 'return false;'}
-          = image_tag(AppConfig.photo['missing_thumb'], :height => '50', :width => '50')
-      %ul
-        %li.fn
-          =link_to_unless(comment.author_url.blank?, h(comment.username), h(comment.author_url)){ h(comment.username) }
-        %li.update
-          %a{"href"=> commentable_url(comment), "rel"=>"bookmark"}
-            %abbr.published{"title"=>"#{comment.created_at}"}
-              = I18n.l(comment.created_at, :format => :short_literal_date)
-        -if ( comment.can_be_deleted_by(current_user) )
-          %li.delete=link_to(:delete.l, {:remote => true, :url => comment_path(comment.commentable_type, comment.commentable_id, comment), :method => :delete, 500 => 'alert(\'Sorry, there was a server error\'); return false',  :success => visual_effect(:fade, "comment_#{comment.id}"), :confirm => :are_you_sure_you_want_to_permanently_delete_this_comment.l} )
-    .entry-content= comment.comment
-    .clear
-- highlighted ||= nil
-- if highlighted
-  %script{"type"=>"text/javascript"}
-    =visual_effect :highlight, "comment_#{comment.id}", :duration => 1 
+    <div class='vcard author'>
+      <h5> <%= link_to image_tag(comment.user.avatar_photo_url(:thumb), :height => '50', :width => '50', :alt => "#{comment.user.login}"), user_path(comment.user), :rel => 'bookmark', :class => 'photo', :title => :users_profile.l(:user => comment.user.login) %> </h5>
+      <ul>
+        <li class='fn'>
+          <%= link_to comment.user.login, user_path(comment.user), :class => 'url' %>
 
-.clear
+        </li>
+        <li class='update'>
+          <a href="<%= commentable_url(comment) %>" rel="bookmark">
+            <abbr class="published" title="<%= comment.created_at %>">
+
+              <%= I18n.l(comment.created_at, :format => :short_literal_date) %>
+
+            </abbr>
+          </a>
+        </li>
+        <% if ( comment.can_be_deleted_by(current_user) ) %>
+          <li class='delete'> <%= link_to(:delete.l, {:remote => true, :url => comment_path(comment.commentable_type, comment.commentable_id, comment), :method => :delete, 500 => 'alert(\'Sorry, there was a server error\'); return false', :success => visual_effect(:fade, "comment_#{comment.id}"), :confirm => :are_you_sure_you_want_to_permanently_delete_this_comment.l} ) %> </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class='entry-content'> <%= comment.comment %> </div>
+    <div class='clear'></div>
+  </div>
+<% else %>
+  <div class="hentry" id="comment_<%= comment.id %>">
+
+    <div class='vcard author'>
+      <h5>
+        <a class="photo" href="#" onclick="return false;" rel="bookmark">
+          <%= image_tag(AppConfig.photo['missing_thumb'], :height => '50', :width => '50') %>
+        </a>
+      </h5>
+      <ul>
+        <li class='fn'>
+          <%= link_to_unless(comment.author_url.blank?, h(comment.username), h(comment.author_url)){ h(comment.username) } %>
+        </li>
+        <li class='update'>
+          <a href="<%= commentable_url(comment) %>" rel="bookmark">
+            <abbr class="published" title="<%= comment.created_at %>">
+              <%= I18n.l(comment.created_at, :format => :short_literal_date) %>
+            </abbr>
+          </a>
+        </li>
+        <% if ( comment.can_be_deleted_by(current_user) ) %>
+          <li class='delete'> <%= link_to(:delete.l, {:remote => true, :url => comment_path(comment.commentable_type, comment.commentable_id, comment), :method => :delete, 500 => 'alert(\'Sorry, there was a server error\'); return false', :success => visual_effect(:fade, "comment_#{comment.id}"), :confirm => :are_you_sure_you_want_to_permanently_delete_this_comment.l} ) %> </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class='entry-content'> <%= comment.comment %> </div>
+    <div class='clear'></div>
+  </div>
+<% end %>
+<% highlighted ||= nil %>
+<% if highlighted %>
+  <%= javascript_tag do %>
+    <%= visual_effect :highlight, "comment_#{comment.id}", :duration => 1 %>
+  <% end %>
+<% end %>
+<div class='clear'></div>

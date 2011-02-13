@@ -1,20 +1,31 @@
--content_for :sidebar do
-  =rounded_box :div_class => 'posts hfeed bluegray-bg', :id => 'comments' do
-    = render :partial => 'posts/author_profile', :locals => {:user => @user} if @user
+<% content_for :sidebar do %>
+<%= rounded_box :div_class => 'posts hfeed bluegray-bg', :id => 'comments' do %>
+<%=  render :partial => 'posts/author_profile', :locals => {:user => @user} if @user %>
 
-=rounded_box :div_class => 'posts hfeed bluegray-bg', :id => 'comments' do
-  - if @comments.empty?
-    #emptycomments= :no_comments_found.l_with_args(:type => @commentable.class.to_s.underscore)
-  %h3
-    = :comments.l + " -"
-    = link_to @title, @back_url
+<% end %>
 
-  %a#newest_comment
-    = render :partial => 'comments/comment', :collection => @comments
+<% end %>
+<%= rounded_box :div_class => 'posts hfeed bluegray-bg', :id => 'comments' do %>
+<%  if @comments.empty? %>
+<div id='emptycomments'><%= :no_comments_found.l_with_args(:type => @commentable.class.to_s.underscore) %>
+</div>
+<% end %>
+<h3>
+    <%=  :comments.l + " -" %>
 
-  .pagination=paginating_links @comments if @comments.total_pages > 1
+    <%=  link_to @title, @back_url %>
 
-  %h3=:add_your_comment.l
-  %p= render :partial => 'comments/comment_form', :locals => {:commentable => @commentable}  
-  %div.clearright
-        
+</h3>
+<a id='newest_comment'>
+    <%=  render :partial => 'comments/comment', :collection => @comments %>
+
+</a>
+<div class='pagination'><%= paginating_links @comments if @comments.total_pages > 1 %>
+</div>
+<h3><%= :add_your_comment.l %>
+</h3>
+<p><%= render :partial => 'comments/comment_form', :locals => {:commentable => @commentable} %>
+</p>
+<div class='clearright'></div>
+<% end %>
+

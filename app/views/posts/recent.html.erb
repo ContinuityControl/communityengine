@@ -1,16 +1,23 @@
+<%  @section = 'posts' %>
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
-- @section = 'posts'
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg hfeed' do %>
+<div class='right'>
+  <ul class='list checks'>
+    <li>    <%= link_to :write_a_blog_post.l, new_user_post_path({:user_id => current_user}) %>
+</li>
+  </ul>
+</div>
+<h3>
+    <%= :recent_posts.l %>
 
-= rounded_box  :div_class => 'bluegray-bg hfeed'  do
-  .right
-    %ul.list.checks
-      %li=link_to :write_a_blog_post.l, new_user_post_path({:user_id => current_user})
-  %h3
-    =:recent_posts.l
+</h3>
+<%=  render :partial => 'posts/post', :collection => @posts %>
 
-  = render :partial => 'posts/post', :collection => @posts      
-  
-  .pagination=paginating_links @posts
-  .clear
+<div class='pagination'><%= paginating_links @posts %>
+</div>
+<div class='clear'></div>
+<% end %>
+

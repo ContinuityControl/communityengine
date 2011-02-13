@@ -1,12 +1,21 @@
-.posts
-  .post{:id => "post_#{post.id}"}
-    = link_to image_tag( (post.image_for_excerpt), {:style=>"width:200px"} ), user_post_path(post.user, post)
-    %p
-      %strong= link_to post.title, user_post_path(post.user, post)
-      %br
-      %small.quiet= link_to :by.l+" #{post.user.login}", user_path(post.user)
-      %br
-      = truncate_words(post.post, :length => 70)
-      = link_to( content_tag(:small, '&raquo;'.html_safe+:more.l), user_post_path(post.user, post))
+<div class='posts'>
+  <div class="post" id="post_<%= post.id %>">
 
-    =render :partial => 'posts/meta', :locals => {:post => post}
+        <%=  link_to image_tag( (post.image_for_excerpt), {:style=>"width:200px"} ), user_post_path(post.user, post) %>
+
+    <p>
+      <strong>      <%= link_to post.title, user_post_path(post.user, post) %>
+</strong>
+      <br />
+      <small class='quiet'>      <%= link_to :by.l+" #{post.user.login}", user_path(post.user) %>
+</small>
+      <br />
+            <%=  truncate_words(post.post, :length => 70) %>
+
+            <%=  link_to( content_tag(:small, '&raquo;'.html_safe+:more.l), user_post_path(post.user, post)) %>
+
+    </p>
+        <%= render :partial => 'posts/meta', :locals => {:post => post} %>
+
+  </div>
+</div>

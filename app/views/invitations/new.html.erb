@@ -1,33 +1,60 @@
-%script{"type"=>"text/javascript", "src"=>"http://www.plaxo.com/css/m/js/util.js"}
-%script{"type"=>"text/javascript", "src"=>"http://www.plaxo.com/css/m/js/basic.js"}
-%script{"type"=>"text/javascript", "src"=>"http://www.plaxo.com/css/m/js/abc_launcher.js"}
+<script src='http://www.plaxo.com/css/m/js/util.js' type='text/javascript'></script>
+<script src='http://www.plaxo.com/css/m/js/basic.js' type='text/javascript'></script>
+<script src='http://www.plaxo.com/css/m/js/abc_launcher.js' type='text/javascript'></script>
+<div class='yui-b'>
+    <%= box :class => "alt first_alt" do %>
+  <h3>  <%= :spread_the_word.l %>
+</h3>
+  <p>
+        <%= :invite_message.l(:site => AppConfig.community_name) %>
 
-.yui-b
-  =box :class => "alt first_alt" do 
-    %h3=:spread_the_word.l
-    %p
-      =:invite_message.l(:site => AppConfig.community_name)
-    %p
-      =:people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on.l
-      = AppConfig.community_name
-      \.
+  </p>
+  <p>
+        <%= :people_who_sign_up_using_your_invitation_will_automatically_be_added_as_your_friends_on.l %>
 
-#yui-main
-  .yui-b
-    =box do 
-      %h3=:invite_your_friends_to_join.l
-      = form_for(:invitation, :url => user_invitations_path(:user_id => @user.id ), :html => {:class => "MainForm"} ) do |f|
-        .right
-          %a{"href"=>"#", "onclick"=>"showPlaxoABChooser('invitation_email_addresses', '/base/plaxo'); return false;"}
-            %img{"src"=>"http://www.plaxo.com/images/abc/buttons/add_button.gif", "alt"=>:add_from_my_address_book.l}/
-        %label{"for"=>"email_addresses"} 
-          =:enter_e_mail_addresses.l 
-          %em= :comma_separated.l
-        = f.text_area :email_addresses , :rows => "5"
-        %label{"for"=>"message"}= :write_a_message.l
-        = f.text_area :message, :rows => "5"
+        <%=  AppConfig.community_name %>
 
-        %p
-          = submit_tag :send_invitations.l
-          = :or.l
-          = link_to :cancel.l, user_path(@user)
+    .
+  </p>
+  <% end %>
+
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>    <%= :invite_your_friends_to_join.l %>
+</h3>
+        <%=  form_for(:invitation, :url => user_invitations_path(:user_id => @user.id ), :html => {:class => "MainForm"} ) do |f| %>
+    <div class='right'>
+      <a href="#" onclick="showPlaxoABChooser('invitation_email_addresses', '/base/plaxo'); return false;">
+
+        <img alt="Add from my address book" src="http://www.plaxo.com/images/abc/buttons/add_button.gif" />
+
+      </a>
+    </div>
+    <label for='email_addresses'>
+            <%= :enter_e_mail_addresses.l %>
+
+      <em>      <%= :comma_separated.l %>
+</em>
+    </label>
+        <%=  f.text_area :email_addresses , :rows => "5" %>
+
+    <label for='message'>    <%= :write_a_message.l %>
+</label>
+        <%=  f.text_area :message, :rows => "5" %>
+
+    <p>
+            <%=  submit_tag :send_invitations.l %>
+
+            <%=  :or.l %>
+
+            <%=  link_to :cancel.l, user_path(@user) %>
+
+    </p>
+    <% end %>
+
+    <% end %>
+
+  </div>
+</div>

@@ -1,8 +1,16 @@
-%dl.vcard
-  %dt.photo
-    = link_to image_tag(user.avatar_photo_url(:thumb), :alt => "#{user.login}", :width => '50', :height => '50'), user_path(user)
-  %dd.fn
-    =link_to user.login, user_path(user), :class => 'url'
-  %dd
-    - if user.description
-      %p= truncate_words(user.description, :length => 100).html_safe
+<dl class='vcard'>
+  <dt class='photo'>
+        <%=  link_to image_tag(user.avatar_photo_url(:thumb), :alt => "#{user.login}", :width => '50', :height => '50'), user_path(user) %>
+
+  </dt>
+  <dd class='fn'>
+        <%= link_to user.login, user_path(user), :class => 'url' %>
+
+  </dd>
+  <dd>
+    <%  if user.description %>
+    <p>    <%= truncate_words(user.description, :length => 100).html_safe %>
+</p>
+    <% end %>
+  </dd>
+</dl>

@@ -1,19 +1,25 @@
--@section = 'posts'
+<% @section = 'posts' %>
+<div class='yui-b'>
+    <%= box :class => "alt first_alt" do %>
+  <h3>  <%= :featured_writers.l %>
+</h3>
+  <%  @featured_writers.each do |user| %>
+    <%=  render :partial => "users/sidebar_user", :locals => {:user => user} %>
 
-.yui-b
+  <% end %>
+  <% end %>
 
-  =box :class => "alt first_alt" do 
-    %h3= :featured_writers.l
-    - @featured_writers.each do |user|
-      = render :partial => "users/sidebar_user", :locals => {:user => user}
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box :class => "hfeed" do %>
+    <h3>    <%= :featured_posts.l %>
+</h3>
+    <div class='pagination'>    <%= paginating_links @posts if @posts.total_pages > 1 %>
+</div>
+        <%=  render :partial => 'posts/post', :collection => @posts %>
 
-#yui-main
-  .yui-b
-    =box :class => "hfeed" do 
-      %h3=:featured_posts.l
+    <% end %>
 
-      .pagination=paginating_links @posts if @posts.total_pages > 1
-
-      = render :partial => 'posts/post', :collection => @posts
-  
-  
+  </div>
+</div>

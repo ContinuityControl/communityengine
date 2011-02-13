@@ -1,25 +1,40 @@
-.yui-b
-  = render :partial => "skills/sidebar_menu"
-  
-  - unless logged_in?
-    =box :class => "alt" do 
-      = :want_to_list_your_services_on.l+" #{AppConfig.community_name}?"
-      = link_to :sign_up.l, '/signup?user[vendor]=true'
+<div class='yui-b'>
+    <%=  render :partial => "skills/sidebar_menu" %>
 
-  -if @active_users.any?
-    =box :class => "alt" do 
-      %h3= :top_pros.l
-      - @active_users.each do |user|
-        = render :partial => "users/sidebar_user", :locals => {:user => user}
+  <%  unless logged_in? %>
+    <%= box :class => "alt" do %>
+    <%=  :want_to_list_your_services_on.l+" #{AppConfig.community_name}?" %>
 
-#yui-main
-  .yui-b
-    =box :class => "user_list" do 
-      %h3= AppConfig.community_name + " &raquo; ".html_safe + :pros.l
+    <%=  link_to :sign_up.l, '/signup?user[vendor]=true' %>
 
-      .pagination= paginating_links @users if @users.total_pages > 1
+  <% end %>
 
-      = render :partial => "users/user", :collection => @users, :locals => {:format => 'full' }
-    
-      %br.clear
-      .pagination= paginating_links @users if @users.total_pages > 1
+  <% end %>
+  <% if @active_users.any? %>
+    <%= box :class => "alt" do %>
+  <h3>  <%= :top_pros.l %>
+</h3>
+  <%  @active_users.each do |user| %>
+    <%=  render :partial => "users/sidebar_user", :locals => {:user => user} %>
+
+  <% end %>
+  <% end %>
+
+  <% end %>
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box :class => "user_list" do %>
+    <h3>    <%= AppConfig.community_name + " &raquo; ".html_safe + :pros.l %>
+</h3>
+    <div class='pagination'>    <%= paginating_links @users if @users.total_pages > 1 %>
+</div>
+        <%=  render :partial => "users/user", :collection => @users, :locals => {:format => 'full' } %>
+
+    <br class='clear' />
+    <div class='pagination'>    <%= paginating_links @users if @users.total_pages > 1 %>
+</div>
+    <% end %>
+
+  </div>
+</div>

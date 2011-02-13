@@ -1,12 +1,20 @@
--content_for :sidebar do
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    =render :partial => 'messages/sidebar_nav'
-    %div.clear
+<% content_for :sidebar do %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= render :partial => 'messages/sidebar_nav' %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  =box do 
-    %h3= :compose_message.l
-    
-    = error_messages_for :message
-    
-    =render :partial => 'form', :locals => {:message => @message, :user => @user}
+<div class='clear'></div>
+<% end %>
+
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= box do %>
+<h3><%= :compose_message.l %>
+</h3>
+<%=  error_messages_for :message %>
+
+<%= render :partial => 'form', :locals => {:message => @message, :user => @user} %>
+
+<% end %>
+
+<% end %>
+

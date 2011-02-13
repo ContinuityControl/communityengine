@@ -1,37 +1,67 @@
-.clear
-.poll{:id => "poll_ui_#{poll.id}"}
-  - has_voted = logged_in? && poll.voted?(current_user)
+<div class='clear'></div>
+<div class="poll" id="poll_ui_<%= poll.id %>">
 
-  %table.poll
-    %thead
-      %tr
-        %th{:colspan => 2}
-          .right
-            =:total_votes.l
-            = poll.votes.size
-          = poll.question
-    -poll.choices.each do |choice|
-      %tr
-        -if @is_current_user || has_voted
-          %td.bars
-            .bar-container
-              .bar{:style => "width:#{choice.votes_percentage}%"}
-                ="#{choice.votes_percentage}%"
-        %td
-          - if logged_in? && !has_voted
-            = link_to :vote.l, { :remote => true, :url => votes_path(:choice_id => choice), :method => :post, :loading => "$$('table.poll').invoke('addClassName', 'loading')"}, {:title => :vote.l, :class => 'vote'} 
-          - elsif !logged_in?
-            = link_to :vote.l, new_vote_path(:post_id => poll.post.id), {:title => :log_in_to_vote.l, :class => 'vote'}
-          = choice.description
-    -if !has_voted
-      %tr
-        %td{:colspan => 2}
-          %small.quiet= :you_must_vote_to_see_the_results.l
-    -elsif logged_in?
-      %tr
-        %td{:colspan => 2}
-          %small.quiet= :you_have_already_voted.l
-      
+  <%  has_voted = logged_in? && poll.voted?(current_user) %>
+  <table class='poll'>
+    <thead>
+      <tr>
+        <th colspan="2">
 
-.clear
-%br
+          <div class='right'>
+                        <%= :total_votes.l %>
+
+                        <%=  poll.votes.size %>
+
+          </div>
+                    <%=  poll.question %>
+
+        </th>
+      </tr>
+    </thead>
+    <% poll.choices.each do |choice| %>
+    <tr>
+      <% if @is_current_user || has_voted %>
+      <td class='bars'>
+        <div class='bar-container'>
+          <div class="bar" style="width:<%= choice.votes_percentage %>%">
+
+                        <%= "#{choice.votes_percentage}%" %>
+
+          </div>
+        </div>
+      </td>
+      <% end %>
+      <td>
+        <%  if logged_in? && !has_voted %>
+                <%=  link_to :vote.l, { :remote => true, :url => votes_path(:choice_id => choice), :method => :post, :loading => "$$('table.poll').invoke('addClassName', 'loading')"}, {:title => :vote.l, :class => 'vote'} %>
+
+        <%  elsif !logged_in? %>
+                <%=  link_to :vote.l, new_vote_path(:post_id => poll.post.id), {:title => :log_in_to_vote.l, :class => 'vote'} %>
+
+        <% end %>
+                <%=  choice.description %>
+
+      </td>
+    </tr>
+    <% end %>
+    <% if !has_voted %>
+    <tr>
+      <td colspan="2">
+
+        <small class='quiet'>        <%= :you_must_vote_to_see_the_results.l %>
+</small>
+      </td>
+    </tr>
+    <% elsif logged_in? %>
+    <tr>
+      <td colspan="2">
+
+        <small class='quiet'>        <%= :you_have_already_voted.l %>
+</small>
+      </td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+<div class='clear'></div>
+<br />

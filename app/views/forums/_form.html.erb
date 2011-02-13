@@ -1,25 +1,39 @@
-#forum_name
-  = form.label :title, :title.l
-  = form.text_field :name, :class => "primary"
+<div id='forum_name'>
+    <%=  form.label :title, :title.l %>
 
-  = form.label :position, :position.l
-  = form.text_field :position, :size => 5
+    <%=  form.text_field :name, :class => "primary" %>
 
-  %fieldset
-    %legend="Group Configuration"
-    = form.label :community_group_id, "Belongs to Group?"
-    = form.collection_select :community_group_id, CommunityGroup.find(:all, :order => :name), :id, :name, {:include_blank => true}
+    <%=  form.label :position, :position.l %>
 
-    = form.label :is_committee, "Committee?"
-    = form.check_box :is_committee
+    <%=  form.text_field :position, :size => 5 %>
 
-  %label
-    =:tags.l
-    %em="(#{:optional_keywords_describing_this_forum_separated_by_commas.l})"
-  = text_field_tag 'tag_list', @forum.tag_list, {:autocomplete => "off", :size => 35}
-  #tag_list_auto_complete.auto_complete
-  = auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] }
+  <fieldset>
+    <legend>    <%= "Group Configuration" %>
+</legend>
+        <%=  form.label :community_group_id, "Belongs to Group?" %>
 
-#forum_descripion
-  %label= :description.l
-  = form.text_area :description, :rows => 7
+        <%=  form.collection_select :community_group_id, CommunityGroup.find(:all, :order => :name), :id, :name, {:include_blank => true} %>
+
+        <%=  form.label :is_committee, "Committee?" %>
+
+        <%=  form.check_box :is_committee %>
+
+  </fieldset>
+  <label>
+        <%= :tags.l %>
+
+    <em>    <%= "(#{:optional_keywords_describing_this_forum_separated_by_commas.l})" %>
+</em>
+  </label>
+    <%=  text_field_tag 'tag_list', @forum.tag_list, {:autocomplete => "off", :size => 35} %>
+
+  <div class='auto_complete' id='tag_list_auto_complete'></div>
+    <%=  auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
+
+</div>
+<div id='forum_descripion'>
+  <label>  <%= :description.l %>
+</label>
+    <%=  form.text_area :description, :rows => 7 %>
+
+</div>

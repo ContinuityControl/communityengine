@@ -1,55 +1,107 @@
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
-  = rounded_box  :div_class => 'posts hfeed bluegray-bg white-fg'  do
-    %h3="Search My Posts"
-    = form_for @search do |f|
-      = f.label :title.l
-      = f.text_field :title_like
-      = f.label :category.l
-      = f.select :category_id_equals, Category.all.collect{|c| [c.name, c.id]}, :include_blank => true
-      = f.label :status.l
-      = f.select :published_as_equals, [['Published','live'], ['Draft','draft']], :include_blank => true
-      = f.label :show.l
-      = select_tag :size, options_for_select([['10',10], ['20',20], ['100',100]], params[:size].to_i )
-      %p.hcenter= f.submit :search.l
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
-= rounded_box  :div_class => 'posts hfeed bluegray-bg white-fg'  do
-  .right
-    =link_to :view_my_blog.l, user_posts_path(current_user)
-    =" | "
-    =link_to :new_post.l, new_user_post_path(current_user)
-  %h3
-    =:manage_posts.l
-  %p=:posts_saved_with_draft_status_wont_appear_in_your_blog_until_you_publish_them.l
+<%=  rounded_box :div_class => 'posts hfeed bluegray-bg white-fg' do %>
+<h3><%= "Search My Posts" %>
+</h3>
+<%=  form_for @search do |f| %>
+<%=  f.label :title.l %>
 
+<%=  f.text_field :title_like %>
 
-  -if @posts.total_pages > 1
-    .pagination= paginating_links @posts, :link_to_current_page => true
+<%=  f.label :category.l %>
 
-  %table{:border => 0, :width => '100%'}
-    %thead
-      %tr
-        %th
-          =order @search, :by => :created_at, :as => :date_created.l
-        %th
-          =order @search, :by => :published_at, :as => :date_published.l
-        %th=:title.l
-        %th=:category.l
-        %th=:tags.l
-        %th=:comments.l
-        %th=:status.l
-    %tbody
-      - @posts.each do |post|
-        %tr
-          %td
-            %abbr{:title=>"#{post.created_at}"}= I18n.l(post.created_at, :format => :published_date)
-          %td
-            %abbr{:title=>"#{post.published_at}"}= post.published_at_display
-          %td
-            = link_to post.title, edit_user_post_path(post.user, post)
-            = link_to("(#{:preview.l})", user_post_path(post.user, post), :target => '_blank') unless post.is_live?
-          %td= post.category ? post.category.name : :uncategorized.l
-          %td= post.tags.any? ? post.tag_list : :no_tags.l
-          %td= post.comments.count
-          %td= post.is_live? ? link_to(:published.l, user_post_path(post.user, post)) : :draft.l
-  .clear
+<%=  f.select :category_id_equals, Category.all.collect{|c| [c.name, c.id]}, :include_blank => true %>
+
+<%=  f.label :status.l %>
+
+<%=  f.select :published_as_equals, [['Published','live'], ['Draft','draft']], :include_blank => true %>
+
+<%=  f.label :show.l %>
+
+<%=  select_tag :size, options_for_select([['10',10], ['20',20], ['100',100]], params[:size].to_i ) %>
+
+<p class='hcenter'><%= f.submit :search.l %>
+</p>
+<% end %>
+
+<% end %>
+
+<% end %>
+<%=  rounded_box :div_class => 'posts hfeed bluegray-bg white-fg' do %>
+<div class='right'>
+    <%= link_to :view_my_blog.l, user_posts_path(current_user) %>
+
+    <%= " | " %>
+
+    <%= link_to :new_post.l, new_user_post_path(current_user) %>
+
+</div>
+<h3>
+    <%= :manage_posts.l %>
+
+</h3>
+<p><%= :posts_saved_with_draft_status_wont_appear_in_your_blog_until_you_publish_them.l %>
+</p>
+<% if @posts.total_pages > 1 %>
+<div class='pagination'><%= paginating_links @posts, :link_to_current_page => true %>
+</div>
+<% end %>
+<table border="0" width="100%">
+
+  <thead>
+    <tr>
+      <th>
+                <%= order @search, :by => :created_at, :as => :date_created.l %>
+
+      </th>
+      <th>
+                <%= order @search, :by => :published_at, :as => :date_published.l %>
+
+      </th>
+      <th>      <%= :title.l %>
+</th>
+      <th>      <%= :category.l %>
+</th>
+      <th>      <%= :tags.l %>
+</th>
+      <th>      <%= :comments.l %>
+</th>
+      <th>      <%= :status.l %>
+</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%  @posts.each do |post| %>
+    <tr>
+      <td>
+        <abbr title="<%= post.created_at %>">
+        <%= I18n.l(post.created_at, :format => :published_date) %>
+</abbr>
+      </td>
+      <td>
+        <abbr title="<%= post.published_at %>">
+        <%= post.published_at_display %>
+</abbr>
+      </td>
+      <td>
+                <%=  link_to post.title, edit_user_post_path(post.user, post) %>
+
+                <%=  link_to("(#{:preview.l})", user_post_path(post.user, post), :target => '_blank') unless post.is_live? %>
+
+      </td>
+      <td>      <%= post.category ? post.category.name : :uncategorized.l %>
+</td>
+      <td>      <%= post.tags.any? ? post.tag_list : :no_tags.l %>
+</td>
+      <td>      <%= post.comments.count %>
+</td>
+      <td>      <%= post.is_live? ? link_to(:published.l, user_post_path(post.user, post)) : :draft.l %>
+</td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class='clear'></div>
+<% end %>
+

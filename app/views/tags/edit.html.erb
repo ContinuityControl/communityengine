@@ -1,19 +1,30 @@
-.yui-b.sidebar
-  = render :partial => 'shared/admin_nav'
+<div class='yui-b sidebar'>
+    <%=  render :partial => 'shared/admin_nav' %>
 
-#yui-main
-  =box :class => "yui-b" do
-    %h3=:editing_tag.l
-    = form_for(:tag, :url => tag_path(@tag), :html => { :method => :put, :class => "MainForm" }) do |f|
+</div>
+<div id='yui-main'>
+    <%= box :class => "yui-b" do %>
+  <h3>  <%= :editing_tag.l %>
+</h3>
+    <%=  form_for(:tag, :url => tag_path(@tag), :html => { :method => :put, :class => "MainForm" }) do |f| %>
+  <label>
+        <%= :name.l %>
 
-      %label
-        =:name.l
-        \:
-      = f.text_field :name
+    :
+  </label>
+    <%=  f.text_field :name %>
 
-      %p
-        = submit_tag :update.l
+  <p>
+        <%=  submit_tag :update.l %>
 
-    = link_to :show.l, tag_path(@tag)
-    |
-    = link_to :back.l, admin_tags_path(:action=>:manage)
+  </p>
+  <% end %>
+
+    <%=  link_to :show.l, tag_path(@tag) %>
+
+  |
+    <%=  link_to :back.l, admin_tags_path(:action=>:manage) %>
+
+  <% end %>
+
+</div>

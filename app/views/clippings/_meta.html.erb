@@ -1,26 +1,44 @@
-.meta{:id => "clipping_#{clipping.id}_meta"}
-  .column.span-2
-    %em
-      = clipping.created_at.strftime("%B %d, %Y")
-  .column.span-2.centered
-    %em
-      = link_to :comments_count.l(:count => clipping.comments.count), user_clipping_path(clipping.user, clipping)+'#comments'
-  .column.span-4.last.centered
-  - if @is_current_user || admin?
-    .column.span-1.first
-      = link_to "#{image_tag 'icons/post.png'} "+:edit.l, edit_user_clipping_path(clipping.user, clipping)
-    .column.span-2.last
-      = link_to "#{image_tag 'icons/delete.png'} "+:delete.l, user_clipping_path(clipping.user, clipping), {:method => :delete, :confirm => :permanently_delete_this_clipping.l}
+<div class="meta" id="clipping_<%= clipping.id %>_meta">
 
-  - if favorite = clipping.has_been_favorited_by(current_user, request.remote_ip)
-    .favorite
-      = link_to image_tag('icons/heart_off.png'), :remote => true, :url => favorite_path('clipping', clipping.id, favorite.id), :method => :delete, :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id}_meta .favorite img').first())", :title => :un_favorite_this.l if logged_in?
-      = image_tag('icons/heart_off.png') unless logged_in?
-      
-      %span.small.quiet= clipping.favorited_count
-  - else
-    .favorite  
-      = link_to image_tag('icons/heart.png'), :remote => true, :url => favorites_path('clipping', clipping.id), :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id}_meta .favorite img').first() )", :title => :favorite_this.l
-      %span.quiet.small= clipping.favorited_count  
+  <div class='column span-2'>
+    <em>
+            <%=  clipping.created_at.strftime("%B %d, %Y") %>
 
-  .clear
+    </em>
+  </div>
+  <div class='column span-2 centered'>
+    <em>
+            <%=  link_to :comments_count.l(:count => clipping.comments.count), user_clipping_path(clipping.user, clipping)+'#comments' %>
+
+    </em>
+  </div>
+  <div class='column span-4 last centered'></div>
+  <%  if @is_current_user || admin? %>
+  <div class='column span-1 first'>
+        <%=  link_to "#{image_tag 'icons/post.png'} "+:edit.l, edit_user_clipping_path(clipping.user, clipping) %>
+
+  </div>
+  <div class='column span-2 last'>
+        <%=  link_to "#{image_tag 'icons/delete.png'} "+:delete.l, user_clipping_path(clipping.user, clipping), {:method => :delete, :confirm => :permanently_delete_this_clipping.l} %>
+
+  </div>
+  <% end %>
+  <%  if favorite = clipping.has_been_favorited_by(current_user, request.remote_ip) %>
+  <div class='favorite'>
+        <%=  link_to image_tag('icons/heart_off.png'), :remote => true, :url => favorite_path('clipping', clipping.id, favorite.id), :method => :delete, :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id}_meta .favorite img').first())", :title => :un_favorite_this.l if logged_in? %>
+
+        <%=  image_tag('icons/heart_off.png') unless logged_in? %>
+
+    <span class='small quiet'>    <%= clipping.favorited_count %>
+</span>
+  </div>
+  <%  else %>
+  <div class='favorite'>
+        <%=  link_to image_tag('icons/heart.png'), :remote => true, :url => favorites_path('clipping', clipping.id), :loading => "new Effect.Pulsate($$('#clipping_#{clipping.id}_meta .favorite img').first() )", :title => :favorite_this.l %>
+
+    <span class='quiet small'>    <%= clipping.favorited_count %>
+</span>
+  </div>
+  <% end %>
+  <div class='clear'></div>
+</div>

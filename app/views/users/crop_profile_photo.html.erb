@@ -1,40 +1,43 @@
-= javascript_include_tag "builder", "dragdrop", "cropper"
-    
-      
--content_for :sidebar do
+<%= javascript_include_tag "builder", "dragdrop", "cropper" %>
 
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    = link_to :profile_photo_change.l, upload_profile_photo_user_path(@user)
-    
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3=:profile_photo.l
-    #previewWrap
-    
+<% content_for :sidebar do %>
+  <%= rounded_box :div_class => 'bluegray-bg' do %>
+    <%= link_to :profile_photo_change.l, upload_profile_photo_user_path(@user) %>
+  <% end %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  %h3= :profile_photo_crop.l  
+  <%= rounded_box :div_class => 'bluegray-bg' do %>
+    <h3><%= :profile_photo.l %></h3>
+    <div id='previewWrap'></div>
+  <% end %>
+<% end %>
 
-  = image_tag( @photo.photo.url, :id => 'photo' )
-  
-  = error_messages_for :photo
-  = form_for(:photo, :url => crop_profile_photo_user_path(@user), :html => { :method => :put, :class => "MainForm" }) do |f|
-    - [:crop_x, :crop_y, :crop_w, :crop_h].each do |attribute|
-      %input{ :type=>"hidden", :name=>attribute, :id=>attribute, :size=>"4"}
-    
-    %p
-      = submit_tag :update.l
-      = :or.l
-      = link_to :cancel_and_go_back_to_my_photos.l, user_photos_path(@user)
+<%= rounded_box :div_class => 'bluegray-bg' do %>
+  <h3><%= :profile_photo_crop.l %></h3>
+  <%= image_tag( @photo.photo.url, :id => 'photo' ) %>
 
-%script{:type => 'text/javascript'}
-  :plain
-    function onEndCrop( coords, dimensions ) {
-      $( 'crop_x' ).value = coords.x1;
-      $( 'crop_y' ).value = coords.y1;
-      $( 'crop_w' ).value = dimensions.width;
-      $( 'crop_h' ).value = dimensions.height;
-    }
-    function loadExample() {
-      new Cropper.ImgWithPreview( 'photo', { previewWrap: 'previewWrap', minWidth: 100, minHeight: 100, ratioDim: { x: 290, y: 290 }, onEndCrop: onEndCrop } );      
-    }
-    Event.observe( window, 'load', function() { loadExample(); } );      
+  <%= error_messages_for :photo %>
+
+  <%= form_for(:photo, :url => crop_profile_photo_user_path(@user), :html => { :method => :put, :class => "MainForm" }) do |f| %>
+    <% [:crop_x, :crop_y, :crop_w, :crop_h].each do |attribute| %>
+      <input type="hidden" name="<%= attribute %>" id="<%= attribute %>" size="4" />
+    <% end %>
+    <p>
+      <%= submit_tag :update.l %>
+      <%= :or.l %>
+      <%= link_to :cancel_and_go_back_to_my_photos.l, user_photos_path(@user) %>
+    </p>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  function onEndCrop( coords, dimensions ) {
+    $( 'crop_x' ).value = coords.x1;
+    $( 'crop_y' ).value = coords.y1;
+    $( 'crop_w' ).value = dimensions.width;
+    $( 'crop_h' ).value = dimensions.height;
+  }
+  function loadExample() {
+    new Cropper.ImgWithPreview( 'photo', { previewWrap: 'previewWrap', minWidth: 100, minHeight: 100, ratioDim: { x: 290, y: 290 }, onEndCrop: onEndCrop } ); 
+  }
+  Event.observe( window, 'load', function() { loadExample(); } );
+<% end %>

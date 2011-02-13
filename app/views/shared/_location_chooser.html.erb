@@ -1,15 +1,20 @@
-#location_chooser
-  %label= :country.l
-  = select_tag(:country_id, options_from_collection_for_select(Country.find_countries_with_metros, "id", "name", selected_country))
+<div id='location_chooser'>
+  <label>  <%= :country.l %>
+</label>
+    <%=  select_tag(:country_id, options_from_collection_for_select(Country.find_countries_with_metros, "id", "name", selected_country)) %>
 
-  %br
-  %label= :state.l 
-  = select_tag(:state_id, options_from_collection_for_select(states, "id", "name", (selected_state rescue nil)), {:disabled => states.empty?, 'data-url' => url_for({:controller => 'users', :action => 'metro_area_update'}) })
+  <br />
+  <label>  <%= :state.l %>
+</label>
+    <%=  select_tag(:state_id, options_from_collection_for_select(states, "id", "name", (selected_state rescue nil)), {:disabled => states.empty?, 'data-url' => url_for({:controller => 'users', :action => 'metro_area_update'}) }) %>
 
-  = image_tag 'spinner.gif', :style => 'display:none;'
+    <%=  image_tag 'spinner.gif', :style => 'display:none;' %>
 
-  %br
-  %label= :metro_area.l
-  = select_tag(:metro_area_id, options_from_collection_for_select(metro_areas, "id", "name", (selected_metro_area rescue nil)), {:disabled => metro_areas.empty? })
+  <br />
+  <label>  <%= :metro_area.l %>
+</label>
+    <%=  select_tag(:metro_area_id, options_from_collection_for_select(metro_areas, "id", "name", (selected_metro_area rescue nil)), {:disabled => metro_areas.empty? }) %>
 
-  = image_tag 'spinner.gif', :style => 'display:none;'
+    <%=  image_tag 'spinner.gif', :style => 'display:none;' %>
+
+</div>

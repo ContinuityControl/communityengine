@@ -1,28 +1,43 @@
--content_for :sidebar do
-  = render :partial => 'shared/admin_nav'
+<% content_for :sidebar do %>
+<%=  render :partial => 'shared/admin_nav' %>
 
-= rounded_box  :div_class => 'white-fg bluegray-bg'  do
-  .right= link_to :new_category.l, new_category_path
-  %h3=:categories.l
+<% end %>
+<%=  rounded_box :div_class => 'white-fg bluegray-bg' do %>
+<div class='right'><%= link_to :new_category.l, new_category_path %>
+</div>
+<h3><%= :categories.l %>
+</h3>
+<table width='100%'>
+  <tr>
+    <th>    <%= :name.l %>
+</th>
+    <th>
+      #
+            <%= :posts.l %>
 
-  %table{:width=>"100%"}
-    %tr 
-      %th=:name.l
-      %th 
-        \# 
-        =:posts.l
-      %th=:actions.l
+    </th>
+    <th>    <%= :actions.l %>
+</th>
+  </tr>
+  <%  for category in @categories %>
+  <tr>
+    <td>    <%= category.name %>
+</td>
+    <td>    <%= category.posts.size %>
+</td>
+    <td>
+            <%=  link_to :show.l, category_path(category) %>
 
-    - for category in @categories
-      %tr
-        %td= category.name
-        %td= category.posts.size	
-        %td
-          = link_to :show.l, category_path(category)
-          | 
-          = link_to :edit.l, edit_category_path(category)
-          |
-          = link_to :destroy.l, category_path(category), :confirm => :are_you_sure.l, :method => :delete
+      |
+            <%=  link_to :edit.l, edit_category_path(category) %>
 
-  %br
+      |
+            <%=  link_to :destroy.l, category_path(category), :confirm => :are_you_sure.l, :method => :delete %>
+
+    </td>
+  </tr>
+  <% end %>
+</table>
+<br />
+<% end %>
 

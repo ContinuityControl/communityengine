@@ -1,92 +1,153 @@
-- @meta = { :description => "#{@user.login}'s profile on #{AppConfig.community_name}.", :keywords => "#{@user.login}, #{@user.tags.join(", ") unless @user.tags.nil?}", :robots => AppConfig.robots_meta_show_content }
-- @section = @user.eql?(current_user) ? 'my_profile' : 'users'
-- @sidebar_left = true
+<%  @meta = { :description => "#{@user.login}'s profile on #{AppConfig.community_name}.", :keywords => "#{@user.login}, #{@user.tags.join(", ") unless @user.tags.nil?}", :robots => AppConfig.robots_meta_show_content } %>
+<%  @section = @user.eql?(current_user) ? 'my_profile' : 'users' %>
+<%  @sidebar_left = true %>
+<%  if @is_current_user and @user.vendor? and (@user.offerings.empty? or @user.description.nil? ) %>
+<p>
+  ? Hey, you're a
+    <%=  AppConfig.community_name %>
 
-- if @is_current_user and @user.vendor? and (@user.offerings.empty? or @user.description.nil? )
-  %p
-    ? Hey, you're a
-    = AppConfig.community_name
-    Pro! You should
-    = link_to :update_your_profile.l, edit_user_path(@user)
-    \! Add your skills, contact info and Web site.
+  Pro! You should
+    <%=  link_to :update_your_profile.l, edit_user_path(@user) %>
 
+  ! Add your skills, contact info and Web site.
+</p>
+<% end %>
+<% content_for :sidebar do %>
+<%=  render :partial => 'profile_user_info_sidebar', :locals => {:user => @user} %>
 
--content_for :sidebar do
-  = render :partial => 'profile_user_info_sidebar', :locals => {:user => @user}
+<%  if @user.description %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3>
+    <%= :about_me.l %>
 
-  - if @user.description
-    = rounded_box  :div_class => 'bluegray-bg'  do
-      %h3
-        =:about_me.l
-      %p= @user.description
+</h3>
+<p><%= @user.description %>
+</p>
+<% end %>
 
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3
-      =:my_friends.l
-      = link_to "(#{@friend_count})", accepted_user_friendships_path(@user) if @friend_count > 5
-    = link_to "&raquo;".html_safe + " #{:invite_a_friend.l :site => AppConfig.community_name}", invite_user_path(@user) if @is_current_user
-    %br
-    = link_to "&raquo;".html_safe + " #{:view_all_my_friend_requests.l} (#{@pending_friendships_count})", pending_user_friendships_path(@user) if @is_current_user
-    %br
-    %br
-    - @accepted_friendships.each do |user|
-      =render :partial => "users/sidebar_user", :locals => {:user => user}
-    -if @accepted_friendships.size > 4
-      %h6.all=link_to :see_all.l, accepted_user_friendships_path(@user)
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3>
+    <%= :my_friends.l %>
 
+    <%=  link_to "(#{@friend_count})", accepted_user_friendships_path(@user) if @friend_count > 5 %>
 
-  - unless @users_comments.empty?
-    = rounded_box  :div_class => 'bluegray-bg'  do
-      %h3=:my_recent_comments.l
-      - @users_comments.each do |comment|
-        %dl.vcard
-          %dt.photo
-            - if comment.recipient
-              = link_to image_tag(comment.recipient.avatar_photo_url(:thumb), :alt => "#{comment.recipient.login}", :width => '50', :height => '50'), commentable_url(comment)
-          %dd.fn
-            - if comment.commentable.eql?(comment.recipient)
-              %strong= :to.l + ": #{link_to comment.recipient.login, commentable_url(comment)}"
-            - else
-              %br
-              %strong= :on_commentable.l + ": #{link_to comment.commentable_name, commentable_url(comment)} (#{comment.commentable_type})"
-          %dd
-            %p= "\"#{truncate_words( comment.comment, :length => 100)}\""
+</h3>
+<%=  link_to "&raquo;".html_safe + " #{:invite_a_friend.l :site => AppConfig.community_name}", invite_user_path(@user) if @is_current_user %>
 
+<br />
+<%=  link_to "&raquo;".html_safe + " #{:view_all_my_friend_requests.l} (#{@pending_friendships_count})", pending_user_friendships_path(@user) if @is_current_user %>
 
-  - unless @photo_comments.empty?
-    = rounded_box  :div_class => 'bluegray-bg'  do
-      %h3=:photo_comments.l
-      - @photo_comments.each do |comment|
-        %dl.vcard
-          %dt.photo
-            = link_to(image_tag(comment.commentable.photo.photo.url(:thumb), :width => '50', :height => '50'), user_photo_path(@user, comment.commentable))
-          %dd.fn= "#{comment.username}" + " " + :says.l + ":"
-          %dd
-            = truncate_words(comment.comment, :length => 100)
-            %br
-            = link_to "&raquo; ".html_safe + :view_comment.l, user_photo_path(@user, comment.commentable) + "#comment_#{comment.id}"
+<br />
+<br />
+<%  @accepted_friendships.each do |user| %>
+<%= render :partial => "users/sidebar_user", :locals => {:user => user} %>
 
-- unless @recent_posts.empty?
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3=:recent_blog_posts.l
-    = render :partial => 'posts/post', :collection => @recent_posts
-    %h6.right.all= link_to :view_my_blog.l, user_posts_path(@user)
-    %div.clearright
+<% end %>
+<% if @accepted_friendships.size > 4 %>
+<h6 class='all'><%= link_to :see_all.l, accepted_user_friendships_path(@user) %>
+</h6>
+<% end %>
+<% end %>
 
-- unless @clippings.empty?
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3=:clippings.l
-    - @clippings.each do |clipping|
-      %a{"href"=>"#{h user_clipping_url(@user, clipping)}"}
-        %img.clipping.polaroid{"src"=>"#{h clipping.image_uri(:thumb)}", :width => '100', :height => '100'}
-    %h6.all.right= link_to :view_all_my_clippings.l, user_clippings_path(@user)
+<%  unless @users_comments.empty? %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :my_recent_comments.l %>
+</h3>
+<%  @users_comments.each do |comment| %>
+<dl class='vcard'>
+  <dt class='photo'>
+    <%  if comment.recipient %>
+        <%=  link_to image_tag(comment.recipient.avatar_photo_url(:thumb), :alt => "#{comment.recipient.login}", :width => '50', :height => '50'), commentable_url(comment) %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  -navspan = '<span class="navigation_settings_gear">Edit</span>'.html_safe
-  =link_to navspan, edit_user_path(current_user)
-  %h3=:profile_comments.l
-  %h2=:add_your_comment.l
-  %p= render :partial => 'comments/comment_form', :locals => {:commentable => @user}
-  %a#newest_comment
-  = render :partial => 'comments/comment', :collection => @comments
-  %span#more_comments_links= more_user_comments_links
+    <% end %>
+  </dt>
+  <dd class='fn'>
+    <%  if comment.commentable.eql?(comment.recipient) %>
+    <strong>    <%= :to.l + ": #{link_to comment.recipient.login, commentable_url(comment)}" %>
+</strong>
+    <%  else %>
+    <br />
+    <strong>    <%= :on_commentable.l + ": #{link_to comment.commentable_name, commentable_url(comment)} (#{comment.commentable_type})" %>
+</strong>
+    <% end %>
+  </dd>
+  <dd>
+    <p>    <%= "\"#{truncate_words( comment.comment, :length => 100)}\"" %>
+</p>
+  </dd>
+</dl>
+<% end %>
+<% end %>
+
+<% end %>
+<%  unless @photo_comments.empty? %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :photo_comments.l %>
+</h3>
+<%  @photo_comments.each do |comment| %>
+<dl class='vcard'>
+  <dt class='photo'>
+        <%=  link_to(image_tag(comment.commentable.photo.photo.url(:thumb), :width => '50', :height => '50'), user_photo_path(@user, comment.commentable)) %>
+
+  </dt>
+  <dd class='fn'>  <%= "#{comment.username}" + " " + :says.l + ":" %>
+</dd>
+  <dd>
+        <%=  truncate_words(comment.comment, :length => 100) %>
+
+    <br />
+        <%=  link_to "&raquo; ".html_safe + :view_comment.l, user_photo_path(@user, comment.commentable) + "#comment_#{comment.id}" %>
+
+  </dd>
+</dl>
+<% end %>
+<% end %>
+
+<% end %>
+<% end %>
+<%  unless @recent_posts.empty? %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :recent_blog_posts.l %>
+</h3>
+<%=  render :partial => 'posts/post', :collection => @recent_posts %>
+
+<h6 class='right all'><%= link_to :view_my_blog.l, user_posts_path(@user) %>
+</h6>
+<div class='clearright'></div>
+<% end %>
+
+<% end %>
+<%  unless @clippings.empty? %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :clippings.l %>
+</h3>
+<%  @clippings.each do |clipping| %>
+<a href="<%= h user_clipping_url(@user, clipping) %>">
+
+  <img class="clipping polaroid" height="100" src="<%= h clipping.image_uri(:thumb) %>" width="100" />
+
+</a>
+<% end %>
+<h6 class='all right'><%= link_to :view_all_my_clippings.l, user_clippings_path(@user) %>
+</h6>
+<% end %>
+
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<% navspan = '<span class="navigation_settings_gear">Edit</span>'.html_safe %>
+<%= link_to navspan, edit_user_path(current_user) %>
+
+<h3><%= :profile_comments.l %>
+</h3>
+<h2><%= :add_your_comment.l %>
+</h2>
+<p><%= render :partial => 'comments/comment_form', :locals => {:commentable => @user} %>
+</p>
+<a id='newest_comment'></a>
+<%=  render :partial => 'comments/comment', :collection => @comments %>
+
+<span id='more_comments_links'><%= more_user_comments_links %>
+</span>
+<% end %>
+

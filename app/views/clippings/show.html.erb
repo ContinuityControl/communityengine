@@ -1,56 +1,94 @@
--@section = 'my_clippings'
-- @meta = { :description => "#{@clipping.description}.",:keywords => "#{@clipping.tags.join(', ') if @clipping.tags}"}
+<% @section = 'my_clippings' %>
+<%  @meta = { :description => "#{@clipping.description}.",:keywords => "#{@clipping.tags.join(', ') if @clipping.tags}"} %>
+<div class='yui-b'>
+    <%= render :partial => 'posts/author_profile', :locals => {:user => @user} %>
 
-.yui-b
-  =render :partial => 'posts/author_profile', :locals => {:user => @user}
+  <%  if @previous || @next %>
+    <%= box :class => "alt" do %>
+    <%=  link_to image_tag( @previous.image_uri(:thumb) ) + tag(:br) + "&laquo; ".html_safe + :previous.l, user_clipping_path(@user, @previous), :class => 'left' if @previous %>
 
-  - if @previous || @next
-    =box :class => "alt" do 
-      = link_to image_tag( @previous.image_uri(:thumb) ) + tag(:br) + "&laquo; ".html_safe + :previous.l, user_clipping_path(@user, @previous), :class => 'left' if @previous
-      = link_to image_tag( @next.image_uri(:thumb) ) + tag(:br) + "&raquo; ".html_safe + :next.l, user_clipping_path(@user, @previous), :class => 'right' if @next
+    <%=  link_to image_tag( @next.image_uri(:thumb) ) + tag(:br) + "&raquo; ".html_safe + :next.l, user_clipping_path(@user, @previous), :class => 'right' if @next %>
 
-  - if @related.any?
-    =box :class => "alt" do 
-      %h3=:related_clippings_all_members.l
-      .centered
-        - @related.each do |clipping|
-          = link_to image_tag(clipping.image_uri(:thumb), :class => "related_clipping polaroid", :alt => clipping.description), user_clipping_url(clipping.user, clipping)
+  <% end %>
 
-#yui-main
-  .yui-b
-    =box :class => "hfeed" do 
-      %h3= link_to :user_clippings.l(:user =>@user.login)
-      .hentry.main
-        - if @is_current_user
-          = link_to :delete.l, user_clipping_path(@user, @clipping), :confirm => :are_you_sure.l, :method => :delete
-          |
-          = link_to :edit.l, edit_user_clipping_path(@user, @clipping)
+  <% end %>
+  <%  if @related.any? %>
+    <%= box :class => "alt" do %>
+  <h3>  <%= :related_clippings_all_members.l %>
+</h3>
+  <div class='centered'>
+    <%  @related.each do |clipping| %>
+        <%=  link_to image_tag(clipping.image_uri(:thumb), :class => "related_clipping polaroid", :alt => clipping.description), user_clipping_url(clipping.user, clipping) %>
 
-        %p.centered
-          %a{"href"=>"#{h @clipping.url }"}
-            %img{:src=>"#{h @clipping.image_uri}", :class=>"clipping", :alt=> "#{h @clipping.description}"}
+    <% end %>
+  </div>
+  <% end %>
 
-        %p
-          =:from.l
-          %a{"href"=>"#{h @clipping.url }", "title"=>"#{h @clipping.description }"}
-            = h truncate(@clipping.url, :length => 95)
+  <% end %>
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box :class => "hfeed" do %>
+    <h3>    <%= link_to :user_clippings.l(:user =>@user.login) %>
+</h3>
+    <div class='hentry main'>
+      <%  if @is_current_user %>
+            <%=  link_to :delete.l, user_clipping_path(@user, @clipping), :confirm => :are_you_sure.l, :method => :delete %>
 
-        %p
-          =:description.l
-          \:
-          =h @clipping.description
+      |
+            <%=  link_to :edit.l, edit_user_clipping_path(@user, @clipping) %>
 
-        %p
-          =:tags.l
-          \:
-        %ul.tags
-          - @clipping.tags.each do |t|
-            %li=link_to( t.name, tag_url(t), :rel => 'tag')
+      <% end %>
+      <p class='centered'>
+        <a href="<%= h @clipping.url  %>">
 
-    =box :class => 'hfeed comments', :id => 'comments' do
-      %h3=:clipping_comments.l
-      %h2=:add_your_comment.l
-      %p= render :partial => 'comments/comment_form', :locals => {:commentable => @clipping}
-      %a#newest_comment
-      = render :partial => 'comments/comment', :collection => @clipping.comments
-      %span#more_comments_links= more_comments_links(@clipping)
+          <img alt="<%= h @clipping.description %>" class="clipping" src="<%= h @clipping.image_uri %>" />
+
+        </a>
+      </p>
+      <p>
+                <%= :from.l %>
+
+        <a href="<%= h @clipping.url  %>" title="<%= h @clipping.description  %>">
+
+                    <%=  h truncate(@clipping.url, :length => 95) %>
+
+        </a>
+      </p>
+      <p>
+                <%= :description.l %>
+
+        :
+                <%= h @clipping.description %>
+
+      </p>
+      <p>
+                <%= :tags.l %>
+
+        :
+      </p>
+      <ul class='tags'>
+        <%  @clipping.tags.each do |t| %>
+        <li>        <%= link_to( t.name, tag_url(t), :rel => 'tag') %>
+</li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+
+        <%= box :class => 'hfeed comments', :id => 'comments' do %>
+    <h3>    <%= :clipping_comments.l %>
+</h3>
+    <h2>    <%= :add_your_comment.l %>
+</h2>
+    <p>    <%= render :partial => 'comments/comment_form', :locals => {:commentable => @clipping} %>
+</p>
+    <a id='newest_comment'></a>
+        <%=  render :partial => 'comments/comment', :collection => @clipping.comments %>
+
+    <span id='more_comments_links'>    <%= more_comments_links(@clipping) %>
+</span>
+    <% end %>
+
+  </div>
+</div>

@@ -1,34 +1,52 @@
--@section = 'clippings'
+<% @section = 'clippings' %>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>
+            <%=  params[:recent] ? :recent.l : :popular.l %>
 
-#yui-main
-  .yui-b    
-    =box do 
-      %h3
-        = params[:recent] ? :recent.l : :popular.l
-        Clippings
+      Clippings
+    </h3>
+    <div class='clippings_grid'>
+      <%  @clippings.to_a.in_groups_of(2) do |group| %>
+      <div class='row'>
+        <%  group.compact.each do |clipping| %>
+                <%= render :partial => 'clippings/clipping', :locals => {:clipping => clipping} %>
 
-      .clippings_grid
+        <% end %>
+        <div class='clear'></div>
+      </div>
+      <% end %>
+    </div>
+    <% if @clippings.total_pages > 1 %>
+    <div class='pagination'>    <%= paginating_links @clippings %>
+</div>
+    <% end %>
+    <div class='clear'></div>
+    <br />
+    <% end %>
 
-        - @clippings.to_a.in_groups_of(2) do |group|
-          .row  
-            - group.compact.each do |clipping|
-              =render :partial => 'clippings/clipping', :locals => {:clipping => clipping}
-            .clear
-      
-      -if @clippings.total_pages > 1      
-        .pagination=paginating_links @clippings
-      .clear
-      %br
-          
-.yui-b  
-  =box do 
-    %h3 &nbsp;
-    
-    =:clippings_let_you_to_save_cool_images_from_around_the_web.l
-    -if logged_in?
-      =link_to :go_to_your_clippings_page_to_get_started.l, user_clippings_path(current_user)
-    -else
-      =:to_get_started_with_clippings_first.l+" " 
-      =link_to :create_an_account.l, signup_path
-  =box :class => "alt" do 
-    =link_to :view.l+" #{params[:recent] ? :popular.l : :recent.l} "+:clippings.l, site_clippings_path(:recent => !params[:recent])
+  </div>
+</div>
+<div class='yui-b'>
+    <%= box do %>
+  <h3>&nbsp;</h3>
+    <%= :clippings_let_you_to_save_cool_images_from_around_the_web.l %>
+
+  <% if logged_in? %>
+    <%= link_to :go_to_your_clippings_page_to_get_started.l, user_clippings_path(current_user) %>
+
+  <% else %>
+    <%= :to_get_started_with_clippings_first.l+" " %>
+
+    <%= link_to :create_an_account.l, signup_path %>
+
+  <% end %>
+  <% end %>
+
+    <%= box :class => "alt" do %>
+    <%= link_to :view.l+" #{params[:recent] ? :popular.l : :recent.l} "+:clippings.l, site_clippings_path(:recent => !params[:recent]) %>
+
+  <% end %>
+
+</div>

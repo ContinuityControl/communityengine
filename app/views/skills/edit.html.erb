@@ -1,13 +1,19 @@
-=box do
-  %h3= :editing_skill
+<%= box do %>
+<h3><%= :editing_skill %>
+</h3>
+<%=  form_for(:skill, :url => skill_path(@skill), :html => { :method => :put, :class => "MainForm" }) do |f| %>
+<label><%= :name.l %>
+</label>
+<%=  f.text_field :name %>
 
-  = form_for(:skill, :url => skill_path(@skill), :html => { :method => :put, :class => "MainForm" }) do |f|
-    %label= :name.l
-    = f.text_field :name
+<p><%= submit_tag :update.l %>
+</p>
+<% end %>
 
-    %p= submit_tag :update.l
+<%=  link_to :show.l, skill_path(@skill) %>
 
+|
+<%=  link_to :back.l, skills_path %>
 
-  = link_to :show.l, skill_path(@skill)
-  |
-  = link_to :back.l, skills_path
+<% end %>
+

@@ -1,26 +1,42 @@
--content_for :sidebar do
-  = render :partial => 'shared/admin_nav'
-  
-= rounded_box  :div_class => 'white-fg bluegray-bg'  do
-  .right= link_to :new_metro_area.l, new_metro_area_path
-  %h3= :metro_areas.l
+<% content_for :sidebar do %>
+<%=  render :partial => 'shared/admin_nav' %>
 
-  .pagination= paginating_links @metro_areas if @metro_areas.total_pages > 1
+<% end %>
+<%=  rounded_box :div_class => 'white-fg bluegray-bg' do %>
+<div class='right'><%= link_to :new_metro_area.l, new_metro_area_path %>
+</div>
+<h3><%= :metro_areas.l %>
+</h3>
+<div class='pagination'><%= paginating_links @metro_areas if @metro_areas.total_pages > 1 %>
+</div>
+<table width='100%'>
+  <tr>
+    <th>    <%= :name.l %>
+</th>
+    <th>    <%= :state.l %>
+</th>
+    <th>    <%= :country.l %>
+</th>
+    <th>    <%= :actions.l %>
+</th>
+  </tr>
+  <%  for metro_area in @metro_areas %>
+  <tr>
+    <td>    <%= metro_area.name %>
+</td>
+    <td>    <%= metro_area.state.name if metro_area.state %>
+</td>
+    <td>    <%= metro_area.country.name %>
+</td>
+    <td>
+            <%=  link_to :edit.l, edit_metro_area_path(metro_area) %>
 
-  %table{:width=>"100%"}
-    %tr
-      %th= :name.l
-      %th= :state.l
-      %th= :country.l
-      %th= :actions.l
+      |
+            <%=  link_to :destroy.l, metro_area_path(metro_area), :confirm => :are_you_sure.l, :method => :delete %>
 
-    - for metro_area in @metro_areas
-      %tr
-        %td= metro_area.name 
-        %td= metro_area.state.name if metro_area.state 
-        %td= metro_area.country.name 
-        %td
-          = link_to :edit.l, edit_metro_area_path(metro_area) 
-          |
-          = link_to :destroy.l, metro_area_path(metro_area), :confirm => :are_you_sure.l, :method => :delete
-  
+    </td>
+  </tr>
+  <% end %>
+</table>
+<% end %>
+

@@ -1,28 +1,52 @@
-=box do
-  - form_tag( statistics_user_path(@user), :class => "MainForm") do
-    %label= :month.l+":"
-    = select_month(@month)
-    = select_year(@month, :start_year => 1.years.ago.year, :end_year => 1.years.from_now.year)
-    %p= submit_tag :go.l
+<%= box do %>
+<%  form_tag( statistics_user_path(@user), :class => "MainForm") do %>
+<label><%= :month.l+":" %>
+</label>
+<%=  select_month(@month) %>
 
-    - if current_user.admin?
-      %p= link_to "&laquo; ".html_safe+:back_to_all_statistics.l, statistics_path
-      %p
-        =:estimated_total_for_this_month.l+":"
-        %strong= "$#{@estimated_payment}"
+<%=  select_year(@month, :start_year => 1.years.ago.year, :end_year => 1.years.from_now.year) %>
 
-    %table{"width"=>"100%"}
-      - @posts.group_by(&:category).each do |category, posts|
-        %thead
-          %tr
-            %th
-              = "#{category.name}:"
-              = "#{posts.size} "+:posts.l
-            %th=:comments.l
-            %th{"width"=>"7%"} Views
-        %tbody
-          - posts.each do |post|
-            %tr
-              %td= post.title
-              %td= post.comments.count
-              %td= post.view_count
+<p><%= submit_tag :go.l %>
+</p>
+<%  if current_user.admin? %>
+<p><%= link_to "&laquo; ".html_safe+:back_to_all_statistics.l, statistics_path %>
+</p>
+<p>
+    <%= :estimated_total_for_this_month.l+":" %>
+
+  <strong>  <%= "$#{@estimated_payment}" %>
+</strong>
+</p>
+<% end %>
+<table width='100%'>
+  <%  @posts.group_by(&:category).each do |category, posts| %>
+  <thead>
+    <tr>
+      <th>
+                <%=  "#{category.name}:" %>
+
+                <%=  "#{posts.size} "+:posts.l %>
+
+      </th>
+      <th>      <%= :comments.l %>
+</th>
+      <th width='7%'>Views</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%  posts.each do |post| %>
+    <tr>
+      <td>      <%= post.title %>
+</td>
+      <td>      <%= post.comments.count %>
+</td>
+      <td>      <%= post.view_count %>
+</td>
+    </tr>
+    <% end %>
+  </tbody>
+  <% end %>
+</table>
+<% end %>
+<% end %>
+

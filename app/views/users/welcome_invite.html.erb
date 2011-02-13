@@ -1,8 +1,17 @@
-%h2="Thank You &amp; Welcome!".html_safe
-= rounded_box  :div_class => 'bluegray-bg', :header => "Areas to Explore"  do
-  %ul
-    %li=link_to "Ask, Answer, Post - Community Discussions", forums_path
-    %li=link_to "Shared Free Policies", featured_documents_path
-    %li=link_to "#{ActionpackLibrary.model_name.human} - We've Got a Compliance #{Actionpack.model_name.human} for That!", actionpack_library_index_path
-%p{:style => 'padding:20px 70px;'}
-  #{ AppConfig.community_name } is an innovative software foundation that automates, organizes and facilitates the work of compliance across the financial institution.  This is key to addressing what we call the Compliance Tax&trade;. #{ link_to "Learn more about cost-saving #{Actionpack.model_name.human.pluralize}!", actionpack_library_index_path }
+<h2><%= "Thank You &amp; Welcome!".html_safe %>
+</h2>
+<%=  rounded_box :div_class => 'bluegray-bg', :header => "Areas to Explore" do %>
+<ul>
+  <li>  <%= link_to "Ask, Answer, Post - Community Discussions", forums_path %>
+</li>
+  <li>  <%= link_to "Shared Free Policies", featured_documents_path %>
+</li>
+  <li>  <%= link_to "#{ActionpackLibrary.model_name.human} - We've Got a Compliance #{Actionpack.model_name.human} for That!", actionpack_library_index_path %>
+</li>
+</ul>
+<% end %>
+
+<p style='padding:20px 70px;'>
+    <%= "#{AppConfig.community_name } is an innovative software foundation that automates, organizes and facilitates the work of compliance across the financial institution. This is key to addressing what we call the Compliance Tax&trade;. #{link_to "Learn more about cost-saving #{Actionpack.model_name.human.pluralize}!", actionpack_library_index_path }" %>
+
+</p>

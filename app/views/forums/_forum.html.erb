@@ -1,31 +1,51 @@
-%tr
-  %td.vat.c1  
-    - if recent_forum_activity(forum)
-      = image_tag "icons/chat-double-16x16-green.png", :class => "icon", :title => :recent_activity.l, :plugin => "community_engine"
-    - else
-      = image_tag "clearbits/comment.png", :class => "icon", :title => :no_recent_activity.l, :plugin => "community_engine"
-  %td.c2.vat
-    = link_to h(forum.name), forum_path(forum), :class => "title"
-    .posts
-      - unless forum.topics_count.zero?
-        = number_with_delimiter(forum.topics_count)
-        = :topics.l
-        ,
-        = number_with_delimiter(forum.sb_posts_count)
-        = :posts.l
+<tr>
+  <td class='vat c1'>
+    <%  if recent_forum_activity(forum) %>
+        <%=  image_tag "icons/chat-double-16x16-green.png", :class => "icon", :title => :recent_activity.l, :plugin => "community_engine" %>
 
-    %p.desc= forum.description_html.html_safe
+    <%  else %>
+        <%=  image_tag "clearbits/comment.png", :class => "icon", :title => :no_recent_activity.l, :plugin => "community_engine" %>
 
-  %td.c3
-    = link_to :edit.l, edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin?
+    <% end %>
+  </td>
+  <td class='c2 vat'>
+        <%=  link_to h(forum.name), forum_path(forum), :class => "title" %>
 
-  %td.inv.lp
-    - if forum.sb_posts.last
-      = sensible_time_ago(forum.sb_posts.last.created_at)
-      %br
-      = :by.l
-      %strong= h(forum.sb_posts.last.user.display_name)
-      %span
-        (
-        = link_to :view.l, forum_topic_path(:forum_id => forum, :id => forum.sb_posts.last.topic_id, :page => forum.sb_posts.last.topic.last_page, :anchor => dom_id(forum.sb_posts.last)) 
-        )
+    <div class='posts'>
+      <%  unless forum.topics_count.zero? %>
+            <%=  number_with_delimiter(forum.topics_count) %>
+
+            <%=  :topics.l %>
+
+      ,
+            <%=  number_with_delimiter(forum.sb_posts_count) %>
+
+            <%=  :posts.l %>
+
+      <% end %>
+    </div>
+    <p class='desc'>    <%= forum.description_html.html_safe %>
+</p>
+  </td>
+  <td class='c3'>
+        <%=  link_to :edit.l, edit_forum_path(forum), :class => "tiny", :rel => "directory", :style => "float:right" if admin? %>
+
+  </td>
+  <td class='inv lp'>
+    <%  if forum.sb_posts.last %>
+        <%=  sensible_time_ago(forum.sb_posts.last.created_at) %>
+
+    <br />
+        <%=  :by.l %>
+
+    <strong>    <%= h(forum.sb_posts.last.user.display_name) %>
+</strong>
+    <span>
+      (
+            <%=  link_to :view.l, forum_topic_path(:forum_id => forum, :id => forum.sb_posts.last.topic_id, :page => forum.sb_posts.last.topic.last_page, :anchor => dom_id(forum.sb_posts.last)) %>
+
+      )
+    </span>
+    <% end %>
+  </td>
+</tr>

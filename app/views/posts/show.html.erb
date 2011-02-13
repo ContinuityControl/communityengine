@@ -1,100 +1,154 @@
-%script{"type"=>"text/javascript", "src"=>"https://www.plaxo.com/css/m/js/util.js"}
-%script{"type"=>"text/javascript", "src"=>"https://www.plaxo.com/css/m/js/basic.js"}
-%script{"type"=>"text/javascript", "src"=>"https://www.plaxo.com/css/m/js/abc_launcher.js"}
+<script src='https://www.plaxo.com/css/m/js/util.js' type='text/javascript'></script>
+<script src='https://www.plaxo.com/css/m/js/basic.js' type='text/javascript'></script>
+<script src='https://www.plaxo.com/css/m/js/abc_launcher.js' type='text/javascript'></script>
+<% content_for :sidebar do %>
+  <%= render :partial => 'forums/community_nav' %>
 
+<% end %>
+<% @section = (@post.category && @post.category.name) %>
+<% @meta = { :title => @post.title, :description => truncate_words(@post.post, :length => 750), :keywords => ( @post.tags.join(", ") unless @post.tags.nil? ), :robots => AppConfig.robots_meta_show_content } %>
+<%= rounded_box :div_class => 'posts hfeed bluegray-bg' do %>
+  <h3><%= :users_blog.l :user=> @user.login %></h3>
+<% end %>
 
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
-
-- @section = (@post.category && @post.category.name)
-- @meta = { :title => @post.title, :description => truncate_words(@post.post, :length => 750), :keywords => ( @post.tags.join(", ") unless @post.tags.nil? ), :robots => AppConfig.robots_meta_show_content }
-
-= rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
-  %h3=:users_blog.l :user=>  @user.login
-= rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
-  =box :class => 'hfeed' do
-    .hentry.main
-      .right{:style => 'padding-top:8px;'}
-        %a{:href=>"#", :onclick=>"showSendTo_friend(); return false;", :title=>:email_this_story_to_friends.l}
-          =image_tag "social_networking_iconpack/email_32.png"
-        %a{:href => "http://www.linkedin.com/shareArticle?mini=true&url=#{url_for(:only_path => false)}", :title=>"Click to share this post on LinkedIn", :target => "_blank"}
-          =image_tag("social_networking_iconpack/linkedin_32.png")
-        %a{:href => "http://twitter.com/home?status=Currently reading #{url_for(:only_path => false)}", :title=>"Click to share this post on Twitter", :target => "_blank"}
-          =image_tag "social_networking_iconpack/twitter_32.png"
-        %a{:href => "http://www.blogger.com/blog_this.pyra?u=#{url_for(:only_path => false)}", :title=>"Click to share this post on Blogger", :target => "_blank"}
-          =image_tag("social_networking_iconpack/blogger_32.png")
-        %a{:href => "http://www.facebook.com/sharer.php?u=#{url_for(:only_path => false)}", :title=>"Click to share this post on Facebook", :target => "_blank"}
-          =image_tag "social_networking_iconpack/facebook_32.png"
-      %h4.entry-title{:style => 'line-height:32px;'}= link_to @post.title, user_post_path(@user, @post), :rel => 'bookmark'
-      .vcard.author
-        %ul
-          %li.update
-            %a{"href"=>"#{user_post_path(@user, @post)}", "rel"=>"bookmark"}
-              %abbr.published{"title"=>"#{@post.published_at}"}= @post.published_at_display("%B %d, %Y")
-          %li.view= :views.l+" (#{@post.view_count})"
-          %li.comments= link_to :comments.l+" (#{@post.comments.size})", user_post_path(@user, @post)+'#comments'
-          - if current_user# and current_user.can_request_friendship_with(@post.user)
-            %li.addfriend= add_friend_link(@post.user)
-          %li.print
-            %a{"href"=>"#", :onclick=>"window.print(); return false;", :title=>:print_this_story.l}= :print.l
-          -if @is_current_user || admin? || moderator?
-            %li.edit= link_to :edit.l, edit_user_post_path(@post.user, @post)
-            %li.delete= link_to :delete.l, user_post_path(@post.user, @post), {:method => :delete, :confirm => :permanently_delete_this_post.l}
-
-          :javascript
+<%= rounded_box :div_class => 'posts hfeed bluegray-bg' do %>
+  <%= box :class => 'hfeed' do %>
+    <div class='hentry main'>
+      <div class='right' style='padding-top:8px;'>
+        <a href="#" onclick="showSendTo_friend(); return false;" title="Email this story">
+          <%= image_tag "social_networking_iconpack/email_32.png" %>
+        </a>
+        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=<%= url_for(:only_path =&gt; false) %>" target="_blank" title="Click to share this post on LinkedIn">
+          <%= image_tag("social_networking_iconpack/linkedin_32.png") %>
+        </a>
+        <a href="http://twitter.com/home?status=Currently reading <%= url_for(:only_path =&gt; false) %>" target="_blank" title="Click to share this post on Twitter">
+          <%= image_tag "social_networking_iconpack/twitter_32.png" %>
+        </a>
+        <a href="http://www.blogger.com/blog_this.pyra?u=<%= url_for(:only_path =&gt; false) %>" target="_blank" title="Click to share this post on Blogger">
+          <%= image_tag("social_networking_iconpack/blogger_32.png") %>
+        </a>
+        <a href="http://www.facebook.com/sharer.php?u=<%= url_for(:only_path =&gt; false) %>" target="_blank" title="Click to share this post on Facebook">
+          <%= image_tag "social_networking_iconpack/facebook_32.png" %>
+        </a>
+      </div>
+      <h4 class='entry-title' style='line-height:32px;'><%= link_to @post.title, user_post_path(@user, @post), :rel => 'bookmark' %></h4>
+      <div class='vcard author'>
+        <ul>
+          <li class='update'>
+            <a href="<%= user_post_path(@user, @post) %>" rel="bookmark">
+              <abbr class="published" title="<%= @post.published_at %>">
+                <%= @post.published_at_display("%B %d, %Y") %>
+              </abbr>
+            </a>
+          </li>
+          <li class='view'>
+            <%= :views.l+" (#{@post.view_count})" %>
+          </li>
+          <li class='comments'>
+            <%= link_to :comments.l+" (#{@post.comments.size})", user_post_path(@user, @post)+'#comments' %>
+          </li>
+          <%  if current_user# and current_user.can_request_friendship_with(@post.user) %>
+            <li class='addfriend'>
+              <%= add_friend_link(@post.user) %>
+            </li>
+          <% end %>
+          <li class='print'>
+            <a href="#" onclick="window.print(); return false;" title="Print this story">
+              <%= :print.l %>
+            </a>
+          </li>
+          <% if @is_current_user || admin? || moderator? %>
+            <li class='edit'>
+              <%= link_to :edit.l, edit_user_post_path(@post.user, @post) %>
+            </li>
+            <li class='delete'>
+              <%= link_to :delete.l, user_post_path(@post.user, @post), {:method => :delete, :confirm => :permanently_delete_this_post.l} %>
+            </li>
+          <% end %>
+          <%= javascript_tag do %>
             function showSendTo_friend(){
-              Lightview.show({
-                href: '#{ url_for(:action => "send_to_friend", :params => {:user_id => @user.id, :id => @post.id}) }',
-                rel: 'ajax',
-                title: '#{:send_this_story_to_friends.l}',
-                options: {
-                  autosize: true,
-                  ajax: {
-                    method: 'post'
-                  }
-                }
-              });
+            Lightview.show({
+            href: '#{url_for(:action => "send_to_friend", :params => {:user_id => @user.id, :id => @post.id}) }',
+            rel: 'ajax',
+            title: '#{:send_this_story_to_friends.l}',
+            options: {
+            autosize: true,
+            ajax: {
+            method: 'post'
             }
+            }
+            });
+            }
+          <% end %>
 
-      / vcard
-      .entry-content
-        = @post.post.html_safe
-        = render :partial => 'polls/poll_ui', :locals => {:poll => @post.polls.first} unless @post.polls.empty?
-        - unless @post.tags.empty?
-          %ul.tags
-            - @post.tags.each do |t|
-              %li=link_to( t.name, tag_url(t), :rel => 'tag')
-      / entry-content
-    / ends hentry
-    .clear
-  =box :class => 'hfeed comments', :id => 'comments' do
-    %h4= :post_comments.l
-    %h5= :add_your_comment.l
-    %p= render :partial => 'comments/comment_form', :locals => {:commentable => @post}
-    %a#newest_comment
-    = render :partial => 'comments/comment', :collection => @comments
-    %span#more_comments_links= more_comments_links(@post)
-  / ends box
+        </ul>
+      </div>
+      <!-- vcard -->
+      <div class='entry-content'>
+        <%=  @post.post.html_safe %>
+        <%=  render :partial => 'polls/poll_ui', :locals => {:poll => @post.polls.first} unless @post.polls.empty? %>
+        <%  unless @post.tags.empty? %>
+          <ul class='tags'>
+            <%  @post.tags.each do |t| %>
+              <li>
+                <%= link_to( t.name, tag_url(t), :rel => 'tag') %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+      <!-- entry-content -->
+    </div>
+    <!-- ends hentry -->
+    <div class='clear'></div>
+  <% end %>
 
--content_for :sidebar do
-  = rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
-    =render :partial => 'author_profile', :locals => {:user => @user}
+  <%= box :class => 'hfeed comments', :id => 'comments' do %>
+    <h4><%= :post_comments.l %></h4>
+    <h5><%= :add_your_comment.l %></h5>
+    <p><%= render :partial => 'comments/comment_form', :locals => {:commentable => @post} %></p>
+    <a id='newest_comment'></a>
+    <%=  render :partial => 'comments/comment', :collection => @comments %>
 
-  = rounded_box  :div_class => 'posts hfeed bluegray-bg'  do
-    - unless @related.empty?
-      =box :class => 'alt' do
-        %h3=:related_posts.l
-        %ul.list.page
-          - @related.each do |post|
-            %li=link_to truncate(post.title, :length => 75), user_post_path(post.user, post)
+    <span id='more_comments_links'><%= more_comments_links(@post) %></span>
+  <% end %>
 
-    - unless @popular_posts.empty?
-      =box :class => 'alt' do
-        %h3=:popular_posts.l
-        %ul.list.page
-          - @popular_posts.each do |post|
-            %li=link_to truncate(post.title, :length => 75), user_post_path(post.user, post)
-/ sidebar
+  <!-- ends box -->
+<% end %>
 
-%script{:type=>"text/javascript", :charset=>"utf-8"}
-  = remote_function :url => {:controller => 'posts', :action => 'update_views', :user_id => @post.user, :id => @post}, :method => :put
+<% content_for :sidebar do %>
+  <%=  rounded_box :div_class => 'posts hfeed bluegray-bg' do %>
+    <%= render :partial => 'author_profile', :locals => {:user => @user} %>
+
+  <% end %>
+
+  <%=  rounded_box :div_class => 'posts hfeed bluegray-bg' do %>
+    <%  unless @related.empty? %>
+      <%= box :class => 'alt' do %>
+        <h3><%= :related_posts.l %></h3>
+        <ul class='list page'>
+          <%  @related.each do |post| %>
+            <li>  <%= link_to truncate(post.title, :length => 75), user_post_path(post.user, post) %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+    <% end %>
+    <%  unless @popular_posts.empty? %>
+      <%= box :class => 'alt' do %>
+        <h3><%= :popular_posts.l %></h3>
+        <ul class='list page'>
+          <%  @popular_posts.each do |post| %>
+            <li>  <%= link_to truncate(post.title, :length => 75), user_post_path(post.user, post) %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+    <% end %>
+  <% end %>
+
+<% end %>
+<!-- sidebar -->
+<script charset='utf-8' type='text/javascript'>
+  <%=  remote_function :url => {:controller => 'posts', :action => 'update_views', :user_id => @post.user, :id => @post}, :method => :put %>
+</script>

@@ -1,16 +1,33 @@
-.yui-b
-  .box
-    %h3=:about_site.l :site => AppConfig.community_name
-    %ul.list.checks
-      %li
-        %a{:href=>"/faq"}= :frequently_asked_questions.l
-      %li 
-        %a{:href=>"/about"}=:about_site.l(:site => AppConfig.community_name)
-      %li 
-        %a{:href=>"/advertise"} 
-          =:advertise.l
-  .box.alt
-    %h3=:need_to_contact_us.l
-    %p
-      =:dont_wait_its.l
-      %a{:href=>"mailto:#{AppConfig.support_email}"}= AppConfig.support_email
+<div class='yui-b'>
+  <div class='box'>
+    <h3>    <%= :about_site.l :site => AppConfig.community_name %>
+</h3>
+    <ul class='list checks'>
+      <li>
+        <a href='/faq'>        <%= :frequently_asked_questions.l %>
+</a>
+      </li>
+      <li>
+        <a href='/about'>        <%= :about_site.l(:site => AppConfig.community_name) %>
+</a>
+      </li>
+      <li>
+        <a href='/advertise'>
+                    <%= :advertise.l %>
+
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class='box alt'>
+    <h3>    <%= :need_to_contact_us.l %>
+</h3>
+    <p>
+            <%= :dont_wait_its.l %>
+
+      <a href="mailto:<%= AppConfig.support_email %>">
+      <%= AppConfig.support_email %>
+</a>
+    </p>
+  </div>
+</div>

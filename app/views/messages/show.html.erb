@@ -1,41 +1,60 @@
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    =render :partial => 'messages/sidebar_nav'
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  #yui-main
-    .yui-b
-      =box do 
-        %h3
-          = :subject.l + ":"
-          =h @message.subject
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= render :partial => 'messages/sidebar_nav' %>
 
-        %p
-          = :from.l + ":"
-          = @message.sender.eql?(@user) ? link_to(:to_you.l, user_path(@user)) : link_to(h(@message.sender.login), user_path(@message.sender))
+<% end %>
 
-        %p
-          = :to.l + ":"
-          = @message.recipient.eql?(@user) ? link_to(:to_you.l, user_path(@user)) : link_to(h(@message.recipient.login), user_path(@message.recipient))
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>
+            <%=  :subject.l + ":" %>
 
+            <%= h @message.subject %>
 
-        %p
-          = :date_title.l + ":"
-          = h I18n.l(@message.created_at, :format => :time_ago)
+    </h3>
+    <p>
+            <%=  :from.l + ":" %>
 
-        %pre.message_body= auto_link(h(@message.body))
+            <%=  @message.sender.eql?(@user) ? link_to(:to_you.l, user_path(@user)) : link_to(h(@message.sender.login), user_path(@message.sender)) %>
 
-        -if @reply    
-          %ul.message_nav
-            - if @message.recipient.eql? @user
-              %li.sent= link_to :reply.l, new_user_message_path(@user, :reply_to => @message), :onclick => "$('reply').toggle(); $('message_body').activate().scrollTo();return false;"
+    </p>
+    <p>
+            <%=  :to.l + ":" %>
 
-          %form.MainForm#dummy_reply
-            %textarea{:onclick => "$('reply').toggle(); $('message_body').activate(); $('dummy_reply').hide(); $(this).blur(); return false;", :style => "height: 75px;"}
+            <%=  @message.recipient.eql?(@user) ? link_to(:to_you.l, user_path(@user)) : link_to(h(@message.recipient.login), user_path(@message.recipient)) %>
 
-          #reply{:style => "display:none;"}=render :partial => 'form', :locals => {:message => @reply, :user => @user}
+    </p>
+    <p>
+            <%=  :date_title.l + ":" %>
 
-  .clear
+            <%=  h I18n.l(@message.created_at, :format => :time_ago) %>
 
-.clear
+    </p>
+    <pre class='message_body'>    <%= auto_link(h(@message.body)) %>
+</pre>
+    <% if @reply %>
+    <ul class='message_nav'>
+      <%  if @message.recipient.eql? @user %>
+      <li class='sent'>      <%= link_to :reply.l, new_user_message_path(@user, :reply_to => @message), :onclick => "$('reply').toggle(); $('message_body').activate().scrollTo();return false;" %>
+</li>
+      <% end %>
+    </ul>
+    <form class='MainForm' id='dummy_reply'>
+      <textarea onclick="$('reply').toggle(); $('message_body').activate(); $('dummy_reply').hide(); $(this).blur(); return false;" style='height: 75px;'></textarea>
+    </form>
+    <div id='reply' style='display:none;'>    <%= render :partial => 'form', :locals => {:message => @reply, :user => @user} %>
+</div>
+    <% end %>
+    <% end %>
+
+  </div>
+</div>
+<div class='clear'></div>
+<% end %>
+
+<div class='clear'></div>

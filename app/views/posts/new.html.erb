@@ -1,71 +1,120 @@
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    =box :id => 'category_tips' do
-      -if @post.contest
-        = render :partial => "contest"
-      -elsif @post.category
-        = render :partial => "/categories/tips", :locals => {:category => @post.category}
-      - else 
-        = render :partial => "/categories/tips", :locals => {:category => nil}
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= box :id => 'category_tips' do %>
+<% if @post.contest %>
+<%=  render :partial => "contest" %>
 
-    =box :class => "alt" do 
-      %a.button.positive{:href => '#', :onclick => "tinyMCE.execCommand('mceCurblyAdvImage');return false;"}=:upload_an_image_for_your_post.l
-    %div.clear
-  
+<% elsif @post.category %>
+<%=  render :partial => "/categories/tips", :locals => {:category => @post.category} %>
 
-    
-= rounded_box  :div_class => 'bluegray-bg'  do
-  -navspan = '<span class="navigation_settings_gear_manage">Manage</span>'.html_safe
-  =link_to navspan, manage_user_posts_path(current_user)
-  =box do 
-    %h3
-      =@post.category ? (:new_post_for_category.l :category => @post.category.name) : :new_post.l
+<%  else %>
+<%=  render :partial => "/categories/tips", :locals => {:category => nil} %>
 
-    = error_messages_for :post
-    = form_for(:post, :url => user_posts_path, :html => {:class => "MainForm", :id => 'post_form'}) do |f|			
-      - unless @post.category || @post.contest || @categories.blank?        
-        %label
-          =:category.l
-        %select{:id=>"post_category_id", :name=>"post[category_id]"}
-          -for category in @categories
-            %option{:value=>"#{category.id}"}= h(category.name)
-      -else
-        = f.hidden_field :category_id
-        = f.hidden_field :contest_id
+<% end %>
+<% end %>
 
-      %label
-        =:title.l
-        %em="(#{:required.l})"
-      = f.text_field :title
+<%= box :class => "alt" do %>
+<a class="button positive" href="#" onclick="tinyMCE.execCommand('mceCurblyAdvImage');return false;">
+<%= :upload_an_image_for_your_post.l %>
+</a>
+<% end %>
 
-      %label
-        =:body_text.l
-        %em="(#{:required.l})"
-      = f.text_area :raw_post, :style => "width:95%;"
+<div class='clear'></div>
+<% end %>
 
-      %label
-        =:tags.l
-        %em="(#{:optional_keywords_describing_this_post_separated_by_commas.l})"
-      = text_field_tag 'tag_list', @post.tag_list, {:autocomplete => "off", :size => 35}
-      .auto_complete#tag_list_auto_complete
-        = auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] }
-      
-      %label
-        %a{:href=> "#", :onclick => "$('poll-ui').toggle(); return false;"}
-          = "#{image_tag 'icons/poll.png'} " + :add_a_poll.l
-        %em=:optional.l
-      #poll-ui{:style => 'display:none'}=render :partial => 'polls/new'
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<% navspan = '<span class="navigation_settings_gear_manage">Manage</span>'.html_safe %>
+<%= link_to navspan, manage_user_posts_path(current_user) %>
 
-      %label
-        =:save_post_as.l
-      = f.select(:published_as, [[:published.l, 'live'], [:draft.l, 'draft']])
-      
-      %p
-        = submit_tag :save.l
-      %p
-        =:or.l 
-        = link_to :cancel_and_go_back_to_my_posts.l, user_posts_path(@user)
+<%= box do %>
+<h3>
+    <%= @post.category ? (:new_post_for_category.l :category => @post.category.name) : :new_post.l %>
 
-  =# observe_field  "post_category_id", {:url => {:controller => 'categories', :action => 'show_tips'}, :with => "id", :update => "category_tips", :complete => visual_effect(:highlight, "category_tips", :duration => 0.5)}
+</h3>
+<%=  error_messages_for :post %>
+
+<%=  form_for(:post, :url => user_posts_path, :html => {:class => "MainForm", :id => 'post_form'}) do |f| %>
+<%  unless @post.category || @post.contest || @categories.blank? %>
+<label>
+    <%= :category.l %>
+
+</label>
+<select id='post_category_id' name='post[category_id]'>
+  <% for category in @categories %>
+  <option value="<%= category.id %>">
+  <%= h(category.name) %>
+</option>
+  <% end %>
+</select>
+<% else %>
+<%=  f.hidden_field :category_id %>
+
+<%=  f.hidden_field :contest_id %>
+
+<% end %>
+<label>
+    <%= :title.l %>
+
+  <em>  <%= "(#{:required.l})" %>
+</em>
+</label>
+<%=  f.text_field :title %>
+
+<label>
+    <%= :body_text.l %>
+
+  <em>  <%= "(#{:required.l})" %>
+</em>
+</label>
+<%=  f.text_area :raw_post, :style => "width:95%;" %>
+
+<label>
+    <%= :tags.l %>
+
+  <em>  <%= "(#{:optional_keywords_describing_this_post_separated_by_commas.l})" %>
+</em>
+</label>
+<%=  text_field_tag 'tag_list', @post.tag_list, {:autocomplete => "off", :size => 35} %>
+
+<div class='auto_complete' id='tag_list_auto_complete'>
+    <%=  auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
+
+</div>
+<label>
+  <a href="#" onclick="$('poll-ui').toggle(); return false;">
+
+        <%=  "#{image_tag 'icons/poll.png'} " + :add_a_poll.l %>
+
+  </a>
+  <em>  <%= :optional.l %>
+</em>
+</label>
+<div id='poll-ui' style='display:none'><%= render :partial => 'polls/new' %>
+</div>
+<label>
+    <%= :save_post_as.l %>
+
+</label>
+<%=  f.select(:published_as, [[:published.l, 'live'], [:draft.l, 'draft']]) %>
+
+<p>
+    <%=  submit_tag :save.l %>
+
+</p>
+<p>
+    <%= :or.l %>
+
+    <%=  link_to :cancel_and_go_back_to_my_posts.l, user_posts_path(@user) %>
+
+</p>
+<% end %>
+
+<% end %>
+
+<%= # observe_field "post_category_id", {:url => {:controller => 'categories', :action => 'show_tips'}, :with => "id", :update => "category_tips", :complete => visual_effect(:highlight, "category_tips", :duration => 0.5)} %>
+
+<% end %>
+

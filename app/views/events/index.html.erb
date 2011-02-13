@@ -1,22 +1,37 @@
-- @section = 'events'
+<%  @section = 'events' %>
+<div class='yui-b'>
+  <%  if @is_admin_user %>
+    <%= box :class => "alt first_alt" do %>
+    <%=  link_to_unless_current :past_events.l, past_events_path %>
 
-.yui-b
-  - if @is_admin_user
-    =box :class => "alt first_alt" do 
-      = link_to_unless_current :past_events.l, past_events_path
-      = link_to_unless_current :upcoming_events.l, events_path
-      %br
-      = link_to :administer_events.l, admin_events_path
-  =box do 
-    %h3= :events.l
-    = :find_out_where_to_be_and_when_to_be_there.l
-  =render :partial=>'subscribe'
-#yui-main
-  .yui-b
-    =box do 
-    
-      .pagination=paginating_links @events if @events.total_pages > 1      
+    <%=  link_to_unless_current :upcoming_events.l, events_path %>
 
-      = render :partial=>'event', :collection=>@events, :locals=>{:show_details_link=>true}
+  <br />
+    <%=  link_to :administer_events.l, admin_events_path %>
 
-      .pagination=paginating_links @events if @events.total_pages > 1      
+  <% end %>
+
+  <% end %>
+    <%= box do %>
+  <h3>  <%= :events.l %>
+</h3>
+    <%=  :find_out_where_to_be_and_when_to_be_there.l %>
+
+  <% end %>
+
+    <%= render :partial=>'subscribe' %>
+
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <div class='pagination'>    <%= paginating_links @events if @events.total_pages > 1 %>
+</div>
+        <%=  render :partial=>'event', :collection=>@events, :locals=>{:show_details_link=>true} %>
+
+    <div class='pagination'>    <%= paginating_links @events if @events.total_pages > 1 %>
+</div>
+    <% end %>
+
+  </div>
+</div>

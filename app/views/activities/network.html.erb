@@ -1,14 +1,26 @@
-.yui-b
-  =render :partial => 'users/dashboard_nav'
-  
-#yui-main
-  =box :class => 'yui-b fresh' do
-    -unless @activities.empty?
-      %h3=:activity_from_your_network.l
-      %table{:width => "100%"}
-        =render :partial => "activities/activity", :collection => @activities
-      -if @activities.total_pages > 1
-        .pagination= paginating_links @activities, :link_to_current_page => true
-    -else
-      =:you_have_no_network_activity_yet.l 
-      = link_to :add_some_friends_to_get_started.l, users_path
+<div class='yui-b'>
+    <%= render :partial => 'users/dashboard_nav' %>
+
+</div>
+<div id='yui-main'>
+    <%= box :class => 'yui-b fresh' do %>
+  <% unless @activities.empty? %>
+  <h3>  <%= :activity_from_your_network.l %>
+</h3>
+  <table width='100%'>
+        <%= render :partial => "activities/activity", :collection => @activities %>
+
+  </table>
+  <% if @activities.total_pages > 1 %>
+  <div class='pagination'>  <%= paginating_links @activities, :link_to_current_page => true %>
+</div>
+  <% end %>
+  <% else %>
+    <%= :you_have_no_network_activity_yet.l %>
+
+    <%=  link_to :add_some_friends_to_get_started.l, users_path %>
+
+  <% end %>
+  <% end %>
+
+</div>

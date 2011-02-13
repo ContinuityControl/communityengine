@@ -1,22 +1,38 @@
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3= :what_are_tags.l
-    %p
-      %strong= :tags_are_one_word_descriptors_users_assign_to_blog_posts_pictures_and_clippings_on.l+" #{AppConfig.community_name}."
-    %p
-      %strong= :bigger_font_size_more_popular_tag.l
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :what_are_tags.l %>
+</h3>
+<p>
+  <strong>  <%= :tags_are_one_word_descriptors_users_assign_to_blog_posts_pictures_and_clippings_on.l+" #{AppConfig.community_name}." %>
+</strong>
+</p>
+<p>
+  <strong>  <%= :bigger_font_size_more_popular_tag.l %>
+</strong>
+</p>
+<% end %>
 
-= rounded_box :div_class => 'bluegray-bg' do
-  .right
-    %form{"action"=>"/search/tags/", "method"=>"get"}
-      = text_field_tag 'tag_list', params[:id], :autocomplete => "off"
-      #tag_list_auto_complete.auto_complete{"class"=>"auto_complete"}
-      = auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] }
-      %input{"type"=>"submit", "value"=>'Search'}
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<div class='right'>
+  <form action='/search/tags/' method='get'>
+        <%=  text_field_tag 'tag_list', params[:id], :autocomplete => "off" %>
 
-  %h3= "Tags"
-  .tag-cloud
-    - tag_cloud @tags, %w(xxs xs s l xl xxl) do |name, css_class|
-      =link_to name, tag_url(URI.escape(name.to_s, /[\/.?#]/)), :class => css_class
+    <div class='auto_complete' id='tag_list_auto_complete'></div>
+        <%=  auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
+
+    <input type='submit' value='Search' />
+  </form>
+</div>
+<h3><%= "Tags" %>
+</h3>
+<div class='tag-cloud'>
+  <%  tag_cloud @tags, %w(xxs xs s l xl xxl) do |name, css_class| %>
+    <%= link_to name, tag_url(URI.escape(name.to_s, /[\/.?#]/)), :class => css_class %>
+
+  <% end %>
+</div>
+<% end %>
+

@@ -1,10 +1,15 @@
-=box :class => 'favorites' do
-  %h3= link_to "#{@user.login}'s "+:favorites.l, user_favorites_path(@user)        
+<%= box :class => 'favorites' do %>
+<h3><%= link_to "#{@user.login}'s "+:favorites.l, user_favorites_path(@user) %>
+</h3>
+<%  @favorites.to_a.in_groups_of(2) do |group| %>
+<div class='row'>
+  <%  group.compact.each do |f| %>
+    <%= render :partial => "favorite", :locals => {:favorite => f} %>
 
-  - @favorites.to_a.in_groups_of(2) do |group|
-    .row  
-      - group.compact.each do |f|
-        =render :partial => "favorite", :locals => {:favorite => f}
+  <% end %>
+</div>
+<% end %>
+<% end %>
 
-        
-.pagination=paginating_links @favorites if @favorites.total_pages > 1      
+<div class='pagination'><%= paginating_links @favorites if @favorites.total_pages > 1 %>
+</div>

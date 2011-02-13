@@ -1,9 +1,15 @@
-%h3 Explore
-%ul.list.checks
-  - Category.find(:all).each do |c|
-    %li= link_to c.name, category_path(c)
-  %li= link_to :whats_popular.l, popular_url, {:class => 'popular'}
-  - Page.find(:all).each do |page|
-    - if (logged_in? || page.page_public)
-      %li= link_to page.title, pages_path(page)
-
+<h3>Explore</h3>
+<ul class='list checks'>
+  <%  Category.find(:all).each do |c| %>
+  <li>  <%= link_to c.name, category_path(c) %>
+</li>
+  <% end %>
+  <li>  <%= link_to :whats_popular.l, popular_url, {:class => 'popular'} %>
+</li>
+  <%  Page.find(:all).each do |page| %>
+  <%  if (logged_in? || page.page_public) %>
+  <li>  <%= link_to page.title, pages_path(page) %>
+</li>
+  <% end %>
+  <% end %>
+</ul>

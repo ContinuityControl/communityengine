@@ -1,26 +1,47 @@
-.yui-b
-  =box do 
-    %h3= :help.l
-    %p= :tags_are_keywords_you_use_to_organize_your_clippings_separate_multiple_tags_with_commas.l
+<div class='yui-b'>
+    <%= box do %>
+  <h3>  <%= :help.l %>
+</h3>
+  <p>  <%= :tags_are_keywords_you_use_to_organize_your_clippings_separate_multiple_tags_with_commas.l %>
+</p>
+  <% end %>
 
-#yui-main
-  .yui-b
-    =box do 
-      %h3= :editing_clipping.l
-      %img{"src"=>"#{h @clipping.image_uri}"}
-      = form_for(:clipping, :url => user_clipping_path(@user, @clipping), :html => { :method => :put, :class => "MainForm" }) do |f|
-        %label= :url.l
-        = f.text_field :url
-        
-        %label= :description.l
-        = f.text_field :description
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>    <%= :editing_clipping.l %>
+</h3>
+    <img src="<%= h @clipping.image_uri %>" />
 
-        %label
-          =:tags.l
-          %em="(#{:optional_keywords_describing_this_clipping_separated_by_commas.l})"
-        = text_field_tag 'tag_list', @clipping.tag_list
+        <%=  form_for(:clipping, :url => user_clipping_path(@user, @clipping), :html => { :method => :put, :class => "MainForm" }) do |f| %>
+    <label>    <%= :url.l %>
+</label>
+        <%=  f.text_field :url %>
 
-        %p
-          = submit_tag :save.l
-          = :or.l
-          = link_to :cancel_and_go_back_to_my_clippings.l, user_clippings_path(@user)
+    <label>    <%= :description.l %>
+</label>
+        <%=  f.text_field :description %>
+
+    <label>
+            <%= :tags.l %>
+
+      <em>      <%= "(#{:optional_keywords_describing_this_clipping_separated_by_commas.l})" %>
+</em>
+    </label>
+        <%=  text_field_tag 'tag_list', @clipping.tag_list %>
+
+    <p>
+            <%=  submit_tag :save.l %>
+
+            <%=  :or.l %>
+
+            <%=  link_to :cancel_and_go_back_to_my_clippings.l, user_clippings_path(@user) %>
+
+    </p>
+    <% end %>
+
+    <% end %>
+
+  </div>
+</div>

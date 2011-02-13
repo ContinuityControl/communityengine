@@ -1,42 +1,66 @@
-- @meta = { :description => "#{AppConfig.community_name} forums.",:keywords => "#{AppConfig.meta_keywords}", :robots => AppConfig.robots_meta_list_content}
--@section = 'forums'
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
+<%  @meta = { :description => "#{AppConfig.community_name} forums.",:keywords => "#{AppConfig.meta_keywords}", :robots => AppConfig.robots_meta_list_content} %>
+<% @section = 'forums' %>
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
--if admin?
-  = rounded_box  :div_class => 'bluegray-bg'  do
-    %h3= :admin.l
-    %p= link_to :create_new_forum.l, new_forum_path, :class => "utility"
+<% end %>
+<% if admin? %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :admin.l %>
+</h3>
+<p><%= link_to :create_new_forum.l, new_forum_path, :class => "utility" %>
+</p>
+<% end %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<div class='right'>
+    <%= link_to :recent_posts.l, recent_forum_posts_path %>
 
-  .right
-    =link_to :recent_posts.l, recent_forum_posts_path
-    =feed_icon_tag :recent_posts.l, all_sb_posts_path(:format => 'rss')
-  %h3= :forums.l
-  %p.subtitle
-    = number_with_delimiter(Topic.count) 
-    = "#{:topics.l},"
-    = number_with_delimiter(SbPost.count)
-    = "#{:posts.l},"
-    = number_with_delimiter(User.count(:conditions => "sb_posts_count>0"))
-    = :voices.l
+    <%= feed_icon_tag :recent_posts.l, all_sb_posts_path(:format => 'rss') %>
 
-  %table{:border=>"0", :cellspacing=>"0", :cellpadding=>"0", :class=>"wide forums"}
-    %tr
-      %th{:width=>"70%", :colspan=>"3"}= :forum.l
-      %th{:width=>"30%", :colspan=>"1"}= :last_post.l
+</div>
+<h3><%= :forums.l %>
+</h3>
+<p class='subtitle'>
+    <%=  number_with_delimiter(Topic.count) %>
 
-    = render :partial => 'forum', :collection => @forums
+    <%=  "#{:topics.l}," %>
 
-  %p= link_to :recent_posts.l, recent_forum_posts_path
+    <%=  number_with_delimiter(SbPost.count) %>
 
+    <%=  "#{:posts.l}," %>
 
-  - online_users = User.currently_online 
-  - unless online_users.empty? 
-    .stats
-      .users
-        - unless online_users.empty? 
-          = :users_online.l + ':'
-          = online_users.map { |u| link_to content_tag(:strong, u.display_name), user_path(u) } * ", " 
-          %br
+    <%=  number_with_delimiter(User.count(:conditions => "sb_posts_count>0")) %>
+
+    <%=  :voices.l %>
+
+</p>
+<table border='0' cellpadding='0' cellspacing='0' class='wide forums'>
+  <tr>
+    <th colspan='3' width='70%'>    <%= :forum.l %>
+</th>
+    <th colspan='1' width='30%'>    <%= :last_post.l %>
+</th>
+  </tr>
+    <%=  render :partial => 'forum', :collection => @forums %>
+
+</table>
+<p><%= link_to :recent_posts.l, recent_forum_posts_path %>
+</p>
+<%  online_users = User.currently_online %>
+<%  unless online_users.empty? %>
+<div class='stats'>
+  <div class='users'>
+    <%  unless online_users.empty? %>
+        <%=  :users_online.l + ':' %>
+
+        <%=  online_users.map { |u| link_to content_tag(:strong, u.display_name), user_path(u) } * ", " %>
+
+    <br />
+    <% end %>
+  </div>
+</div>
+<% end %>
+<% end %>
+

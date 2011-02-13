@@ -1,8 +1,17 @@
-#welcome
-  .yui-gc
-    .yui-u.first
-      =box do 
-        %h2
-          =:get_started_banner.l :site=>AppConfig.community_name
-        %h4 
-          =link_to :sign_up.l, signup_path
+<div id='welcome'>
+  <div class='yui-gc'>
+    <div class='yui-u first'>
+            <%= box do %>
+      <h2>
+                <%= :get_started_banner.l :site=>AppConfig.community_name %>
+
+      </h2>
+      <h4>
+                <%= link_to :sign_up.l, signup_path %>
+
+      </h4>
+      <% end %>
+
+    </div>
+  </div>
+</div>

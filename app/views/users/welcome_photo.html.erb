@@ -1,43 +1,80 @@
-%h2="Let’s get your profile started"
-= form_tag user_path(:welcome => 'about'), :method => 'put', :multipart => true do
-  = rounded_box  :div_class => 'bluegray-bg', :header => :about_you.l  do
-    %h4=:describe_yourself.l
-    .left{:style => 'width:461px;'}
-      = text_area :user, :description, :rows => 30, :style => 'width:100%', :class => "rich_text_editor"
-      - if @user.vendor?
-        %p= render :partial => 'offerings/chooser'
-    %div{ :style => "margin-left:476px" }
-      = render :partial => 'shared/bio_help'
-    .clear
-    .prepend-top
-      %h4=:tag_yourself.l
-      .left{:style => 'width:461px;margin-top:10px'}
-        = text_field_tag 'tag_list', @user.tag_list, {:autocomplete => "off", :size => '40'}
-        #tag_list_auto_complete.auto_complete
-        = auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] }
-      %div{ :style => "margin-left:476px;margin-top:10px" }
-        =:comma_separated_keywords_that_describe_you.l
-        %br
-        %p
-          =:you_could_tag_yourself.l( :keywords => AppConfig.meta_keywords.split(",").to_sentence(:last_word_connector => ", or "))
-    .clear
-  = rounded_box  :div_class => 'bluegray-bg', :header => :choose_your_location.l  do
-    .left{:style => 'width:110px;'}
-      =:postal_code.l
-      %br
-      = text_field :user, :zip, :size => 10
-    %div{ :style => "margin-left:120px;float:none;" }
-      = render :partial => 'shared/location_chooser', :locals => {:selected_country => @user.country_id, :selected_state => @user.state_id, :selected_metro_area => @user.metro_area_id, :states => @states, :metro_areas => @metro_areas}
-    .clear
-  = rounded_box  :div_class => 'bluegray-bg', :header => "Upload Your Profile Photo"  do
-    .left{:style => "width:100px"}
-      =image_tag @user.avatar_photo_url(:thumb)
-    %div{ :style => "margin-left:110px" }
-      %p= file_field :avatar, :uploaded_data, :size => "20"
-    .clear
-  %p
-    =styled_save_button :upload_and_continue_to_step_two.l
-    %span{:style => "margin-left:5px;"}
-      =link_to "or " + :skip_this_step.l, welcome_about_user_path(@user)
-  .clear
+<h2><%= "Let’s get your profile started" %>
+</h2>
+<%=  form_tag user_path(:welcome => 'about'), :method => 'put', :multipart => true do %>
+<%=  rounded_box :div_class => 'bluegray-bg', :header => :about_you.l do %>
+<h4><%= :describe_yourself.l %>
+</h4>
+<div class='left' style='width:461px;'>
+    <%=  text_area :user, :description, :rows => 30, :style => 'width:100%', :class => "rich_text_editor" %>
+
+  <%  if @user.vendor? %>
+  <p>  <%= render :partial => 'offerings/chooser' %>
+</p>
+  <% end %>
+</div>
+<div style='margin-left:476px'>
+    <%=  render :partial => 'shared/bio_help' %>
+
+</div>
+<div class='clear'></div>
+<div class='prepend-top'>
+  <h4>  <%= :tag_yourself.l %>
+</h4>
+  <div class='left' style='width:461px;margin-top:10px'>
+        <%=  text_field_tag 'tag_list', @user.tag_list, {:autocomplete => "off", :size => '40'} %>
+
+    <div class='auto_complete' id='tag_list_auto_complete'></div>
+        <%=  auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
+
+  </div>
+  <div style='margin-left:476px;margin-top:10px'>
+        <%= :comma_separated_keywords_that_describe_you.l %>
+
+    <br />
+    <p>
+            <%= :you_could_tag_yourself.l( :keywords => AppConfig.meta_keywords.split(",").to_sentence(:last_word_connector => ", or ")) %>
+
+    </p>
+  </div>
+</div>
+<div class='clear'></div>
+<% end %>
+
+<%=  rounded_box :div_class => 'bluegray-bg', :header => :choose_your_location.l do %>
+<div class='left' style='width:110px;'>
+    <%= :postal_code.l %>
+
+  <br />
+    <%=  text_field :user, :zip, :size => 10 %>
+
+</div>
+<div style='margin-left:120px;float:none;'>
+    <%=  render :partial => 'shared/location_chooser', :locals => {:selected_country => @user.country_id, :selected_state => @user.state_id, :selected_metro_area => @user.metro_area_id, :states => @states, :metro_areas => @metro_areas} %>
+
+</div>
+<div class='clear'></div>
+<% end %>
+
+<%=  rounded_box :div_class => 'bluegray-bg', :header => "Upload Your Profile Photo" do %>
+<div class='left' style='width:100px'>
+    <%= image_tag @user.avatar_photo_url(:thumb) %>
+
+</div>
+<div style='margin-left:110px'>
+  <p>  <%= file_field :avatar, :uploaded_data, :size => "20" %>
+</p>
+</div>
+<div class='clear'></div>
+<% end %>
+
+<p>
+    <%= styled_save_button :upload_and_continue_to_step_two.l %>
+
+  <span style='margin-left:5px;'>
+        <%= link_to "or " + :skip_this_step.l, welcome_about_user_path(@user) %>
+
+  </span>
+</p>
+<div class='clear'></div>
+<% end %>
 

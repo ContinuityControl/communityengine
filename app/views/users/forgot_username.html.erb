@@ -1,12 +1,23 @@
--content_for :sidebar do
-  = rounded_box  :div_class => 'bluegray-bg login_help'  do
-    =render :partial => 'shared/login_sidebar'
+<% content_for :sidebar do %>
+<%=  rounded_box :div_class => 'bluegray-bg login_help' do %>
+<%= render :partial => 'shared/login_sidebar' %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  %h3=:forgot_your_username.l
+<% end %>
 
-  = form_tag forgot_username_url, :class => 'MainForm' do
-    %label{"for"=>"email"}=:enter_your_email_address.l+":"
-    = text_field_tag 'email', nil, :size => 35
-    %p
-      = submit_tag :send_me_my_username.l
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<h3><%= :forgot_your_username.l %>
+</h3>
+<%=  form_tag forgot_username_url, :class => 'MainForm' do %>
+<label for='email'><%= :enter_your_email_address.l+":" %>
+</label>
+<%=  text_field_tag 'email', nil, :size => 35 %>
+
+<p>
+    <%=  submit_tag :send_me_my_username.l %>
+
+</p>
+<% end %>
+
+<% end %>
+

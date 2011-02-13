@@ -1,28 +1,49 @@
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  =box :class => 'alt first_alt' do
-    = link_to :forums.l, forum_home_path
-    %span.arrow &rarr;
-    = link_to h(@forum.name), forum_path(@forum)
-    %span.arrow &rarr;
-    = :new_topic.l
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= box :class => 'alt first_alt' do %>
+<%=  link_to :forums.l, forum_home_path %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
+<span class='arrow'>&rarr;</span>
+<%=  link_to h(@forum.name), forum_path(@forum) %>
 
-  =box do 
-    %h3#new_topic= :new_topic.l
-    %p.subtitle
-      = :by.l
-      = current_user.display_name
+<span class='arrow'>&rarr;</span>
+<%=  :new_topic.l %>
 
-    = error_messages_for :topic
-    = form_for :topic, :url  => forum_topics_path(@forum), :html => {:class => "MainForm"} do |f|
-      = render :partial => "form", :object => f
-      %p
-        = submit_tag :post_topic.l
-        = :or.l
-        = link_to(:cancel.l, forum_path(@forum))
+<% end %>
 
-    = javascript_tag "$('topic_title').focus();"
+<% end %>
+
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%= box do %>
+<h3 id='new_topic'><%= :new_topic.l %>
+</h3>
+<p class='subtitle'>
+    <%=  :by.l %>
+
+    <%=  current_user.display_name %>
+
+</p>
+<%=  error_messages_for :topic %>
+
+<%=  form_for :topic, :url => forum_topics_path(@forum), :html => {:class => "MainForm"} do |f| %>
+<%=  render :partial => "form", :object => f %>
+
+<p>
+    <%=  submit_tag :post_topic.l %>
+
+    <%=  :or.l %>
+
+    <%=  link_to(:cancel.l, forum_path(@forum)) %>
+
+</p>
+<% end %>
+
+<%=  javascript_tag "$('topic_title').focus();" %>
+
+<% end %>
+
+<% end %>
+

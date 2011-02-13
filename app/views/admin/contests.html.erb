@@ -1,31 +1,55 @@
-.yui-b
-  = render :partial => 'shared/admin_nav' if current_user.admin?
+<div class='yui-b'>
+    <%=  render :partial => 'shared/admin_nav' if current_user.admin? %>
 
-#yui-main
-  .yui-b
-    =box do 
-      %h3= :contests.l
-      = link_to :new_contest.l, new_contest_path
+</div>
+<div id='yui-main'>
+  <div class='yui-b'>
+        <%= box do %>
+    <h3>    <%= :contests.l %>
+</h3>
+        <%=  link_to :new_contest.l, new_contest_path %>
 
-      %table{:width=>"100%"}
-        %tr
-          %th= :date_title.l
-          %th= :title.l
-          %th= :description.l
-          %th= :begin.l
-          %th= :end.l
-          %th= :actions.l
+    <table width='100%'>
+      <tr>
+        <th>        <%= :date_title.l %>
+</th>
+        <th>        <%= :title.l %>
+</th>
+        <th>        <%= :description.l %>
+</th>
+        <th>        <%= :begin.l %>
+</th>
+        <th>        <%= :end.l %>
+</th>
+        <th>        <%= :actions.l %>
+</th>
+      </tr>
+      <%  for contest in @contests %>
+      <tr>
+        <td>        <%= h I18n.l(contest.created_at, :format => :short_published_date) %>
+</td>
+        <td>        <%= h contest.title %>
+</td>
+        <td>        <%= h truncate(contest.post, :length => 250) %>
+</td>
+        <td>        <%= h I18n.l(contest.begin_date, :format => :short_published_date) %>
+</td>
+        <td>        <%= h I18n.l(contest.end_date, :format => :short_published_date) %>
+</td>
+        <td>
+                    <%=  link_to :show.l, contest_path(contest) %>
 
-        - for contest in @contests
-          %tr
-            %td=h I18n.l(contest.created_at, :format => :short_published_date)
-            %td=h contest.title
-            %td=h truncate(contest.post, :length => 250)
-            %td=h I18n.l(contest.begin_date, :format => :short_published_date)
-            %td=h I18n.l(contest.end_date, :format => :short_published_date)
-            %td
-              = link_to :show.l, contest_path(contest)
-              %br
-              = link_to :edit.l, edit_contest_path(contest)
-              %br
-              = link_to :destroy.l, contest_path(contest), :confirm => :are_you_sure.l, :method => :delete
+          <br />
+                    <%=  link_to :edit.l, edit_contest_path(contest) %>
+
+          <br />
+                    <%=  link_to :destroy.l, contest_path(contest), :confirm => :are_you_sure.l, :method => :delete %>
+
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <% end %>
+
+  </div>
+</div>

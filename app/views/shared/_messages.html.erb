@@ -1,8 +1,14 @@
-- %w(info notice error).each do |type|
-  - if flash[type.to_sym]
-    .warning.flash_message{:class => "#{type.to_s}"}
-      %span= h(flash[type.to_sym])
-      %small
-        %a{:href=>"#", :onclick=>"$$('div.flash_message')[0].hide();return false"}=:close_this_message.l
-      
-      
+<%  %w(info notice error).each do |type| %>
+<%  if flash[type.to_sym] %>
+<div class="<%= type.to_s %> flash_message warning">
+
+  <span>  <%= h(flash[type.to_sym]) %>
+</span>
+  <small>
+    <a href="#" onclick="$$('div.flash_message')[0].hide();return false">
+    <%= :close_this_message.l %>
+</a>
+  </small>
+</div>
+<% end %>
+<% end %>

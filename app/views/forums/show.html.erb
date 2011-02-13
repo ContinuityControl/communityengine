@@ -1,104 +1,169 @@
-- @meta = { :description => "#{@forum.name.capitalize} discussion forum.",:keywords => "#{@forum.tags.join(', ') if @forum.tags}",:robots => AppConfig.robots_meta_show_content}
-- @section = 'forums'
-- @page_title = @forum.name
+<%  @meta = { :description => "#{@forum.name.capitalize} discussion forum.",:keywords => "#{@forum.tags.join(', ') if @forum.tags}",:robots => AppConfig.robots_meta_show_content} %>
+<%  @section = 'forums' %>
+<%  @page_title = @forum.name %>
+<% content_for :sidebar do %>
+<%= render :partial => 'forums/community_nav' %>
 
--content_for :sidebar do
-  =render :partial => 'forums/community_nav'
+<% end %>
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%=  link_to :forums.l, forum_home_path %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  = link_to :forums.l, forum_home_path
-  %span.arrow
-    &rarr;
-  = h @forum.name
-  .right
-    - if logged_in?
-      %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
-    - else
-      %h6.all.right= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum)
+<span class='arrow'>
+  &rarr;
+</span>
+<%=  h @forum.name %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  .right
-    = "Enable Email Notification of Activity"
-    = check_box_tag :watch_this_discussion, 1, @watched, :id => "watch_this_discussion", "data-url" => forum_forums_user_path(@forum)
+<div class='right'>
+  <%  if logged_in? %>
+  <h6 class='all right'>  <%= link_to :post_a_new_topic.l, new_forum_topic_path(@forum) %>
+</h6>
+  <%  else %>
+  <h6 class='all right'>  <%= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum) %>
+</h6>
+  <% end %>
+</div>
+<% end %>
 
-  %p.subtitle
-    = feed_icon_tag @forum.name, forum_sb_posts_path(@forum, :format => :rss)
-    = pluralize @forum.topics_count, :topic.l
-    ,
-    = pluralize @forum.sb_posts_count, :post.l
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<div class='right'>
+    <%=  "Enable Email Notification of Activity" %>
 
-  - unless @forum.description.blank?
-    = @forum.description_html.html_safe
+    <%=  check_box_tag :watch_this_discussion, 1, @watched, :id => "watch_this_discussion", "data-url" => forum_forums_user_path(@forum) %>
 
-  - if @forum.moderators.any?
-    = "#{:moderators.l}:"
-    %ul.flat
-      - @forum.moderators.each do |user|
-        %li= link_to user.display_name, user_path(user)
+</div>
+<p class='subtitle'>
+    <%=  feed_icon_tag @forum.name, forum_sb_posts_path(@forum, :format => :rss) %>
 
-  %br.clearright
+    <%=  pluralize @forum.topics_count, :topic.l %>
 
-  - if @topics.total_pages > 1
-    - if logged_in?
-      %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
+  ,
+    <%=  pluralize @forum.sb_posts_count, :post.l %>
 
-    .pagination= paginating_links @topics
+</p>
+<%  unless @forum.description.blank? %>
+<%=  @forum.description_html.html_safe %>
 
-  - unless @topics.empty?
-    %table.wide.topics{:border=>"0", :cellspacing=>"0", :cellpadding=>"0"}
-      %tr
-        %th.la{:colspan=>"2"}= :topics.l
-        %th{:width=>"1%"}= :posts.l
-        %th{:width=>"1%"}= :views.l
-        %th.la= :last_post.l
+<% end %>
+<%  if @forum.moderators.any? %>
+<%=  "#{:moderators.l}:" %>
 
-      - for topic in @topics
-        %tr
-          %td.c1{:style=>"padding:5px; width:16px;"}
-            - icon, color, post = icon_and_color_and_post_for topic
+<ul class='flat'>
+  <%  @forum.moderators.each do |user| %>
+  <li>  <%= link_to user.display_name, user_path(user) %>
+</li>
+  <% end %>
+</ul>
+<% end %>
+<br class='clearright' />
+<%  if @topics.total_pages > 1 %>
+<%  if logged_in? %>
+<h6 class='all right'><%= link_to :post_a_new_topic.l, new_forum_topic_path(@forum) %>
+</h6>
+<% end %>
+<div class='pagination'><%= paginating_links @topics %>
+</div>
+<% end %>
+<%  unless @topics.empty? %>
+<table border='0' cellpadding='0' cellspacing='0' class='wide topics'>
+  <tr>
+    <th class='la' colspan='2'>    <%= :topics.l %>
+</th>
+    <th width='1%'>    <%= :posts.l %>
+</th>
+    <th width='1%'>    <%= :views.l %>
+</th>
+    <th class='la'>    <%= :last_post.l %>
+</th>
+  </tr>
+  <%  for topic in @topics %>
+  <tr>
+    <td class='c1' style='padding:5px; width:16px;'>
+      <%  icon, color, post = icon_and_color_and_post_for topic %>
+      <%  if recent_topic_activity(topic) %>
+            <%=  image_tag "icons/chat-double-16x16-green.png", :class => "icon", :title => :recent_activity.l+" #{post}" %>
 
-            - if recent_topic_activity(topic)
-              = image_tag "icons/chat-double-16x16-green.png", :class => "icon", :title => :recent_activity.l+" #{post}"
-            - else
-              = image_tag "clearbits/#{icon}.png", :class => "icon", :title => :no_recent_activity.l+" #{post}"
-          %td.c2
-            = :sticky.l+": <strong>".html_safe if topic.sticky?
-            = link_to h(topic.title), forum_topic_path(@forum, topic), :class => "entry-title", :rel => "bookmark"
-            = "</strong>".html_safe if topic.sticky?
-            - if topic.paged?
-              %small= link_to :last.l, forum_topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page)
-          %td.ca.inv.stat= topic.sb_posts_count
-          %td.ca.inv.stat= number_with_delimiter(topic.views)
-          %td.lp
-            %abbr.updated{:title=>"#{topic.replied_at.xmlschema}"}= sensible_time_ago(topic.replied_at)
-            = :by.l
-            %span.author
-              %strong.fn= h(topic.replied_by_user.display_name)
-            %span= link_to :view.l, forum_topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page, :anchor => "posts-#{topic.last_post_id}")
+      <%  else %>
+            <%=  image_tag "clearbits/#{icon}.png", :class => "icon", :title => :no_recent_activity.l+" #{post}" %>
 
-  - if @topics.total_pages > 1
-    .pagination= paginating_links @topics
+      <% end %>
+    </td>
+    <td class='c2'>
+            <%=  :sticky.l+": <strong>".html_safe if topic.sticky? %>
 
-  - if @topics.size < 10
-    - @related = Post.find_tagged_with(@forum.tag_list, :limit => 10)
-    - unless @related.empty?
-      %table.wide.topics{:border=>"0", :cellspacing=>"0", :cellpadding=>"0"}
-        %tr
-          %th.la{:colspan=>"2"}= :this_forum_is_still_getting_started.l
-          %th{:width=>"1%"}= :comments.l
-          %th{:width=>"1%"}= :views.l
-          %th.la= :author.l
-          -@related.each do |post|
-            = render :partial => 'sb_posts/dummy_forum_post', :locals => {:post => post}
-  .clear
+            <%=  link_to h(topic.title), forum_topic_path(@forum, topic), :class => "entry-title", :rel => "bookmark" %>
 
-= rounded_box  :div_class => 'bluegray-bg'  do
-  = link_to :forums.l, forum_home_path
-  %span.arrow
-    &rarr;
-  = h @forum.name
-  .right
-    - if logged_in?
-      %h6.all.right= link_to :post_a_new_topic.l, new_forum_topic_path(@forum)
-    - else
-      %h6.all.right= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum)
+            <%=  "</strong>".html_safe if topic.sticky? %>
+
+      <%  if topic.paged? %>
+      <small>      <%= link_to :last.l, forum_topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page) %>
+</small>
+      <% end %>
+    </td>
+    <td class='ca inv stat'>    <%= topic.sb_posts_count %>
+</td>
+    <td class='ca inv stat'>    <%= number_with_delimiter(topic.views) %>
+</td>
+    <td class='lp'>
+      <abbr class="updated" title="<%= topic.replied_at.xmlschema %>">
+      <%= sensible_time_ago(topic.replied_at) %>
+</abbr>
+            <%=  :by.l %>
+
+      <span class='author'>
+        <strong class='fn'>        <%= h(topic.replied_by_user.display_name) %>
+</strong>
+      </span>
+      <span>      <%= link_to :view.l, forum_topic_path(:forum_id => @forum, :id => topic, :page => topic.last_page, :anchor => "posts-#{topic.last_post_id}") %>
+</span>
+    </td>
+  </tr>
+  <% end %>
+</table>
+<% end %>
+<%  if @topics.total_pages > 1 %>
+<div class='pagination'><%= paginating_links @topics %>
+</div>
+<% end %>
+<%  if @topics.size < 10 %>
+<%  @related = Post.find_tagged_with(@forum.tag_list, :limit => 10) %>
+<%  unless @related.empty? %>
+<table border='0' cellpadding='0' cellspacing='0' class='wide topics'>
+  <tr>
+    <th class='la' colspan='2'>    <%= :this_forum_is_still_getting_started.l %>
+</th>
+    <th width='1%'>    <%= :comments.l %>
+</th>
+    <th width='1%'>    <%= :views.l %>
+</th>
+    <th class='la'>    <%= :author.l %>
+</th>
+    <% @related.each do |post| %>
+        <%=  render :partial => 'sb_posts/dummy_forum_post', :locals => {:post => post} %>
+
+    <% end %>
+  </tr>
+</table>
+<% end %>
+<% end %>
+<div class='clear'></div>
+<% end %>
+
+<%=  rounded_box :div_class => 'bluegray-bg' do %>
+<%=  link_to :forums.l, forum_home_path %>
+
+<span class='arrow'>
+  &rarr;
+</span>
+<%=  h @forum.name %>
+
+<div class='right'>
+  <%  if logged_in? %>
+  <h6 class='all right'>  <%= link_to :post_a_new_topic.l, new_forum_topic_path(@forum) %>
+</h6>
+  <%  else %>
+  <h6 class='all right'>  <%= link_to :log_in_to_create_a_new_topic.l, new_forum_topic_path(@forum) %>
+</h6>
+  <% end %>
+</div>
+<% end %>
+
