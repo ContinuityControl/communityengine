@@ -4,7 +4,6 @@ require 'pp'
 class BaseController < ApplicationController
   include AuthenticatedSystem
   include LocalizedApplication
-  around_filter :set_locale  
   skip_before_filter :verify_authenticity_token, :only => :footer_content
   helper_method :commentable_url
   before_filter :initialize_header_tabs
