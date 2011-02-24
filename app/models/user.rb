@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 
 
   #validation
-  validates_presence_of     :metro_area,                 :if => Proc.new { |user| user.state }
+  #validates_presence_of     :metro_area,                 :if => Proc.new { |user| user.state }
   validates_uniqueness_of   :login_slug
   validates_exclusion_of    :login, :in => AppConfig.reserved_logins
   validates_date :birthday, :before => 13.years.ago.to_date  
