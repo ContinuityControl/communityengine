@@ -1,19 +1,16 @@
 <%  @section = (params[:metro_area_id] ? 'metro_area' : 'users') %>
 <% content_for :sidebar do %>
-<%=  render :partial => 'users/search_options' %>
-
+  <%= render :partial => 'users/search_options' %>
 <% end %>
-<%=  rounded_box :div_class => 'white-fg bluegray-bg', :inner_class => 'user_list' do %>
-<h3><%= :site_members.l :site => AppConfig.community_name %>
-</h3>
-<div class='pagination'><%= paginating_links @users, :params => params if @users.total_pages > 1 %>
-</div>
-<br class='clear' />
-<%=  render :partial => "users/user", :collection => @users %>
 
-<br class='clear' />
-<div class='pagination'><%= paginating_links @users, :params => params if @users.total_pages > 1 %>
-</div>
-<div class='clear'></div>
+<%= rounded_box :div_class => 'white-fg user_list' do %>
+  <h3><%= :site_members.l :site => AppConfig.community_name %></h3>
+  <div class='pagination'><%= paginating_links @users, :params => params if @users.total_pages > 1 %></div>
+  <br class='clear' />
+  <%=  render :partial => "users/user", :collection => @users %>
+
+  <br class='clear' />
+  <div class='pagination'><%= paginating_links @users, :params => params if @users.total_pages > 1 %></div>
+  <div class='clear'></div>
 <% end %>
 

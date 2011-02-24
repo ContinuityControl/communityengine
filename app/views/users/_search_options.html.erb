@@ -1,4 +1,4 @@
-<%=  rounded_box :div_class => 'white-fg bluegray-bg', :inner_class => 'user_list' do %>
+<%= rounded_box :div_class => 'white-fg user_list' do %>
 <%=  form_tag users_path, :method => :get , :class => 'user_search' do %>
 <label><%= :user_login.l %>
 </label>
@@ -16,7 +16,7 @@
 
 <% end %>
 
-<%=  rounded_box :div_class => 'white-fg bluegray-bg', :inner_class => 'user_list' do %>
+<%= rounded_box :div_class => 'white-fg user_list' do %>
 <h3><%= :metro_areas.l %>
 </h3>
 <%  city_cloud @metro_areas_for_cloud, %w(nube1 nube2 nube3 nube4 nube5) do |city, css_class| %>
@@ -26,7 +26,7 @@
 <% end %>
 
 <%  if current_user %>
-<%=  rounded_box :div_class => 'white-fg bluegray-bg', :inner_class => 'user_list' do %>
+<%=  rounded_box :div_class => 'white-fg user_list' do %>
 <h3><%= :share_the_love.l %>
 </h3>
 <%=  link_to :invite_your_friends_to_join.l, invite_user_path(current_user) %>
