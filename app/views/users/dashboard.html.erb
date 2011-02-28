@@ -9,7 +9,7 @@
 <% end %>
 <%=  rounded_box :div_class => 'bluegray-bg todo_activity', :extra_style =>'overflow: auto;' do %>
 <div class='h4_right'>
-    <%= link_to 'On Demand', on_demand_todos_path,{:class => 'lightview create_on_demand', :rel => 'ajax', :title => "On Demand ToDos :: :: width: 702, height: 702, ajax: { method: 'get' }"} %>
+    <%= link_to 'On Demand', on_demand_todos_path,{:class => 'lightview create_on_demand', :title => "On Demand ToDos"} %>
 
 </div>
 <h4><%= DistributedToDo.model_name.human.pluralize %>
