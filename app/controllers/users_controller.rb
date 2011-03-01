@@ -113,6 +113,7 @@ class UsersController < BaseController
     @skills               = Skill.find(:all)
     @offering             = Offering.new
     @avatar               = Photo.new
+    @tag_names            = Tag.select(:name).all.map(&:name).compact
   end
   
   def update

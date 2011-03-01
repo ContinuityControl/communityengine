@@ -77,10 +77,7 @@
 <h3><%= :tags.l %>
 </h3>
 <div id='user_tags'>
-    <%=  text_field_tag 'tag_list', @user.tag_list, {:autocomplete => "off"} %>
-
-  <div class='auto_complete' id='tag_list_auto_complete'></div>
-    <%=  auto_complete_field 'tag_list', {:url => { :controller => "tags", :action => 'auto_complete_for_tag_name'}, :tokens => [','] } %>
+    <%=  text_field_tag 'tag_list', @user.tag_list, 'data-autocomplete-tags' => @tag_names.to_json %>
 
   <label>
     <em>
